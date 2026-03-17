@@ -36,4 +36,6 @@ Grateful Dead recordings, trademarks, and related content are owned by their res
 
 ## Live App
 
+The music never stopped.
+
 https://ronsdeadlistener.com
