@@ -1393,6 +1393,10 @@ async function loadShowMeta(show,priority){
           const songs=tracks.map(function(t){return t.name.replace(/\s*->$/,'').trim();}).filter(function(s){return s.length>1;});
           if(songs.length){
             show.songs=songs;
+            if(curShow&&curShow.id===show.id&&playing&&'mediaSession' in navigator){
+              var _ms=show.songs[curTrackIdx]||'Track '+(curTrackIdx+1);
+              navigator.mediaSession.metadata=new MediaMetadata({title:_ms,artist:'Grateful Dead',album:(show.venue||'')+(show.date?' · '+show.date:''),artwork:[{src:'favicon_tight_180.png',sizes:'180x180',type:'image/png'}]});
+            }
             songs.forEach(function(song){
               const key=song.toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
               if(!songIndex[key])songIndex[key]=[];
@@ -2292,6 +2296,10 @@ async function switchRecording(showId,newId){
             show.tracks=dd;
             show.totalDur=dd.reduce(function(s,t){return s+(parseFloat(t.length)||0);},0);
             show.songs=dd.map(function(t){return t.name.replace(/\s*->$/,'').trim();}).filter(function(s){return s.length>1;});
+            if(curShow&&curShow.id===show.id&&playing&&'mediaSession' in navigator){
+              var _ms=show.songs[curTrackIdx]||'Track '+(curTrackIdx+1);
+              navigator.mediaSession.metadata=new MediaMetadata({title:_ms,artist:'Grateful Dead',album:(show.venue||'')+(show.date?' · '+show.date:''),artwork:[{src:'favicon_tight_180.png',sizes:'180x180',type:'image/png'}]});
+            }
             renderSetlistBody(show);return;
           }
         }
