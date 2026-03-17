@@ -1631,6 +1631,24 @@ function startPlayback(show,idx){
     renderSetlistBody(show);
     // Preload next track silently
     preloadNextTrack(show,idx+1);
+    if('mediaSession' in navigator){
+      const _t=show.tracks&&show.tracks[idx];
+      let _s='Track '+(idx+1);
+      if(show.songs&&show.songs[idx])_s=show.songs[idx];
+      else if(_t&&_t.title)_s=_t.title;
+      else if(_t&&_t.name)_s=_t.name.replace(/\.mp3$/i,'').replace(/[-_]/g,' ');
+      navigator.mediaSession.metadata=new MediaMetadata({
+        title:_s,artist:'Grateful Dead',
+        album:(show.venue||'')+(show.date?' · '+show.date:''),
+        artwork:[{src:'favicon_tight_180.png',sizes:'180x180',type:'image/png'}]
+      });
+      navigator.mediaSession.playbackState='playing';
+      navigator.mediaSession.setActionHandler('play',function(){if(audio&&audio.paused){audio.play();playing=true;playIntent=true;navigator.mediaSession.playbackState='playing';renderMiniPlayer();updateSpPlayer();}});
+      navigator.mediaSession.setActionHandler('pause',function(){if(audio){audio.pause();playing=false;playIntent=false;navigator.mediaSession.playbackState='paused';renderMiniPlayer();updateSpPlayer();}});
+      navigator.mediaSession.setActionHandler('nexttrack',function(){if(curShow&&curTrackIdx+1<(curShow.tracks||[]).length)startPlayback(curShow,curTrackIdx+1);});
+      navigator.mediaSession.setActionHandler('previoustrack',function(){if(audio&&audio.currentTime>3)audio.currentTime=0;else if(curShow&&curTrackIdx>0)startPlayback(curShow,curTrackIdx-1);});
+      try{navigator.mediaSession.setActionHandler('seekto',function(d){if(audio&&d.seekTime!=null)audio.currentTime=d.seekTime;});}catch(e){}
+    }
   }).catch(function(e){if(e.name!=='AbortError'){playing=false;playIntent=false;updateSpPlayer();}});
 }
 
