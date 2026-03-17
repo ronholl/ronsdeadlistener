@@ -1649,8 +1649,8 @@ function startPlayback(show,idx){
       navigator.mediaSession.playbackState='playing';
       navigator.mediaSession.setActionHandler('play',function(){if(audio&&audio.paused){audio.play();playing=true;playIntent=true;navigator.mediaSession.playbackState='playing';renderMiniPlayer();updateSpPlayer();}});
       navigator.mediaSession.setActionHandler('pause',function(){if(audio){audio.pause();playing=false;playIntent=false;navigator.mediaSession.playbackState='paused';renderMiniPlayer();updateSpPlayer();}});
-      navigator.mediaSession.setActionHandler('nexttrack',function(){if(curShow&&curTrackIdx+1<(curShow.tracks||[]).length)startPlayback(curShow,curTrackIdx+1);});
-      navigator.mediaSession.setActionHandler('previoustrack',function(){if(audio&&audio.currentTime>3)audio.currentTime=0;else if(curShow&&curTrackIdx>0)startPlayback(curShow,curTrackIdx-1);});
+      try{navigator.mediaSession.setActionHandler('nexttrack',function(){if(curShow&&curTrackIdx+1<(curShow.tracks||[]).length)startPlayback(curShow,curTrackIdx+1);});}catch(e){}
+      try{navigator.mediaSession.setActionHandler('previoustrack',function(){if(audio&&audio.currentTime>3)audio.currentTime=0;else if(curShow&&curTrackIdx>0)startPlayback(curShow,curTrackIdx-1);});}catch(e){}
       try{navigator.mediaSession.setActionHandler('seekto',function(d){if(audio&&d.seekTime!=null)audio.currentTime=d.seekTime;});}catch(e){}
     }
   }).catch(function(e){if(e.name!=='AbortError'){playing=false;playIntent=false;updateSpPlayer();}});
@@ -2796,8 +2796,8 @@ function retryShowMeta(id){
 
         <!-- Contact -->
         <div style="text-align:center;margin-bottom:14px">
-          <a href="/cdn-cgi/l/email-protection#3644595845525357525e5357525a5f45425358534476515b575f5a1855595b" style="font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.5px">
-            ✉ <span class="__cf_email__" data-cfemail="b1c3dedfc2d5d4d0d5d9d4d0d5ddd8c2c5d4dfd4c3f1d6dcd0d8dd9fd2dedc">[email&#160;protected]</span>
+          <a href="/cdn-cgi/l/email-protection#40322f2e3324252124282521242c293334252e253200272d21292c6e232f2d" style="font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.5px">
+            ✉ <span class="__cf_email__" data-cfemail="c3b1acadb0a7a6a2a7aba6a2a7afaab0b7a6ada6b183a4aea2aaafeda0acae">[email&#160;protected]</span>
           </a>
           <div style="font-size:10px;color:rgba(255,255,255,.2);margin-top:4px;letter-spacing:.5px">questions · new users · feedback</div>
         </div>
