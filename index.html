@@ -1394,8 +1394,8 @@ async function loadShowMeta(show,priority){
           if(songs.length){
             show.songs=songs;
             if(curShow&&curShow.id===show.id&&playing&&'mediaSession' in navigator){
-              var _ms=show.songs[curTrackIdx]||(curShow.tracks&&curShow.tracks[curTrackIdx]&&curShow.tracks[curTrackIdx].name)||'Track '+(curTrackIdx+1);
-              navigator.mediaSession.metadata=new MediaMetadata({title:_ms,artist:'Grateful Dead',album:(show.venue||'')+(show.date?' · '+show.date:''),artwork:[{src:'favicon_tight_180.png',sizes:'180x180',type:'image/png'}]});
+              var _ms=show.songs[curTrackIdx]||'Track '+(curTrackIdx+1);
+              navigator.mediaSession.metadata=new MediaMetadata({title:_ms,artist:'Grateful Dead',album:(show.venue||'')+(show.date?' · '+show.date:''),artwork:[{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'180x180',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_32.png',sizes:'32x32',type:'image/png'}]});
             }
             songs.forEach(function(song){
               const key=song.toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
@@ -1639,16 +1639,12 @@ function startPlayback(show,idx){
       const _t=show.tracks&&show.tracks[idx];
       let _s='Track '+(idx+1);
       if(show.songs&&show.songs[idx])_s=show.songs[idx];
-      else if(_t&&_t.name){
-        // Relisten: name is already "Scarlet Begonias"
-        // Archive: name is "gd77-05-08d1t01.mp3" - needs cleaning
-        const n=_t.name;
-        _s=n.match(/\.mp3$/i)?n.replace(/\.mp3$/i,'').replace(/[-_]/g,' ').replace(/^[a-z]{2}\d{6}[a-z0-9]*\s*/i,'').trim()||n:n;
-      }
+      else if(_t&&_t.title)_s=_t.title;
+      else if(_t&&_t.name)_s=_t.name.replace(/\.mp3$/i,'').replace(/[-_]/g,' ');
       navigator.mediaSession.metadata=new MediaMetadata({
         title:_s,artist:'Grateful Dead',
         album:(show.venue||'')+(show.date?' · '+show.date:''),
-        artwork:[{src:'favicon_tight_180.png',sizes:'180x180',type:'image/png'}]
+        artwork:[{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'180x180',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_32.png',sizes:'32x32',type:'image/png'}]
       });
       navigator.mediaSession.playbackState='playing';
       navigator.mediaSession.setActionHandler('play',function(){if(audio&&audio.paused){audio.play();playing=true;playIntent=true;navigator.mediaSession.playbackState='playing';renderMiniPlayer();updateSpPlayer();}});
@@ -2301,8 +2297,8 @@ async function switchRecording(showId,newId){
             show.totalDur=dd.reduce(function(s,t){return s+(parseFloat(t.length)||0);},0);
             show.songs=dd.map(function(t){return t.name.replace(/\s*->$/,'').trim();}).filter(function(s){return s.length>1;});
             if(curShow&&curShow.id===show.id&&playing&&'mediaSession' in navigator){
-              var _ms=show.songs[curTrackIdx]||(curShow.tracks&&curShow.tracks[curTrackIdx]&&curShow.tracks[curTrackIdx].name)||'Track '+(curTrackIdx+1);
-              navigator.mediaSession.metadata=new MediaMetadata({title:_ms,artist:'Grateful Dead',album:(show.venue||'')+(show.date?' · '+show.date:''),artwork:[{src:'favicon_tight_180.png',sizes:'180x180',type:'image/png'}]});
+              var _ms=show.songs[curTrackIdx]||'Track '+(curTrackIdx+1);
+              navigator.mediaSession.metadata=new MediaMetadata({title:_ms,artist:'Grateful Dead',album:(show.venue||'')+(show.date?' · '+show.date:''),artwork:[{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'180x180',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_32.png',sizes:'32x32',type:'image/png'}]});
             }
             renderSetlistBody(show);return;
           }
