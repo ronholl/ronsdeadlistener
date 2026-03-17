@@ -53,6 +53,11 @@ body{display:flex;justify-content:center}
 .login-sub{font-size:11px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-top:6px}
 .login-prompt{font-size:13px;color:var(--muted);padding:16px 24px 8px;text-align:center;width:100%;letter-spacing:.5px;text-transform:uppercase;font-size:11px}
 .login-users{display:flex;flex-direction:column;gap:10px;padding:0 24px;width:100%;max-width:360px;align-self:center}
+.login-user-compact{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all .15s;user-select:none;background:var(--surf);margin-bottom:6px}
+.login-user-compact:active{border-color:var(--gold);background:rgba(200,168,75,.05)}
+.login-avatar-sm{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;font-weight:700;flex-shrink:0}
+.login-compact-name{flex:1;font-size:15px;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.login-compact-cnt{font-size:11px;color:var(--muted);white-space:nowrap;margin-right:6px}
 .login-user-btn{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;user-select:none}
 .login-user-btn:active{border-color:var(--gold);background:rgba(200,168,75,.08)}
 .login-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:20px;font-weight:700;flex-shrink:0}
@@ -899,26 +904,52 @@ function showErr(){
 function renderLoginScreen(){
   const el=document.getElementById('loginUsers');
   const totalShows=shows.length;
-  // User cards
-  let cards=users.map(function(u,i){
-    const cnt=shows.filter(function(s){return s.attended[u];}).length;
-    const col=USER_COLORS[i%USER_COLORS.length];
-    const isMe=u===curUser;
-    const action=isMe?'cancelLogin()':'showPin(\''+u+'\')';
-    const badge=isMe
-      ?'<div style="font-size:9px;background:rgba(82,183,136,.15);color:var(--green);border:1px solid rgba(82,183,136,.3);border-radius:10px;padding:2px 8px">logged in</div>'
-      :'<div style="font-size:18px;color:var(--muted);opacity:.4">›</div>';
-    return '<div class="login-user-btn" onclick="'+action+'" style="'+(isMe?'border-color:rgba(82,183,136,.3)':'')+'">'+
-      '<div class="login-avatar" style="background:'+col+'22;color:'+col+'">'+u[0]+'</div>'+
-      '<div class="login-user-info">'+
-        '<div class="login-user-name">'+esc(u)+'</div>'+
-        '<div class="login-user-shows">'+cnt.toLocaleString()+' shows attended</div>'+
-      '</div>'+
-      badge+
-    '</div>';
+
+  // Current user always first, then sort rest by show count descending
+  const sorted=[...users].sort(function(a,b){
+    if(a===curUser) return -1;
+    if(b===curUser) return 1;
+    const ca=shows.filter(function(s){return s.attended[a];}).length;
+    const cb=shows.filter(function(s){return s.attended[b];}).length;
+    return cb-ca;
   });
-  
-  el.innerHTML=cards.join('');
+
+  function buildCards(filter){
+    const q=(filter||'').toLowerCase().trim();
+    const matched=sorted.filter(function(u){
+      return !q||u.toLowerCase().includes(q);
+    });
+    if(!matched.length){
+      return '<div style="text-align:center;color:var(--muted);font-size:12px;padding:12px">No match</div>';
+    }
+    return matched.map(function(u){
+      const i=users.indexOf(u);
+      const cnt=shows.filter(function(s){return s.attended[u];}).length;
+      const col=USER_COLORS[i%USER_COLORS.length];
+      const isMe=u===curUser;
+      const action=isMe?'cancelLogin()':'showPin(\''+u+'\')';
+      const badge=isMe
+        ?'<span style="font-size:9px;background:rgba(82,183,136,.15);color:var(--green);border:1px solid rgba(82,183,136,.3);border-radius:8px;padding:2px 7px;flex-shrink:0">logged in</span>'
+        :'<span style="font-size:15px;color:var(--muted);opacity:.4">›</span>';
+      return '<div class="login-user-compact" onclick="'+action+'" style="'+(isMe?'border-color:rgba(82,183,136,.3);background:rgba(82,183,136,.04)':'')+'">'
+        +'<div class="login-avatar-sm" style="background:'+col+'22;color:'+col+'">'+u[0]+'</div>'
+        +'<div class="login-compact-name">'+esc(u)+'</div>'
+        +'<div class="login-compact-cnt">'+cnt.toLocaleString()+' shows</div>'
+        +badge
+        +'</div>';
+    }).join('');
+  }
+
+  // Search box + list
+  el.innerHTML='<div style="padding:0 0 8px">'
+    +'<input id="loginSearch" type="search" placeholder="Search listeners…" '
+    +'oninput="document.getElementById(\'loginUserList\').innerHTML=buildLoginCards(this.value)" '
+    +'style="width:100%;box-sizing:border-box;background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:9px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;margin-bottom:8px">'
+    +'</div>'
+    +'<div id="loginUserList">'+buildCards('')+'</div>';
+
+  // Expose buildCards globally for the oninput handler
+  window.buildLoginCards=buildCards;
 }
 
 function showLogin(){
