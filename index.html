@@ -1031,8 +1031,11 @@ function loginAs(name,save){
   // Set viewer to self by default
   viewUser=name;
   document.getElementById('usel').value=name;
-  myOnly=true;
-  document.getElementById('myBtn').classList.add('on');
+  // Only default to My Shows if user has attended at least one show
+  var _userShows=shows.filter(function(s){return s.attended&&s.attended[name];}).length;
+  myOnly=_userShows>0;
+  if(myOnly)document.getElementById('myBtn').classList.add('on');
+  else document.getElementById('myBtn').classList.remove('on');
   applyFilters();updateAttCount();updateViewStats();
   setHdrSt('Welcome back, '+name+'!','ok');
 }
@@ -1140,7 +1143,19 @@ function updateAttCount(){
 function updateViewStats(){
   const el=document.getElementById('ucnt');
   if(viewUser==='all'){el.innerHTML='';return;}
-  el.innerHTML=`<b>${shows.filter(s=>s.attended[viewUser]).length}</b> shows`;
+  const cnt=shows.filter(s=>s.attended[viewUser]).length;
+  el.innerHTML=`<b>${cnt}</b> shows`;
+  // Hide My Shows button if user has no shows yet
+  const myBtn=document.getElementById('myBtn');
+  if(myBtn){
+    if(cnt===0){
+      myBtn.style.display='none';
+      // Switch to all shows if currently on My Shows
+      if(myOnly){myOnly=false;myBtn.classList.remove('on');applyFilters();}
+    } else {
+      myBtn.style.display='';
+    }
+  }
 }
 
 // ── LIST ──────────────────────────────────────────────────────────
@@ -2800,9 +2815,7 @@ function retryShowMeta(id){
 
         <!-- Contact -->
         <div style="text-align:center;margin-bottom:14px">
-          <a href="#" onclick="var e='ronsdeadheadlistener'+String.fromCharCode(64)+'gmail.com';window.location='mailto:'+e;return false;" style="font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.5px" onmouseenter="this.title='ronsdeadheadlistener'+String.fromCharCode(64)+'gmail.com'">
-            ✉ ronsdeadheadlistener [at] gmail.com
-          </a>
+          <span id="_ce" style="font-size:12px;color:var(--muted);letter-spacing:.5px;cursor:pointer;text-decoration:underline" onclick="var e='ronsdeadheadlistener'+'@'+'gmail.com';window.location='mailto:'+e">✉ <span id="_ct"></span></span>
           <div style="font-size:10px;color:rgba(255,255,255,.2);margin-top:4px;letter-spacing:.5px">questions · new users · feedback</div>
         </div>
 
