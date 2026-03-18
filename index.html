@@ -261,15 +261,14 @@ body{display:flex;justify-content:center}
 .mp-time{font-size:9px;color:var(--muted);min-width:30px;font-variant-numeric:tabular-nums}
 .mp-time.r{text-align:right}
 .mp-idle{padding:14px 0;text-align:center;color:var(--muted);font-size:11px;font-style:italic}
-.others-view{padding:12px 16px}
-.ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:10px}
-.ocard{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;cursor:pointer;user-select:none}
-.ocard:active{border-color:var(--gold)}
-.oavatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:20px;font-weight:700;margin:0 auto 8px}
-.oname{font-size:13px;color:var(--text)}
-.ocnt{font-size:11px;color:var(--gold);margin-top:3px}
-.obar{height:4px;border-radius:2px;margin-top:8px;background:rgba(255,255,255,.1);overflow:hidden}
-.obar-fill{height:100%;border-radius:2px}
+.others-view{padding:0}
+.ogrid{margin-top:0}
+.orow{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.orow:active{background:rgba(200,168,75,.05)}
+.oavatar-sm{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:13px;font-weight:700;flex-shrink:0}
+.orow-name{flex:1;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.orow-bar{flex:2;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.orow-cnt{font-size:12px;color:var(--gold);min-width:40px;text-align:right}
 .song-view{padding:10px 16px;display:flex;flex-direction:column;gap:8px}
 .song-results{overflow-y:auto;flex:1;min-height:0}
 .smatch{padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer}
@@ -889,6 +888,7 @@ function onLoaded(list){
   // Restore last playback position after a short delay
   setTimeout(restoreLastPosition, 1500);
   loadFavorites(); // Load immediately - uses cache for instant display
+  if(curUser)updateViewStats();
 }
 
 function showErr(){
@@ -1031,9 +1031,8 @@ function loginAs(name,save){
   // Set viewer to self by default
   viewUser=name;
   document.getElementById('usel').value=name;
-  // Only default to My Shows if user has attended at least one show
-  var _userShows=shows.filter(function(s){return s.attended&&s.attended[name];}).length;
-  myOnly=_userShows>0;
+  const _uc=shows.filter(function(s){return s.attended&&s.attended[name];}).length;
+  myOnly=_uc>0;
   if(myOnly)document.getElementById('myBtn').classList.add('on');
   else document.getElementById('myBtn').classList.remove('on');
   applyFilters();updateAttCount();updateViewStats();
@@ -1145,17 +1144,8 @@ function updateViewStats(){
   if(viewUser==='all'){el.innerHTML='';return;}
   const cnt=shows.filter(s=>s.attended[viewUser]).length;
   el.innerHTML=`<b>${cnt}</b> shows`;
-  // Hide My Shows button if user has no shows yet
   const myBtn=document.getElementById('myBtn');
-  if(myBtn){
-    if(cnt===0){
-      myBtn.style.display='none';
-      // Switch to all shows if currently on My Shows
-      if(myOnly){myOnly=false;myBtn.classList.remove('on');applyFilters();}
-    } else {
-      myBtn.style.display='';
-    }
-  }
+  if(myBtn){if(cnt===0){myBtn.style.display='none';if(myOnly){myOnly=false;myBtn.classList.remove('on');applyFilters();}}else{myBtn.style.display='';}}
 }
 
 // ── LIST ──────────────────────────────────────────────────────────
@@ -1168,62 +1158,8 @@ function renderList(){
   const archiveDownBanner='';
   // Show max 4 badges to avoid crowding
   const shownUsers=users.slice(0,4);
-  // Pin current user's favorites at top of their own list
-  let pinnedHtml='';
   const myUser2=curUser||viewUser;
-  if(myUser2&&myUser2!=='all'&&myOnly&&allFavorites.length){
-    const pinned=myFavorites().map(function(f){
-      return shows.find(function(s){return s.id===f.showId;}) ||
-             shows.find(function(s){return s.id.startsWith(f.showId.substring(0,10))&&s.venue===f.venue;});
-    }).filter(Boolean);
-    if(pinned.length){
-      pinnedHtml='<div class="fav-section-hdr">★ Your Favorites</div>'+
-        pinned.map(s=>{
-          const ip=curShow&&curShow.id===s.id;
-          const myAtt=s.attended[myUser2]||false;
-          const isFav=true;
-          const hasAudio=(s.metaLoaded&&!s.notAvail)||s.relistenAvail;
-          const badges=(function(){
-            const shown=shownUsers.map(function(u){
-              const col=USER_COLORS[users.indexOf(u)%USER_COLORS.length];
-              const att=s.attended[u];
-              return '<div class="badge '+(att?'y':'n')+'" title="'+u+'" style="color:'+col+';'+(att?'background:'+col+'22;':'')+'">'+u[0]+'</div>';
-            });
-            const extra=users.length-shownUsers.length;
-            if(extra>0)shown.push('<div class="badge n" style="color:var(--muted);font-size:7px">+'+extra+'</div>');
-            return shown.join('');
-          })();
-          let sub='';
-          if(s.notAvail&&s.metaLoaded&&!s.relistenAvail){
-            sub='<div class="row-na">not on Relisten or archive.org</div>';
-          }else if(hasAudio){
-            const dot='<span style="color:var(--green)">▶ </span>';
-            const sbd=s.relistenSbd?'<span style="color:var(--gold);font-size:9px">SBD </span>':'';
-            const songs=s.songs&&s.songs.length?s.songs.slice(0,5).join(' · '):'';
-            sub=`<div class="row-songs">${dot}${sbd}${songs}</div>`;
-          }
-          return `<div class="row${ip?' playing':''}" onclick="openSetlist('${s.id}')">
-            <div class="row-date">${s.date}</div>
-            <div class="row-info"><div class="row-venue">${esc(s.venue)}</div><div class="row-city">${esc(s.city)}</div>${sub}</div>
-            <div class="row-right">
-              <div class="row-btns">
-                <button class="fav-btn fav-on" data-id="${s.id}" onclick="event.stopPropagation();toggleFavorite('${s.id}')" title="Remove favorite">★</button>
-                <button class="mine-btn${myAtt?' mine-on':''}" onclick="event.stopPropagation();toggleMine('${s.id}')" title="${myAtt?'Remove':'Add to my shows'}">${myAtt?'✓':'+'}</button>
-                <button class="pbtn${ip&&playing?' on':''}${!hasAudio?' na':''}" onclick="event.stopPropagation();${hasAudio?'quickPlay(\''+s.id+'\')':''}">${!hasAudio?'—':ip&&playing?'⏸':'▶'}</button>
-              </div>
-              <div class="badges">${badges}</div>
-            </div>
-          </div>`;
-        }).join('')+
-        '<div class="fav-divider"></div>';
-    }
-  }
-  // Exclude pinned favorites from the regular list to avoid duplicates
-  const pinnedIds=new Set(myFavorites().map(f=>f.showId));
-  const filteredNoPinned=(myUser2&&myUser2!=='all'&&myOnly&&pinnedIds.size)
-    ? filtered.filter(s=>!pinnedIds.has(s.id))
-    : filtered;
-  el.innerHTML=archiveDownBanner+pinnedHtml+filteredNoPinned.slice(0,300).map(s=>{
+  el.innerHTML=archiveDownBanner+filtered.slice(0,300).map(s=>{
     const ip=curShow?.id===s.id;
     const myUser=curUser||viewUser;
     const myAtt=myUser&&myUser!=='all'&&s.attended[myUser];
@@ -1267,13 +1203,14 @@ function renderList(){
 // ── OTHERS ────────────────────────────────────────────────────────
 function renderOthers(){
   const max=Math.max(...users.map(u=>shows.filter(s=>s.attended[u]).length),1);
-  document.getElementById('ogrid').innerHTML=users.map((u,i)=>{
-    const cnt=shows.filter(s=>s.attended[u]).length;
+  const sorted=[...users].map((u,i)=>({u,i,cnt:shows.filter(s=>s.attended[u]).length})).sort((a,b)=>b.cnt-a.cnt);
+  document.getElementById('ogrid').innerHTML=sorted.map(({u,i,cnt})=>{
     const c=USER_COLORS[i%USER_COLORS.length];
-    return `<div class="ocard" onclick="browseUser('${u}')">
-      <div class="oavatar" style="background:${c}22;color:${c}">${u[0]}</div>
-      <div class="oname">${esc(u)}</div><div class="ocnt">${cnt.toLocaleString()} shows</div>
-      <div class="obar"><div class="obar-fill" style="width:${Math.round(cnt/max*100)}%;background:${c}88"></div></div>
+    return `<div class="orow" onclick="browseUser('${u}')">
+      <div class="oavatar-sm" style="background:${c}22;color:${c}">${u[0].toUpperCase()}</div>
+      <div class="orow-name">${esc(u)}</div>
+      <div class="orow-bar"><div style="width:${Math.round(cnt/max*100)}%;background:${c};height:4px;border-radius:2px"></div></div>
+      <div class="orow-cnt">${cnt.toLocaleString()}</div>
     </div>`;
   }).join('');
 }
@@ -1323,7 +1260,7 @@ function closeSetlist(){
 function openSetlistForCurrent(){if(curShow)openSetlist(curShow.id);}
 
 // ── META LOADING ──────────────────────────────────────────────────
-const BG_BATCH=8,BG_DELAY=500;
+const BG_BATCH=20,BG_DELAY=200;
 function bgLoadBatch(start){
   // Only background-load shows from 1972+ (earlier shows rarely on archive.org)
   const candidates=shows.filter(s=>!s.metaLoaded&&!s.notAvail&&s.year>='1972');
@@ -1665,11 +1602,7 @@ function startPlayback(show,idx){
       navigator.mediaSession.setActionHandler('play',function(){if(audio&&audio.paused){audio.play();playing=true;playIntent=true;navigator.mediaSession.playbackState='playing';renderMiniPlayer();updateSpPlayer();}});
       navigator.mediaSession.setActionHandler('pause',function(){if(audio){audio.pause();playing=false;playIntent=false;navigator.mediaSession.playbackState='paused';renderMiniPlayer();updateSpPlayer();}});
       navigator.mediaSession.setActionHandler('nexttrack',function(){if(curShow&&curTrackIdx+1<(curShow.tracks||[]).length)startPlayback(curShow,curTrackIdx+1);});
-      navigator.mediaSession.setActionHandler('previoustrack',function(){
-        if(audio&&audio.currentTime>3){audio.currentTime=0;}
-        else if(curShow&&curTrackIdx>0){playIntent=true;startPlayback(curShow,curTrackIdx-1);}
-        else if(audio){audio.currentTime=0;}
-      });
+      navigator.mediaSession.setActionHandler('previoustrack',function(){if(audio&&audio.currentTime>3)audio.currentTime=0;else if(curShow&&curTrackIdx>0)startPlayback(curShow,curTrackIdx-1);});
       try{navigator.mediaSession.setActionHandler('seekto',function(d){if(audio&&d.seekTime!=null)audio.currentTime=d.seekTime;});}catch(e){}
     }
   }).catch(function(e){if(e.name!=='AbortError'){playing=false;playIntent=false;updateSpPlayer();}});
@@ -1825,7 +1758,7 @@ function doSongSearch(){
   });
   matches.sort((a,b)=>a.date.localeCompare(b.date));
   const indexed=shows.filter(s=>s.songs).length;
-  cntEl.textContent=matches.length?`${matches.length} shows with "${q}" (${indexed} indexed)`:`No results yet — ${indexed}/${shows.length} shows indexed`;
+  cntEl.textContent=matches.length?`${matches.length} shows with "${q}"${indexed<shows.length?" · "+indexed.toLocaleString()+" of "+shows.length.toLocaleString()+" setlists loaded":""}`:`Search any song · ${indexed.toLocaleString()} of ${shows.length.toLocaleString()} setlists loaded${indexed<shows.length?" (loading more in background)":""}`;
   resEl.innerHTML=matches.slice(0,150).map(m=>`
     <div class="smatch" onclick="openSetlistAndPlay('${m.id}','${esc(m.song).replace(/'/g,"\\'")}')">
       <div class="sm-date">${m.date}</div><div class="sm-venue">${esc(m.venue)}</div>
@@ -1879,7 +1812,13 @@ async function loadFavorites() {
     });
     if (r.ok) {
       const d = await r.json();
-      const fresh = d.favorites || [];
+      let fresh = d.favorites || [];
+      // Don't restore locally-removed favorites - sheet may lag behind
+      // Keep local removals authoritative for this session
+      const localRemoved = JSON.parse(localStorage.getItem('gd_fav_removed')||'[]');
+      if(localRemoved.length){
+        fresh = fresh.filter(f=>!localRemoved.some(r=>r.user===f.user&&r.showId===f.showId));
+      }
       // Only re-render if data actually changed
       if (JSON.stringify(fresh) !== JSON.stringify(allFavorites)) {
         allFavorites = fresh;
@@ -1902,9 +1841,8 @@ function myFavorites() {
 }
 
 function isFavorited(showId) {
-  const user = curUser || viewUser;
-  if (!user || user === 'all') return false;
-  return allFavorites.some(f => f.user === user && f.showId === showId);
+  if (!curUser) return false;
+  return allFavorites.some(f => f.user === curUser && f.showId === showId);
 }
 
 async function toggleFavorite(id) {
@@ -1924,6 +1862,14 @@ async function toggleFavorite(id) {
     // Remove
     allFavorites = allFavorites.filter(f => !(f.user === curUser && f.showId === id));
     localStorage.setItem('gd_favorites', JSON.stringify(allFavorites));
+    // Track this removal so background fetch doesn't restore it
+    try{
+      const removed=JSON.parse(localStorage.getItem('gd_fav_removed')||'[]');
+      removed.push({user:curUser,showId:id});
+      localStorage.setItem('gd_fav_removed',JSON.stringify(removed));
+    }catch(e){}
+    document.querySelectorAll('.fav-btn[data-id="'+id+'"]').forEach(b=>{b.classList.remove('fav-on');b.title='Add favorite';});
+    updateSpFavBtn();
     renderList(); renderJamFavorites();
     setHdrSt('Removed from favorites', 'ok');
     setTimeout(() => setHdrSt('', ''), 2500);
@@ -1942,6 +1888,12 @@ async function toggleFavorite(id) {
     }
     // Add
     allFavorites.push({user: curUser, showId: id, date: show.date, venue: show.venue});
+    // Remove from local-removed list if re-adding
+    try{
+      const removed=JSON.parse(localStorage.getItem('gd_fav_removed')||'[]');
+      const filtered=removed.filter(r=>!(r.user===curUser&&r.showId===id));
+      localStorage.setItem('gd_fav_removed',JSON.stringify(filtered));
+    }catch(e){}
     renderList(); renderJamFavorites();
     setHdrSt('\u2605 Added to favorites', 'ok');
     setTimeout(() => setHdrSt('', ''), 2500);
@@ -1957,6 +1909,11 @@ async function toggleFavorite(id) {
 function renderJamFavorites() {
   const el = document.getElementById('jamFavList');
   if (!el) return;
+  // Remember open sections before rebuild
+  const openSections = new Set();
+  el.querySelectorAll('[id^="jamfav-"]').forEach(function(d){
+    if(d.style.display!=='none') openSections.add(d.id);
+  });
   if (!allFavorites.length) {
     el.innerHTML = '<div class="jam-empty">No favorites yet — star a show to add it</div>';
     return;
@@ -1966,10 +1923,8 @@ function renderJamFavorites() {
     if (!byUser[f.user]) byUser[f.user] = [];
     byUser[f.user].push(f);
   });
-  // Sort so current user is first
   const userOrder = Object.keys(byUser).sort(function(a,b){
-    if(a===curUser) return -1;
-    if(b===curUser) return 1;
+    if(a===curUser) return -1; if(b===curUser) return 1;
     return a.localeCompare(b);
   });
   let out = '';
@@ -1978,17 +1933,13 @@ function renderJamFavorites() {
     const col = USER_COLORS[userIdx >= 0 ? userIdx % USER_COLORS.length : 0];
     const favs = byUser[user];
     const uid = 'jamfav-' + user.replace(/[^a-z0-9]/gi,'_');
+    // Keep section open if it was open, or auto-open current user's section
+    const isOpen = openSections.has(uid) || user === curUser;
     out += '<div style="margin-bottom:6px">';
-    out += '<div onclick="toggleJamFavSection(\''+uid+'\',this)" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:7px 0;user-select:none">'
-      + '<div style="width:22px;height:22px;border-radius:50%;background:'+col+'22;color:'+col+';font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid '+col+'">'+user[0]+'</div>'
-      + '<b style="color:'+col+';font-size:13px">'+esc(user)+'</b>'
-      + '<span style="font-size:10px;color:var(--muted)">'+favs.length+' show'+(favs.length>1?'s':'')+'</span>'
-      + '<span class="jfav-arrow" style="margin-left:auto;color:var(--muted);font-size:12px">▸</span>'
-      + '</div>';
-    out += '<div id="'+uid+'" style="display:none">';
+    out += '<div onclick="toggleJamFavSection(\''+uid+'\',this)" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:7px 0;user-select:none">'      + '<div style="width:22px;height:22px;border-radius:50%;background:'+col+'22;color:'+col+';font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid '+col+'">'+user[0]+'</div>'      + '<b style="color:'+col+';font-size:13px">'+esc(user)+'</b>'      + '<span style="font-size:10px;color:var(--muted)">'+favs.length+' show'+(favs.length>1?'s':'')+'</span>'      + '<span class="jfav-arrow" style="margin-left:auto;color:var(--muted);font-size:12px">'+(isOpen?'▾':'▸')+'</span>'      + '</div>';
+    out += '<div id="'+uid+'" style="display:'+(isOpen?'block':'none')+'">';
     favs.forEach(function(f) {
       let show = shows.find(function(s){return s.id===f.showId;});
-      // Fallback: match by date prefix if full ID doesn't match
       if (!show) show = shows.find(function(s){return s.id.startsWith(f.showId.substring(0,10))&&s.venue===f.venue;});
       if (!show) return;
       out += jamShowCard(show, false, null, true);
@@ -1996,6 +1947,26 @@ function renderJamFavorites() {
     out += '</div></div>';
   });
   el.innerHTML = out;
+  // Restore previously open sections
+  if(openSections.size){
+    openSections.forEach(function(id){
+      const d=document.getElementById(id);
+      if(d){
+        d.style.display='block';
+        const arrow=d.previousElementSibling&&d.previousElementSibling.querySelector('.jfav-arrow');
+        if(arrow)arrow.textContent='▾';
+      }
+    });
+  } else if(curUser){
+    // Auto-open current user's section on first render
+    const uid='jamfav-'+curUser.replace(/[^a-z0-9]/gi,'_');
+    const d=document.getElementById(uid);
+    if(d){
+      d.style.display='block';
+      const arrow=d.previousElementSibling&&d.previousElementSibling.querySelector('.jfav-arrow');
+      if(arrow)arrow.textContent='▾';
+    }
+  }
 }
 
 function toggleJamFavSection(uid, hdr) {
@@ -2719,7 +2690,7 @@ function updateSpFavBtn(){
   if(!btn||!curShow)return;
   const faved=isFavorited(curShow.id);
   btn.classList.toggle('fav-active', faved);
-  btn.innerHTML=faved?'★ fav':'+ fav';
+  btn.innerHTML=faved?'<span style="font-size:18px;line-height:1">★</span> fav':'<span style="font-size:18px;line-height:1;opacity:.35">☆</span> fav';
   btn.title=faved?'Remove from favorites':'Add to favorites';
   btn.style.color='';btn.style.background='';
 }
@@ -2815,7 +2786,7 @@ function retryShowMeta(id){
 
         <!-- Contact -->
         <div style="text-align:center;margin-bottom:14px">
-          <span id="_ce" style="font-size:12px;color:var(--muted);letter-spacing:.5px;cursor:pointer;text-decoration:underline" onclick="var e='ronsdeadheadlistener'+'@'+'gmail.com';window.location='mailto:'+e">✉ <span id="_ct"></span></span>
+          <span id="contact-link" style="font-size:15px;color:var(--muted);cursor:pointer;text-decoration:underline" onclick="var p='ronsdeadheadlistener',d='gmail.com',at=String.fromCharCode(64);window.location='mailto:'+p+at+d">&#9993; <span id="contact-email">ronsdeadheadlistener&#64;gmail.com</span></span>
           <div style="font-size:10px;color:rgba(255,255,255,.2);margin-top:4px;letter-spacing:.5px">questions · new users · feedback</div>
         </div>
 
