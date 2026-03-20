@@ -2829,24 +2829,17 @@ function restoreLastPosition(){
     if(Date.now()-saved.ts > 86400000){localStorage.removeItem('gd_restore');return;}
     const show=shows.find(s=>s.id===saved.showId);
     if(!show)return;
-    // If the show isn't visible (myOnly filter excludes it), temporarily show all
-    // so the user can see what's being restored
-    const showInFiltered=filtered.some(s=>s.id===show.id);
-    if(!showInFiltered&&myOnly){
-      myOnly=false;
-      const myBtn=document.getElementById('myBtn');
-      if(myBtn)myBtn.classList.remove('on');
-      applyFilters();
-    }
-    // Load the show meta if needed, then pause at position
+    // Restore playback without touching the current filter (myOnly stays as loginAs set it)
+    // If the show isn't in the filtered list (e.g. not attended), that's fine —
+    // the mini-player shows it and the user can tap to open it
     curShow=show;curTrackIdx=saved.trackIdx||0;
     const afterRestore=function(){
       if(show.tracks&&show.tracks.length>saved.trackIdx){
         pauseAtPosition(show,saved.trackIdx,saved.pos);
-        // Scroll the list to the restored show after a brief render delay
+        // Only scroll to it if it's actually visible in the current filter
         setTimeout(function(){
           const idx=filtered.findIndex(s=>s.id===show.id);
-          if(idx<0)return;
+          if(idx<0)return; // not in current filter — that's fine, mini-player has it
           const list=document.getElementById('list');
           if(!list)return;
           const rows=list.querySelectorAll('.row');
