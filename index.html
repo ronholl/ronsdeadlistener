@@ -112,18 +112,18 @@ body{display:flex;justify-content:center}
 .nu-msg.ok{color:var(--green)}
 
 /* ── MAIN APP ── */
-.hdr{background:#130a0a;padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
+.hdr{background:#130a0a;padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:120}
 .skull{font-size:24px;line-height:1;flex-shrink:0}
 .hdr-text{flex:1;min-width:0}
 .hdr-title{font-family:var(--serif);font-size:15px;color:var(--gold);letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hdr-sub{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
 .hdr-st{font-size:9px;margin-top:1px;min-height:11px}
 .hdr-st.ok{color:var(--green)}.hdr-st.err{color:var(--red)}.hdr-st.busy{color:var(--gold)}
-.hdr-user{display:flex;align-items:center;gap:6px;flex-shrink:0;cursor:pointer;background:rgba(200,168,75,.08);border:1px solid rgba(200,168,75,.2);border-radius:20px;padding:5px 10px 5px 6px}
+.hdr-user{display:flex;align-items:center;gap:6px;flex-shrink:0;cursor:pointer;background:rgba(200,168,75,.08);border:1px solid rgba(200,168,75,.2);border-radius:50%;width:32px;height:32px;padding:0;justify-content:center}
 .hdr-user:active{background:rgba(200,168,75,.15)}
 .hdr-user-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--serif)}
-.hdr-user-name{font-size:11px;color:var(--gold)}
-.tabs{display:flex;background:#111;border-bottom:1px solid var(--border);position:sticky;top:65px;z-index:9}
+.hdr-user-name{display:none}
+.tabs{display:flex;background:#111;border-bottom:1px solid var(--border);position:sticky;top:65px;z-index:119}
 .tab{flex:1;padding:9px 4px;text-align:center;font-size:10px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.5px;text-transform:uppercase;font-family:var(--mono);transition:all .15s;user-select:none}
 .tab.on{color:var(--gold);border-bottom-color:var(--gold)}
   #tab-shows,#tab-songs,#tab-others{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0}
@@ -152,7 +152,7 @@ body{display:flex;justify-content:center}
 .list{overflow-y:auto;flex:1}
 .row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;gap:8px;user-select:none}
 .row:active{background:rgba(200,168,75,.07)}
-.row.playing{background:rgba(200,168,75,.07);border-left:2px solid var(--gold);padding-left:14px}
+.row.playing{background:rgba(200,168,75,.07);box-shadow:inset 2px 0 0 var(--gold)}
 .row-date{font-size:13px;color:var(--gold);min-width:88px;letter-spacing:.3px;flex-shrink:0}
 .row-info{flex:1;min-width:0}
 .row-venue{font-size:16px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -197,9 +197,9 @@ body{display:flex;justify-content:center}
 .pbtn.on{background:var(--gold);border-color:var(--gold);color:#000}
 .pbtn.na{opacity:.25;cursor:default}
 /* SETLIST PANEL */
-.setlist-panel{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:520px;height:100vh;background:var(--bg);z-index:100;display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.setlist-panel{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:520px;height:100%;background:var(--bg);z-index:115;display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.4,0,.2,1)}
 .setlist-panel.open{transform:translateX(-50%) translateY(0)}
-.sp-hdr{background:#130a0a;padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sp-hdr{background:#130a0a;padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
 .sp-back{background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--muted);cursor:pointer;font-size:11px;font-family:var(--mono)}
 .sp-back:active{border-color:var(--gold);color:var(--gold)}
 .sp-info{flex:1;min-width:0}
@@ -214,10 +214,13 @@ body{display:flex;justify-content:center}
 .sp-arc{font-size:10px;color:var(--gold);background:transparent;border:1px solid rgba(200,168,75,.3);border-radius:6px;padding:3px 8px;cursor:pointer;font-family:var(--mono);flex-shrink:0}
 .sp-arc:active{background:rgba(200,168,75,.1)}
 .sp-body{overflow-y:auto;flex:1}
-.sp-section{padding:6px 16px 4px;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;background:var(--surf);border-bottom:1px solid var(--border);border-top:1px solid var(--border);position:sticky;top:0;z-index:2}
+.sp-tabs{display:flex;background:#111;border-bottom:1px solid var(--border)}
+.sp-tab{flex:1;padding:7px 4px;text-align:center;font-size:9px;color:var(--muted);cursor:pointer;letter-spacing:.5px;text-transform:uppercase;font-family:var(--mono);transition:all .15s;user-select:none}
+.sp-tab:active{color:var(--gold)}
+.sp-section{padding:6px 16px 4px;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;background:var(--surf);border-bottom:1px solid var(--border)}
 .sp-track{display:flex;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;gap:10px;user-select:none}
 .sp-track:active{background:rgba(200,168,75,.07)}
-.sp-track.cur{background:rgba(200,168,75,.08);border-left:2px solid var(--gold);padding-left:14px}
+.sp-track.cur{background:rgba(200,168,75,.08);box-shadow:inset 2px 0 0 var(--gold)}
 .sp-track-num{font-size:10px;color:var(--muted);min-width:18px;text-align:right;flex-shrink:0}
 .sp-track-info{flex:1;min-width:0}
 .sp-track-name{font-size:15px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -228,46 +231,51 @@ body{display:flex;justify-content:center}
 .sp-pbtn.cur{background:var(--gold);border-color:var(--gold);color:#000}
 .sp-unavail{padding:24px 20px;text-align:center;color:var(--muted);font-size:11px;line-height:1.9}
 .sp-unavail a{color:var(--gold);text-decoration:none}
-.sp-player{background:#0f0f0f;border-top:1px solid var(--border);padding:16px 16px 24px;flex-shrink:0}
-.sp-now{font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;min-height:18px}
+.sp-player{background:#0f0f0f;border-top:1px solid var(--border);padding:10px 14px 16px;flex-shrink:0}
+.sp-now{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;min-height:16px}
 .sp-now-sub{font-size:11px;color:var(--muted);margin-bottom:8px;min-height:14px;font-style:italic}
-.prog-wrap{display:flex;align-items:center;gap:8px;margin:4px 0 8px}
+.prog-wrap{display:flex;align-items:center;gap:8px;margin:2px 0 4px}
 .ptime{font-size:12px;color:var(--muted);min-width:38px;font-variant-numeric:tabular-nums}
 .ptime.r{text-align:right}
 .pbar{flex:1;height:6px;background:rgba(255,255,255,.12);border-radius:3px;cursor:pointer;padding:12px 0;margin:-12px 0}
 .pbar-inner{height:6px;background:rgba(255,255,255,.12);border-radius:3px;pointer-events:none}
 .pbar-fill{height:100%;background:var(--gold);border-radius:3px;width:0%;transition:width .3s linear}
-.sp-ctrls{display:flex;align-items:center;gap:14px;justify-content:center;padding:8px 0}
-.cbtn{background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--muted);padding:10px 16px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;user-select:none;min-height:44px;display:flex;align-items:center;justify-content:center}
+.sp-ctrls{display:flex;align-items:center;gap:10px;justify-content:center;padding:4px 0}
+.cbtn{background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--muted);padding:8px 12px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;user-select:none;min-height:40px;display:flex;align-items:center;justify-content:center}
 .cbtn:active{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,.08)}
-.cbtn.main{background:var(--gold);border-color:var(--gold);color:#000;border-radius:50%;width:72px;height:72px;font-size:28px;padding:0;flex-shrink:0}
+.cbtn.main{background:var(--gold);border-color:var(--gold);color:#000;border-radius:50%;width:58px;height:58px;font-size:24px;padding:0;flex-shrink:0}
 .cbtn.main:active{background:var(--gold2);transform:scale(.95)}
-.cbtn.skip{border-radius:50%;width:56px;height:56px;font-size:22px;padding:0;flex-shrink:0}
-#sp-fav{border-radius:12px;min-width:56px;height:56px;font-size:14px;padding:0 12px;flex-shrink:0;border:1px solid rgba(200,168,75,.35);color:rgba(200,168,75,.7);gap:4px}
+.cbtn.skip{border-radius:50%;width:44px;height:44px;font-size:18px;padding:0;flex-shrink:0}
+#sp-fav{border-radius:12px;min-width:48px;height:44px;font-size:14px;padding:0 12px;flex-shrink:0;border:1px solid rgba(200,168,75,.35);color:rgba(200,168,75,.7);gap:4px}
 #sp-fav.fav-active{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,.15)}
 .cbtn.att{border-color:rgba(82,183,136,.35);color:rgba(82,183,136,.7)}
 .cbtn.att.saved{border-color:var(--green);color:var(--green);background:rgba(82,183,136,.1)}
 .cbtn.saved{border-color:var(--green)!important;color:var(--green)!important}
-.cbtn.att{min-width:80px}
-.mini-player{background:#0f0f0f;border-top:1px solid var(--border);padding:10px 16px;position:sticky;bottom:0;cursor:pointer}
-.mp-row{display:flex;align-items:center;gap:10px}
-.mp-info{flex:1;min-width:0}
-.mp-song{font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mp-show{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mp-prog{display:flex;align-items:center;gap:8px;margin-top:7px}
+.cbtn.att{min-width:72px}
+.mini-player{background:linear-gradient(180deg,#1a1208 0%,#110e06 100%);border-top:2px solid var(--gold);padding:8px 12px 10px;position:sticky;bottom:0;z-index:5}
+.mp-row{display:flex;align-items:center;gap:8px}
+.mp-info{flex:1;min-width:0;cursor:pointer}
+.mp-song{font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.mp-show{font-size:11px;color:var(--gold);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.8}
+.mp-ctrls{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.mp-btn{width:34px;height:34px;border-radius:50%;background:transparent;border:1px solid rgba(200,168,75,.25);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;flex-shrink:0;transition:all .15s}
+.mp-btn:active{background:rgba(200,168,75,.15);color:var(--gold)}
+.mp-btn.main{background:var(--gold);border-color:var(--gold);color:#000;font-size:16px;width:38px;height:38px}
+.mp-btn.main:active{background:var(--gold2)}
+.mp-prog{display:flex;align-items:center;gap:6px;margin-top:6px}
 .mp-pbar{flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;cursor:pointer;padding:6px 0;margin:-6px 0}
 .mp-pbar-inner{height:3px;background:rgba(255,255,255,.1);border-radius:2px;pointer-events:none}
 .mp-pbar-fill{height:100%;background:var(--gold);border-radius:2px;width:0%}
 .mp-time{font-size:9px;color:var(--muted);min-width:30px;font-variant-numeric:tabular-nums}
 .mp-time.r{text-align:right}
-.mp-idle{padding:14px 0;text-align:center;color:var(--muted);font-size:11px;font-style:italic}
-.others-view{padding:0}
+.mp-idle{padding:12px 0;text-align:center;color:var(--muted);font-size:11px;font-style:italic}
+.others-view{padding:0;overflow-y:auto;flex:1;min-height:0}
 .ogrid{margin-top:0}
-.orow{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.orow{display:flex;align-items:center;gap:10px;padding:5px 12px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
 .orow:active{background:rgba(200,168,75,.05)}
-.oavatar-sm{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:13px;font-weight:700;flex-shrink:0}
-.orow-name{flex:1;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.orow-bar{flex:2;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.oavatar-sm{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:10px;font-weight:700;flex-shrink:0}
+.orow-name{flex:1;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.orow-bar{width:60px;flex-shrink:0;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
 .orow-cnt{font-size:12px;color:var(--gold);min-width:40px;text-align:right}
 .song-view{padding:10px 16px;display:flex;flex-direction:column;gap:8px}
 .song-results{overflow-y:auto;flex:1;min-height:0}
@@ -276,6 +284,13 @@ body{display:flex;justify-content:center}
 .sm-date{font-size:10px;color:var(--gold)}
 .sm-venue{font-size:12px;color:var(--text);margin-top:1px}
 .sm-ctx{font-size:10px;color:var(--muted);font-style:italic;margin-top:2px}
+.srow{padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow:active{background:rgba(200,168,75,.07)}
+.srow-song{font-size:14px;color:var(--text);font-weight:500}
+.srow-sep{font-size:12px;color:rgba(255,255,255,.2)}
+.srow-date{font-size:12px;color:var(--gold)}
+.srow-venue{font-size:12px;color:var(--muted)}
+.srow-play{font-size:10px;color:var(--green);opacity:.8}
 .loading{padding:28px 16px;text-align:center;color:var(--muted);font-size:11px;letter-spacing:.5px}
 .empty{padding:24px 16px;text-align:center;color:var(--muted);font-size:11px}
 .err-box{margin:14px 16px;background:rgba(196,64,64,.1);border:1px solid rgba(196,64,64,.25);border-radius:10px;padding:14px;font-size:11px;color:#e07070;line-height:1.8}
@@ -288,10 +303,10 @@ body{display:flex;justify-content:center}
 
   /* Track list grid */
   .tl-header{display:grid;grid-template-columns:32px 1fr 48px;padding:6px 16px 5px;border-bottom:1px solid var(--border);font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);user-select:none;position:sticky;top:0;background:var(--bg);z-index:1}
-  .tl-row{display:grid;grid-template-columns:32px 1fr 48px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;align-items:center;user-select:none;transition:background .12s;border-left:3px solid transparent}
+  .tl-row{display:grid;grid-template-columns:32px 1fr 48px;padding:5px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;align-items:center;user-select:none;transition:background .12s}
   .tl-row:hover{background:rgba(255,255,255,.03)}
   .tl-row:active{background:rgba(255,255,255,.06)}
-  .tl-cur{background:rgba(200,168,75,.07)!important;border-left:3px solid var(--gold)!important}
+  .tl-cur{background:rgba(200,168,75,.07)!important;box-shadow:inset 3px 0 0 var(--gold)}
   .tl-num{font-size:11px;color:var(--muted);text-align:right;padding-right:10px;font-variant-numeric:tabular-nums}
   .tl-cur .tl-num{color:var(--gold)}
   .tl-title{font-size:15px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px}
@@ -409,6 +424,7 @@ body{display:flex;justify-content:center}
     </div>
 
     <div class="login-prompt">Who's listening?</div>
+    <div id="loginCloseBtn" onclick="cancelLogin()" style="display:none;position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10" title="Close">×</div>
     <div class="login-users" id="loginUsers">
       <div id="loginLoadingMsg" style="padding:20px;text-align:center;color:var(--muted);font-size:12px"><span class="spinner"></span> Loading names…<br><br><span style="font-size:10px;opacity:.6">Connecting to Google Sheets</span></div>
     </div>
@@ -494,7 +510,7 @@ body{display:flex;justify-content:center}
   <div class="tabs">
     <div class="tab on" id="tab-btn-shows" onclick="switchTab('shows')">Shows</div>
     <div class="tab" id="tab-btn-songs" onclick="switchTab('songs')">Songs</div>
-    <div class="tab" id="tab-btn-others" onclick="switchTab('others')">Others</div>
+    <div class="tab" id="tab-btn-others" onclick="switchTab('others')">Deadheads</div>
     <div class="tab" id="tab-btn-jam" onclick="switchTab('jam')">Jam</div>
   </div>
 
@@ -510,10 +526,11 @@ body{display:flex;justify-content:center}
       <div class="stat"><span class="stat-n" id="s-yrs">—</span><span class="stat-l">Years</span></div>
     </div>
     <div class="filters">
-      <input class="srch" id="q" type="search" placeholder="Search venue, city, date, song..." oninput="applyFilters()"/>
+      <div style="position:relative;display:flex;align-items:center"><input class="srch" id="q" type="text" autocomplete="off" placeholder="Search venue, city, date, song..." oninput="applyFilters()" style="width:100%;padding-right:32px"/><button onclick="document.getElementById('q').value='';applyFilters()" style="position:absolute;right:8px;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px;line-height:1">×</button></div>
       <div class="frow">
         <select class="fsel" id="yrSel" onchange="applyFilters()"><option value="">All years</option></select>
         <button class="ftog" id="myBtn" onclick="toggleMy()">My shows</button>
+        <button class="ftog" id="theirBtn" style="display:none" onclick="toggleTheir()">— shows</button>
         <button class="ftog" id="srtBtn" onclick="toggleSort()">Date ↓</button>
       </div>
     </div>
@@ -523,7 +540,7 @@ body{display:flex;justify-content:center}
 
   <div id="tab-songs" style="display:none">
     <div class="song-view">
-      <input class="srch" id="songQ" type="search" placeholder="Search song name (e.g. Dark Star, Scarlet...)" oninput="songSearch()"/>
+      <div style="position:relative;display:flex;align-items:center"><input class="srch" id="songQ" type="text" autocomplete="off" placeholder="Search song name (e.g. Dark Star, Scarlet...)" oninput="songSearch()" style="width:100%;padding-right:32px"/><button onclick="document.getElementById('songQ').value='';renderFeaturedSongs()" style="position:absolute;right:8px;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px;line-height:1">×</button></div>
       <div class="cntbar" id="songCnt" style="padding:4px 0;border:none">Type a song name to search</div>
     </div>
     <div class="song-results" id="songResults"></div>
@@ -535,126 +552,36 @@ body{display:flex;justify-content:center}
       <div class="ogrid" id="ogrid"></div>
     </div>
   </div>
-
-  <div class="mini-player" id="miniPlayer" onclick="openSetlistForCurrent()">
-    <div class="mp-idle">Tap a show to open its setlist ↑</div>
-  </div>
-
-  <!-- JAM TAB -->
-  <div id="tab-jam" style="display:none">
-
-    <!-- Favorites -->
-    <div class="jam-card">
-      <div class="jam-card-hdr">
-        <span class="jam-icon">&#11088;</span>
-        <div>
-          <div class="jam-title">Favorites</div>
-          <div class="jam-sub">Starred shows from all listeners</div>
-        </div>
-      </div>
-      <div id="jamFavList" class="jam-results">
-        <div class="jam-empty">Loading&hellip;</div>
-      </div>
-    </div>
-
-    <!-- On This Day -->
-    <div class="jam-card" id="jamToday">
-      <div class="jam-card-hdr">
-        <span class="jam-icon">&#128197;</span>
-        <div>
-          <div class="jam-title">On This Day</div>
-          <div class="jam-sub" id="jamTodayDate">Shows from today in Dead history</div>
-        </div>
-      </div>
-      <div id="jamTodayList" class="jam-results">
-        <div class="jam-loading"><span class="spinner"></span> Loading&hellip;</div>
-      </div>
-    </div>
-
-    <!-- Play a Show -->
-    <div class="jam-card">
-      <div class="jam-card-hdr">
-        <span class="jam-icon">&#127922;</span>
-        <div>
-          <div class="jam-title">Play a Show</div>
-          <div class="jam-sub">Surprise me with a great show</div>
-        </div>
-      </div>
-      <div id="jamRandom" class="jam-results"></div>
-      <button class="jam-btn" onclick="loadRandomShow()">Roll the Dice &#8635;</button>
-    </div>
-
-    <!-- Best Versions -->
-    <div class="jam-card">
-      <div class="jam-card-hdr">
-        <span class="jam-icon">&#127942;</span>
-        <div>
-          <div class="jam-title">Best Versions</div>
-          <div class="jam-sub">Top rated performances of any song</div>
-        </div>
-      </div>
-      <div style="padding:0 0 10px">
-        <input id="jamSongQ" type="text" placeholder="Type a song name&hellip;"
-          oninput="jamSongSearch()"
-          style="width:100%;box-sizing:border-box;background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none">
-      </div>
-      <div id="jamBestList" class="jam-results"></div>
-    </div>
-
-  </div>
-
-  <!-- SETLIST PANEL -->
-  <div class="setlist-panel" id="setlistPanel">
-    <div class="sp-hdr">
-      <button class="sp-back" onclick="closeSetlist()">← Back</button>
-      <div class="sp-info">
-        <div class="sp-date" id="sp-date"></div>
-        <div class="sp-venue" id="sp-venue"></div>
-        <div class="sp-city" id="sp-city"></div>
-      </div>
-      <div class="sp-badges" id="sp-badges"></div>
-    </div>
-    <div class="sp-meta" id="sp-meta">
-      <div class="sp-meta-txt" id="sp-meta-txt"><span class="spinner"></span></div>
-      <button class="sp-arc" onclick="openArchive()">archive ↗</button>
-    </div>
-    <div class="sp-body" id="sp-body">
-      <div class="loading"><span class="spinner"></span>Fetching tracks…</div>
-    </div>
-    <div class="sp-player">
-      <div class="sp-now" id="sp-now">—</div>
-      <div class="sp-now-sub" id="sp-now-sub"></div>
-      <div class="prog-wrap">
-        <span class="ptime" id="sp-tc">0:00</span>
-        <div class="pbar" onclick="seekClick(event)">
-          <div class="pbar-inner"><div class="pbar-fill" id="sp-fill"></div></div>
-        </div>
-        <span class="ptime r" id="sp-td">--:--</span>
-      </div>
-      <div class="sp-ctrls">
-        <button class="cbtn att" id="sp-att" onclick="markAttended()">+ mine</button>
-        <button class="cbtn skip" onclick="skipTrack(-1)" title="Previous track">⏮</button>
-        <button class="cbtn main" id="sp-play" onclick="togglePlay()">▶</button>
-        <button class="cbtn skip" onclick="skipTrack(1)" title="Next track">⏭</button>
-        <button class="cbtn" id="sp-fav" onclick="toggleFavoriteFromPlayer()" title="Add to favorites" style="padding:0 14px;gap:6px;font-size:14px">+ fav</button>
-      </div>
-    </div>
-  </div>
-
-</div><!-- #app -->
+<!-- #app -->
 <script>
 // ── SAFE LOCALSTORAGE (file:// blocks localStorage) ──────────────
 // ── CONFIG ────────────────────────────────────────────────────────
 const SHEET_ID   = '1Hl1iSUkBQbfjbzXpEl5DrpRZQhu_xnOfqgvgmoTMURk';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDkkn9PBWvmBFsjRpoj0-zzM3euaLQt23B64iWn8XO13I4eqeEiCEuB8Zwj0ohObwpMQ/exec';
+// Poster filename — place final_deadhead_poster_web.jpg in the same folder as index.html
+// Leave empty string to disable the poster feature entirely
+const POSTER_FILE = 'final_deadhead_poster_web.jpg';
+// Derives the full URL automatically from wherever the app is hosted — no hardcoding needed
+const POSTER_URL = POSTER_FILE
+  ? (window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/') + POSTER_FILE)
+  : '';
 const USER_COLORS=['#c44040','#4a7fc1','#c8a84b','#52b788','#9b6dbd','#e87d3e','#e8a84b','#52b7b7'];
 
 // ── STATE ─────────────────────────────────────────────────────────
 let shows=[], filtered=[], users=[], userCols={}, userPins={};
+let attCache={};  // attCache[userName] = count — rebuilt when attendance changes
+function rebuildAttCache(){
+  attCache={};
+  users.forEach(function(u){
+    attCache[u]=shows.filter(function(s){return s.attended&&s.attended[u];}).length;
+  });
+}
+function attCount(u){return attCache[u]||0;}
 let curUser=null;      // logged-in user name
 let guestMode=false;   // browsing without login
 let viewUser='all';    // which user's shows to browse
 let curShow=null, audio=null, playing=false, curTrackIdx=0;
+let playingShow=null, playingTrackIdx=0; // what's actually playing audio
 let myOnly=false, sortDesc=true;
 let positions={}, songIndex={}, metaCache={};
 let preloadAudio=null; // preloaded next track for seamless playback
@@ -667,8 +594,10 @@ function savePos(id,t){
   positions[id]=Math.floor(t);
   try{
     localStorage.setItem('gd_pos',JSON.stringify(positions));
-    if(curShow&&audio){
-      localStorage.setItem('gd_restore',JSON.stringify({showId:curShow.id,trackIdx:curTrackIdx,pos:Math.floor(t),ts:Date.now()}));
+    // Always save playingShow/playingTrackIdx, not curShow/curTrackIdx
+    // curShow is whatever is open in the setlist panel — could be a different show
+    if(playingShow&&audio){
+      localStorage.setItem('gd_restore',JSON.stringify({showId:playingShow.id,trackIdx:playingTrackIdx,pos:Math.floor(t),ts:Date.now()}));
     }
   }catch(e){}
 }
@@ -861,6 +790,11 @@ function onLoaded(list){
   document.getElementById('s-total').textContent=list.length.toLocaleString();
   document.getElementById('s-yrs').textContent=yrs[0]+'–'+yrs[yrs.length-1];
 
+  // Apply any locally-cached attendance changes on top of sheet data first
+  // so rebuildAttCache() is correct before loginAs() reads attCount()
+  loadAttendedLocal();
+  rebuildAttCache();
+
   // Build login screen with real user data
   // Only show login if not already logged in (user may have entered PIN during load)
   if(!curUser && !guestMode){
@@ -881,8 +815,6 @@ function onLoaded(list){
     document.getElementById('loginScreen').style.display='none';
   }
 
-  // Apply any locally-cached attendance changes on top of sheet data
-  loadAttendedLocal();
   renderOthers();applyFilters();
   bgLoadBatch(0);
   // Restore last playback position after a short delay
@@ -912,8 +844,8 @@ function renderLoginScreen(){
   const sorted=[...users].sort(function(a,b){
     if(a===curUser) return -1;
     if(b===curUser) return 1;
-    const ca=shows.filter(function(s){return s.attended[a];}).length;
-    const cb=shows.filter(function(s){return s.attended[b];}).length;
+    const ca=attCount(a);
+    const cb=attCount(b);
     return cb-ca;
   });
 
@@ -927,7 +859,7 @@ function renderLoginScreen(){
     }
     return matched.map(function(u){
       const i=users.indexOf(u);
-      const cnt=shows.filter(function(s){return s.attended[u];}).length;
+      const cnt=attCount(u);
       const col=USER_COLORS[i%USER_COLORS.length];
       const isMe=u===curUser;
       const action=isMe?'cancelLogin()':'showPin(\''+u+'\')';
@@ -1031,12 +963,15 @@ function loginAs(name,save){
   // Set viewer to self by default
   viewUser=name;
   document.getElementById('usel').value=name;
-  const _uc=shows.filter(function(s){return s.attended&&s.attended[name];}).length;
+  const _uc=attCount(name);
   myOnly=_uc>0;
   if(myOnly)document.getElementById('myBtn').classList.add('on');
   else document.getElementById('myBtn').classList.remove('on');
+  const _tb=document.getElementById('theirBtn');if(_tb){_tb.style.display='none';_tb.classList.remove('on');}
   applyFilters();updateAttCount();updateViewStats();
   setHdrSt('Welcome back, '+name+'!','ok');
+  // Check for admin broadcast message — delay so welcome clears first
+  setTimeout(checkAdminMsg, 2500);
 }
 
 function switchUser(){
@@ -1044,6 +979,8 @@ function switchUser(){
   // Tapping own name closes, tapping another name asks for PIN
   renderLoginScreen();
   document.getElementById('loginScreen').style.display='flex';
+  var cb=document.getElementById('loginCloseBtn');
+  if(cb)cb.style.display=curUser?'flex':'none';
 }
 
 // ── NEW USER REGISTRATION ─────────────────────────────────────────
@@ -1055,6 +992,16 @@ function showNewUser(){
   document.getElementById('nuMsg').textContent='';
   document.getElementById('nuSubmit').disabled=true;
   document.getElementById('nuName').focus();
+  // Pre-check user count via GET (CORS-friendly) so we can warn immediately if bus is full
+  fetch(SCRIPT_URL+'?action=getUserCount').then(r=>r.json()).then(d=>{
+    if(d.spotsLeft===0){
+      const msg=document.getElementById('nuMsg');
+      msg.innerHTML='The bus is full right now 🚌'
+        +'<br><br>You can <span style="color:var(--gold);cursor:pointer;text-decoration:underline" onclick="enterGuestMode()">browse as a Guest</span>'
+        +' or email <a href="mailto:ronsdeadheadlistener@gmail.com" style="color:var(--gold)">ronsdeadheadlistener@gmail.com</a> to request a spot.';
+      msg.className='nu-msg err';
+    }
+  }).catch(()=>{});// silently ignore if count check fails
 }
 
 function nuPinInput(idx){
@@ -1069,13 +1016,22 @@ function nuPinKey(e,idx){
     document.getElementById('nup'+(idx-1)).focus();
   }
 }
+// Names that look too much like Ron's — block them
+const RESERVED_NAMES=/^ron(\s+h)?$/i;  // block 'Ron' and 'Ron H' only
+function isReservedName(n){return RESERVED_NAMES.test(n.trim());}
+
 function nuValidate(){
   const name=document.getElementById('nuName').value.trim();
   const pin=[0,1,2,3].map(i=>document.getElementById('nup'+i).value).join('');
-  const valid=name.length>=2&&pin.length===4&&!users.includes(name);
+  const reserved=isReservedName(name);
+  const taken=users.includes(name);
+  const valid=name.length>=2&&pin.length===4&&!taken&&!reserved;
   document.getElementById('nuSubmit').disabled=!valid;
   const msg=document.getElementById('nuMsg');
-  if(name.length>=2&&users.includes(name)){
+  if(name.length>=2&&reserved){
+    msg.textContent='That name is reserved — Ron is already on the bus 🚌';
+    msg.className='nu-msg err';
+  }else if(name.length>=2&&taken){
     msg.textContent='That name is already taken — pick a different one';
     msg.className='nu-msg err';
   }else{
@@ -1088,22 +1044,25 @@ async function registerNewUser(){
   const pin=[0,1,2,3].map(i=>document.getElementById('nup'+i).value).join('');
   const btn=document.getElementById('nuSubmit');
   const msg=document.getElementById('nuMsg');
+  if(isReservedName(name)){
+    msg.textContent='That name is reserved — Ron is already on the bus 🚌';
+    msg.className='nu-msg err';
+    return;
+  }
   btn.disabled=true;btn.textContent='Saving…';
   msg.textContent='Adding you to the sheet…';msg.className='nu-msg';
   try{
     await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',
       body:JSON.stringify({action:'addUser',name,pin}),
       headers:{'Content-Type':'text/plain;charset=utf-8'}});
-    // Optimistically add to local state
+
     users.push(name);userCols[name]=3+users.length-1;userPins[name]=pin;
     shows.forEach(s=>{s.attended[name]=false;});
+    rebuildAttCache();
     renderLoginScreen();
     renderOthers();
-    // ── Bulk prefetch all years from Relisten ────────────────────
-  // Fetches 31 years in parallel (~400ms), marks shows as available
-  // instantly so green ▶ indicators appear without waiting for full loads
-  prefetchRelistenAvailability();
-  const usel=document.getElementById('usel');
+    prefetchRelistenAvailability();
+    const usel=document.getElementById('usel');
     const o=document.createElement('option');o.value=name;o.textContent=name;usel.appendChild(o);
     msg.textContent='Done! Logging you in…';msg.className='nu-msg ok';
     setTimeout(()=>loginAs(name,true),800);
@@ -1115,7 +1074,23 @@ async function registerNewUser(){
 
 // ── FILTERS ───────────────────────────────────────────────────────
 function changeViewUser(){viewUser=document.getElementById('usel').value;applyFilters();updateViewStats();}
-function toggleMy(){myOnly=!myOnly;document.getElementById('myBtn').classList.toggle('on',myOnly);applyFilters();}
+function toggleMy(){
+  const myBtn=document.getElementById('myBtn');
+  const tb=document.getElementById('theirBtn');
+  if(myBtn.classList.contains('on')&&viewUser===curUser){
+    // Already on MY shows - toggle off to show all
+    myOnly=false;
+    myBtn.classList.remove('on');
+  } else {
+    // Switch to my shows
+    viewUser=curUser||viewUser;
+    document.getElementById('usel').value=viewUser;
+    myOnly=true;
+    myBtn.classList.add('on');
+    if(tb)tb.classList.remove('on');
+  }
+  applyFilters();updateAttCount();updateViewStats();
+}
 function toggleSort(){sortDesc=!sortDesc;document.getElementById('srtBtn').textContent='Date '+(sortDesc?'↓':'↑');applyFilters();}
 function applyFilters(){
   const q=document.getElementById('q').value.toLowerCase();
@@ -1137,15 +1112,24 @@ function applyFilters(){
 }
 function updateAttCount(){
   if(viewUser==='all'){document.getElementById('s-att').textContent='—';return;}
-  document.getElementById('s-att').textContent=shows.filter(s=>s.attended[viewUser]).length.toLocaleString();
+  document.getElementById('s-att').textContent=attCount(viewUser).toLocaleString();
 }
 function updateViewStats(){
   const el=document.getElementById('ucnt');
   if(viewUser==='all'){el.innerHTML='';return;}
-  const cnt=shows.filter(s=>s.attended[viewUser]).length;
-  el.innerHTML=`<b>${cnt}</b> shows`;
+  const cnt=attCount(viewUser);
+  el.innerHTML='<b>'+cnt+'</b> shows';
   const myBtn=document.getElementById('myBtn');
-  if(myBtn){if(cnt===0){myBtn.style.display='none';if(myOnly){myOnly=false;myBtn.classList.remove('on');applyFilters();}}else{myBtn.style.display='';}}
+  if(myBtn){
+    // Hide My Shows only if the LOGGED-IN user has 0 shows
+    const myCnt=curUser?attCount(curUser):0;
+    if(myCnt===0&&curUser){
+      myBtn.style.display='none';
+      if(myOnly){myOnly=false;myBtn.classList.remove('on');applyFilters();}
+    } else {
+      myBtn.style.display='';
+    }
+  }
 }
 
 // ── LIST ──────────────────────────────────────────────────────────
@@ -1159,8 +1143,9 @@ function renderList(){
   // Show max 4 badges to avoid crowding
   const shownUsers=users.slice(0,4);
   const myUser2=curUser||viewUser;
-  el.innerHTML=archiveDownBanner+filtered.slice(0,300).map(s=>{
-    const ip=curShow?.id===s.id;
+  const _cap=(myOnly||(viewUser&&viewUser!=='all'))?2500:300;
+  el.innerHTML=archiveDownBanner+filtered.slice(0,_cap).map(s=>{
+    const ip=playingShow?.id===s.id&&!!audio;
     const myUser=curUser||viewUser;
     const myAtt=myUser&&myUser!=='all'&&s.attended[myUser];
     const isFav=isFavorited(s.id);
@@ -1197,27 +1182,60 @@ function renderList(){
       </div>
     </div>`;
   }).join('');
-  if(filtered.length>300)el.innerHTML+=`<div class="empty" style="font-size:9px">First 300 shown — filter to narrow</div>`;
+  if(filtered.length>_cap)el.innerHTML+=`<div class="empty" style="font-size:9px">First ${_cap} shown — filter to narrow</div>`;
 }
 
-// ── OTHERS ────────────────────────────────────────────────────────
+// ── DEADHEADS ────────────────────────────────────────────────────────
 function renderOthers(){
-  const max=Math.max(...users.map(u=>shows.filter(s=>s.attended[u]).length),1);
-  const sorted=[...users].map((u,i)=>({u,i,cnt:shows.filter(s=>s.attended[u]).length})).sort((a,b)=>b.cnt-a.cnt);
-  document.getElementById('ogrid').innerHTML=sorted.map(({u,i,cnt})=>{
-    const c=USER_COLORS[i%USER_COLORS.length];
-    return `<div class="orow" onclick="browseUser('${u}')">
-      <div class="oavatar-sm" style="background:${c}22;color:${c}">${u[0].toUpperCase()}</div>
-      <div class="orow-name">${esc(u)}</div>
-      <div class="orow-bar"><div style="width:${Math.round(cnt/max*100)}%;background:${c};height:4px;border-radius:2px"></div></div>
-      <div class="orow-cnt">${cnt.toLocaleString()}</div>
-    </div>`;
+  const max=Math.max(...users.map(u=>attCount(u)),1);
+  const sorted=[...users].map(function(u,i){return{u:u,i:i,cnt:attCount(u)};}).sort(function(a,b){return b.cnt-a.cnt;});
+  document.getElementById('ogrid').innerHTML=sorted.map(function(item){
+    const u=item.u,c=USER_COLORS[item.i%USER_COLORS.length],cnt=item.cnt;
+    return '<div class="orow" onclick="browseUser(\'' + u + '\')">'
+      +'<div class="oavatar-sm" style="background:'+c+'22;color:'+c+'">'+u[0].toUpperCase()+'</div>'
+      +'<div class="orow-name">'+esc(u)+'</div>'
+      +'<div class="orow-bar"><div style="width:'+Math.round(cnt/max*100)+'%;background:'+c+';height:4px;border-radius:2px"></div></div>'
+      +'<div class="orow-cnt">'+cnt.toLocaleString()+'</div></div>';
   }).join('');
 }
 function browseUser(u){
-  document.getElementById('usel').value=u;viewUser=u;myOnly=true;
-  document.getElementById('myBtn').classList.add('on');
+  document.getElementById('usel').value=u;viewUser=u;
+  const theirBtn=document.getElementById('theirBtn');
+  if(u===curUser){
+    myOnly=true;
+    document.getElementById('myBtn').classList.add('on');
+    if(theirBtn){theirBtn.style.display='none';theirBtn.classList.remove('on');}
+  } else {
+    myOnly=true;
+    document.getElementById('myBtn').classList.remove('on');
+    if(theirBtn){
+      theirBtn.textContent=u.substring(0,6)+' shows';
+      theirBtn.style.display='';
+      theirBtn.classList.add('on');
+      theirBtn._user=u;
+    }
+  }
   applyFilters();updateViewStats();switchTab('shows');
+}
+function toggleTheir(){
+  const theirBtn=document.getElementById('theirBtn');
+  const myBtn=document.getElementById('myBtn');
+  if(theirBtn&&theirBtn.classList.contains('on')){
+    // Already on their shows - toggle off to show all
+    myOnly=false;
+    theirBtn.classList.remove('on');
+    applyFilters();updateAttCount();updateViewStats();
+  } else {
+    // Switch to their shows
+    if(theirBtn&&theirBtn._user){
+      viewUser=theirBtn._user;
+      document.getElementById('usel').value=viewUser;
+    }
+    myOnly=true;
+    if(theirBtn)theirBtn.classList.add('on');
+    myBtn.classList.remove('on');
+    applyFilters();updateAttCount();updateViewStats();
+  }
 }
 
 // ── SETLIST PANEL ─────────────────────────────────────────────────
@@ -1225,13 +1243,25 @@ async function openSetlist(id){
   const show=shows.find(s=>s.id===id);if(!show)return;
   // Remember which tab was active so Back returns there
   setlistOriginTab=document.querySelector('.tab.on')?.id?.replace('tab-btn-','')||'shows';
-  if(!curShow||curShow.id!==show.id) curTrackIdx=0;
+  if(!curShow||curShow.id!==show.id) curTrackIdx=-1; // no auto-highlight on open
   curShow=show;renderList();
   document.getElementById('sp-date').textContent=show.date;
   document.getElementById('sp-venue').textContent=show.venue;
   document.getElementById('sp-city').textContent=show.city;
   updateSpAttBtn();updateSpPlayer();
-  document.getElementById('setlistPanel').classList.add('open');
+  const _hdr=document.querySelector('.hdr');
+  const _hdrH=_hdr?_hdr.offsetHeight:65;
+  const _mp=document.getElementById('miniPlayer');
+  const _mpH=(_mp&&_mp.offsetHeight>10)?_mp.offsetHeight:0;
+  const _sp=document.getElementById('setlistPanel');
+  var _tabs=document.querySelector('.tabs');
+  var _tabsH=_tabs?_tabs.offsetHeight:0;
+  _sp.style.top=(_hdrH+_tabsH)+'px';
+  _sp.style.height='calc(100vh - '+(_hdrH+_tabsH)+'px)';
+  _sp.classList.add('open');
+  // Hide the show list so .row.playing gold bar can't bleed through the panel
+  var _list=document.getElementById('list');if(_list)_list.style.visibility='hidden';
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
   updateSpFavBtn();
   if(!show.metaLoaded){
     document.getElementById('sp-meta-txt').innerHTML='<span class="spinner"></span>Loading setlist…';
@@ -1250,14 +1280,28 @@ async function openSetlist(id){
 }
 
 function closeSetlist(){
-  document.getElementById('setlistPanel').classList.remove('open');
-  // Return to the tab that was active when the setlist was opened
-  if(typeof setlistOriginTab!=='undefined'&&setlistOriginTab&&setlistOriginTab!==
-     (document.querySelector('.tab.on')?.id?.replace('tab-btn-','')||'shows')){
+  const _spc=document.getElementById('setlistPanel');
+  _spc.classList.remove('open');_spc.style.top='';_spc.style.height='';
+  const _mpEl2=document.getElementById('miniPlayer');if(_mpEl2)_mpEl2.style.visibility='';
+  // Restore show list visibility
+  var _list=document.getElementById('list');if(_list)_list.style.visibility='';
+  var _activeTab=setlistOriginTab||'shows';
+  var _tb=document.getElementById('tab-btn-'+_activeTab);if(_tb)_tb.classList.add('on');
+  if(typeof setlistOriginTab!=='undefined'&&setlistOriginTab){
     switchTab(setlistOriginTab);
   }
 }
-function openSetlistForCurrent(){if(curShow)openSetlist(curShow.id);}
+function openSetlistForCurrent(){
+  const target=playingShow||curShow;
+  if(!target)return;
+  // Open the setlist and highlight the playing track
+  openSetlist(target.id).then(function(){
+    if(playingShow&&playingTrackIdx>=0){
+      const el=document.getElementById('track-'+playingTrackIdx);
+      if(el)el.scrollIntoView({block:'center',behavior:'smooth'});
+    }
+  });
+}
 
 // ── META LOADING ──────────────────────────────────────────────────
 const BG_BATCH=20,BG_DELAY=200;
@@ -1494,19 +1538,20 @@ function renderSetlistBody(show){
   // ── Track list: clean 3-column grid ─────────────────────────
   let html='';
   show.tracks.forEach(function(t,i){
-    const isCur=curShow&&curShow.id===show.id&&curTrackIdx===i&&audio;
     const dur=t.length?fmtT(parseFloat(t.length)):'';
     // Strip trailing "->" from display, show "→" as a subtle connector
     const hasTransition=t.name&&t.name.trim().endsWith('->');
     const songName=t.name?t.name.replace(/\s*->$/,'').trim():'Track '+(i+1);
     html+=
-      '<div class="tl-row'+(isCur?' tl-cur':'')+'" id="track-'+i+'" onclick="playTrack('+i+')">'+
+      '<div class="tl-row" id="track-'+i+'" onclick="playTrack('+i+')">'+
         '<span class="tl-num">'+(i+1)+'</span>'+
         '<span class="tl-title">'+esc(songName)+(hasTransition?' <span class="tl-arrow">→</span>':'')+'</span>'+
         '<span class="tl-dur">'+dur+'</span>'+
       '</div>';
   });
   body.innerHTML=html;
+  // After DOM is written, apply highlight via the single source of truth
+  updateSpPlayer();
 }
 
 
@@ -1534,7 +1579,9 @@ function fmtSize(b){const mb=b/1048576;return(mb>100?Math.round(mb):mb.toFixed(1
 // ── PLAYBACK ─────────────────────────────────────────────────────
 function playTrack(idx){
   if(!curShow?.tracks)return;
-  startPlayback(curShow,Math.max(0,Math.min(idx,curShow.tracks.length-1)));
+  const target=Math.max(0,Math.min(idx,curShow.tracks.length-1));
+  curTrackIdx=target;
+  startPlayback(curShow,target);
 }
 function quickPlay(id){
   const show=shows.find(s=>s.id===id);if(!show||show.notAvail)return;
@@ -1542,12 +1589,18 @@ function quickPlay(id){
     playing?pauseAudio():resumeAudio();
     return;
   }
+  // Immediately highlight row and show loading in mini player
+  curShow=show;curTrackIdx=0;playing=false;
+  renderList();renderMiniPlayer();
+  const ms=document.querySelector('.mp-song');
   if(!show.metaLoaded){
-    curShow=show;renderList();renderMiniPlayer();
-    loadShowMeta(show,true).then(()=>{if(show.tracks?.length)startPlayback(show,0);});
+    if(ms)ms.textContent='⏳ Loading '+show.date+'...';
+    loadShowMeta(show,true).then(function(){
+      if(show.tracks&&show.tracks.length)startPlayback(show,0);
+    });
     return;
   }
-  if(show.tracks?.length)startPlayback(show,0);
+  if(show.tracks&&show.tracks.length)startPlayback(show,0);
 }
 
 function startPlayback(show,idx){
@@ -1564,6 +1617,7 @@ function startPlayback(show,idx){
   playing=false;playIntent=false;
   if(!show.tracks||!show.tracks[idx])return;
   curShow=show;curTrackIdx=idx;
+  playingShow=show;playingTrackIdx=idx;
   // Use preloaded or create new
   if(!newAudio){newAudio=new Audio();newAudio.preload='auto';}
   audio=newAudio;
@@ -1625,8 +1679,19 @@ function preloadNextTrack(show,nextIdx){
 
 function pauseAudio(){if(!audio)return;playIntent=false;audio.pause();playing=false;if('mediaSession' in navigator)navigator.mediaSession.playbackState='paused';updateSpPlayer();renderMiniPlayer();renderList();}
 function resumeAudio(){if(!audio)return;playIntent=true;audio.play().then(()=>{playing=true;if('mediaSession' in navigator)navigator.mediaSession.playbackState='playing';updateSpPlayer();renderMiniPlayer();renderList();});}
-function togglePlay(){if(!audio&&curShow)startPlayback(curShow,curTrackIdx);else if(playing)pauseAudio();else resumeAudio();}
-function skipTrack(dir){if(!curShow?.tracks)return;const n=curTrackIdx+dir;if(n>=0&&n<curShow.tracks.length)startPlayback(curShow,n);}
+function togglePlay(){if(!audio&&curShow){const ti=curTrackIdx>=0?curTrackIdx:0;startPlayback(curShow,ti);}else if(playing)pauseAudio();else resumeAudio();}
+function skipTrack(dir){
+  if(!curShow?.tracks)return;
+  if(dir===-1){
+    // Restart if >3s in, else go to previous
+    if(audio&&audio.currentTime>3){audio.currentTime=0;return;}
+    const n=curTrackIdx-1;
+    if(n>=0)startPlayback(curShow,n);
+  } else {
+    const n=curTrackIdx+1;
+    if(n<curShow.tracks.length)startPlayback(curShow,n);
+  }
+}
 
 function updateProgress(){
   if(!audio)return;
@@ -1645,39 +1710,59 @@ function updateSpPlayer(){
   const pb=document.getElementById('sp-play');if(pb)pb.textContent=playing?'⏸':'▶';
   const now=document.getElementById('sp-now');
   const sub=document.getElementById('sp-now-sub');
-  if(now&&curShow&&curShow.tracks&&curShow.tracks[curTrackIdx]){
-    const t=curShow.tracks[curTrackIdx];
-    const songName=curShow.songs&&curShow.songs[curTrackIdx]?curShow.songs[curTrackIdx]:null;
+  // Show what's PLAYING, not what's being browsed
+  const ps=playingShow||curShow;
+  const pi=playingShow?playingTrackIdx:curTrackIdx;
+  if(now&&ps&&ps.tracks&&ps.tracks[pi]){
+    const t=ps.tracks[pi];
+    const songName=ps.songs&&ps.songs[pi]?ps.songs[pi]:null;
     now.textContent=songName||(t.mp3?t.name:cleanName(t.name));
-    if(sub)sub.textContent=(playing?'▶ ':curShow&&audio?'⏸ ':'')+curShow.date+' · '+curShow.venue;
+    if(sub)sub.textContent=(playing?'▶ ':audio?'⏸ ':'')+ps.date+' · '+ps.venue;
+  } else if(now){
+    now.textContent='';
+    if(sub)sub.textContent='';
   }
-  // Update track row highlights using CSS class
-  if(curShow&&curShow.tracks){
-    curShow.tracks.forEach(function(_,i){
-      const el=document.getElementById('track-'+i);
-      if(!el)return;
-      const isCur=curTrackIdx===i&&!!audio;
-      if(isCur)el.classList.add('tl-cur');
-      else el.classList.remove('tl-cur');
-    });
-    // Scroll current track into view
-    const curEl=document.getElementById('track-'+curTrackIdx);
-    if(curEl)curEl.scrollIntoView({block:'nearest',behavior:'smooth'});
+  // Clear ALL tl-cur rows in the DOM first (covers stale rows from previously browsed shows)
+  document.querySelectorAll('.tl-cur').forEach(function(el){el.classList.remove('tl-cur');});
+  // Then highlight only the currently playing track — but only if the browsed show IS the playing show
+  if(playingShow&&curShow&&playingShow.id===curShow.id&&audio){
+    const curEl=document.getElementById('track-'+playingTrackIdx);
+    if(curEl){
+      curEl.classList.add('tl-cur');
+      curEl.scrollIntoView({block:'nearest',behavior:'smooth'});
+    }
   }
   updateProgress();
 }
 
 function renderMiniPlayer(){
   const el=document.getElementById('miniPlayer');
-  if(!curShow||!audio){el.innerHTML='<div class="mp-idle">Tap a show to open its setlist ↑</div>';return;}
+  if(!curShow){el.innerHTML='<div class="mp-idle">Tap a show to open its setlist ↑</div>';return;}
+  if(!audio){
+    el.innerHTML='<div class="mp-row"><div class="mp-info"><div class="mp-song">⏳ Loading '+esc(curShow.date)+'…</div><div class="mp-show">'+esc(curShow.venue)+'</div></div></div>';
+    return;
+  }
   const pct=audio&&audio.duration?(audio.currentTime/audio.duration*100):0;
   // Use song name if available, fall back to cleaned filename
   const songName=curShow.songs&&curShow.songs[curTrackIdx]?curShow.songs[curTrackIdx]:null;
   const name=songName||(curShow.tracks&&curShow.tracks[curTrackIdx]?cleanName(curShow.tracks[curTrackIdx].name):'Loading…');
   el.innerHTML=`
     <div class="mp-row">
-      <div class="mp-info"><div class="mp-song">${esc(name)}</div><div class="mp-show">${esc(curShow.date)} · ${esc(curShow.venue)}</div></div>
-      <button class="pbtn${playing?' on':''}" onclick="event.stopPropagation();togglePlay()">${playing?'⏸':'▶'}</button>
+      <div class="mp-info" onclick="openSetlistForCurrent()">
+        <div class="mp-song">${esc(name)}</div>
+        <div class="mp-show">${esc(curShow.date)} · ${esc(curShow.venue)}</div>
+      </div>
+      <div class="mp-ctrls">
+        <button class="mp-btn" onclick="event.stopPropagation();skipTrack(-1)" title="Previous">⏮</button>
+        <button class="mp-btn main" onclick="event.stopPropagation();togglePlay()">${playing?'⏸':'▶'}</button>
+        <button class="mp-btn" onclick="event.stopPropagation();skipTrack(1)" title="Next">⏭</button>
+        <button class="mp-btn" onclick="event.stopPropagation();tryCast()" title="AirPlay/Cast">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M2 16.1A5 5 0 0 1 5.9 20M2 12.05A9 9 0 0 1 9.95 20M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/>
+            <circle cx="2" cy="20" r="1" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="mp-prog">
       <span class="mp-time" id="mp-tc">${fmtT(audio?.currentTime)}</span>
@@ -1741,40 +1826,164 @@ function parseSongs(text){
 }
 let songTimer=null;
 function songSearch(){clearTimeout(songTimer);songTimer=setTimeout(doSongSearch,220);}
+
+function showSongIndexStats(matchCount,q){
+  // Count indexed songs (from cache OR network - anything with songs loaded)
+  const indexed=Object.keys(songIndex).length>0
+    ? shows.filter(s=>s.songs&&s.songs.length).length
+    : shows.filter(s=>s.metaLoaded).length;
+  const withAudio=shows.filter(s=>s.metaLoaded&&!s.notAvail&&s.tracks&&s.tracks.length).length;
+  const noAudio=shows.filter(s=>s.metaLoaded&&(s.notAvail||!(s.tracks&&s.tracks.length))).length;
+  const totalFetched=withAudio+noAudio;
+  const allDone=totalFetched>=shows.length;
+  const pct=Math.round(totalFetched/shows.length*100);
+  const prog=allDone?'':' · '+pct+'% audio loaded';
+  if(matchCount>0&&q){
+    return matchCount+' songs matching "'+q+'"'+prog;
+  }
+  return allDone
+    ? 'Search any song · all '+shows.length.toLocaleString()+' shows loaded ('+withAudio.toLocaleString()+' with audio)'
+    : 'Search any song · '+indexed.toLocaleString()+' setlists indexed · '+pct+'% audio loaded';
+}
+
+// Featured songs for pre-loaded Songs tab display
+const FEATURED_SONGS=['Dark Star','Scarlet Begonias','Fire on the Mountain','Terrapin Station','Eyes of the World','Franklin\'s Tower','Sugar Magnolia','Friend of the Devil','Estimated Prophet','Cassidy','Cumberland Blues','Wharf Rat','St. Stephen','The Other One','Truckin\'','Casey Jones','Jack Straw','Ramble On Rose','Brokedown Palace','Ripple','China Cat Sunflower','I Know You Rider','Playing in the Band','Ship of Fools','Loser','Row Jimmy','Brown Eyed Women','Weather Report Suite','Stella Blue','High Time'];
+
+function renderSongRow(m){
+  const showObj=shows.find(s=>s.id===m.id);
+  const hasAudio=showObj&&((showObj.metaLoaded&&!showObj.notAvail)||showObj.relistenAvail);
+  return '<div class="srow" onclick="openSetlistAndPlay(\''+m.id+'\',\''+m.song.replace(/'/g,"\\'")+'\')">'+
+    '<span class="srow-song">'+esc(m.song)+'</span>'+
+    '<span class="srow-sep"> · </span>'+
+    '<span class="srow-date">'+m.date+'</span>'+
+    '<span class="srow-sep"> · </span>'+
+    '<span class="srow-venue">'+esc(m.venue)+'</span>'+
+    (hasAudio?'<span class="srow-play"> &#9654;</span>':'')+
+    '</div>';
+}
+
+function renderFeaturedSongs(){
+  const resEl=document.getElementById('songResults');
+  const cntEl=document.getElementById('songCnt');
+  if(!resEl)return;
+  // Show clickable song name chips - tap fills search box
+  const shuffled=FEATURED_SONGS.slice().sort(()=>Math.random()-0.5).slice(0,20);
+  cntEl.textContent='Tap a song to search, or type below';
+  resEl.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:8px;padding:4px 0">'
+    +shuffled.map(function(song){
+      return '<div onclick="fillSongSearch(\''+song.replace(/'/g,"\\'")+'\')" style="background:var(--surf);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:13px;color:var(--text);cursor:pointer;user-select:none" onmousedown="event.preventDefault()">'+esc(song)+'</div>';
+    }).join('')
+    +'</div>';
+}
+function fillSongSearch(song){
+  const q=document.getElementById('songQ');
+  if(!q)return;
+  q.value=song;
+  q.focus();
+  doSongSearch();
+}
+
 function doSongSearch(){
   const q=document.getElementById('songQ').value.trim().toLowerCase();
   const cntEl=document.getElementById('songCnt'),resEl=document.getElementById('songResults');
-  if(q.length<2){cntEl.textContent='Type a song name to search';resEl.innerHTML='';return;}
+  if(q.length<2){renderFeaturedSongs();return;}
   shows.filter(s=>!s.songs&&!s.metaLoaded).slice(0,80).forEach((s,i)=>setTimeout(()=>loadShowMeta(s,false),i*100));
   const matches=[],seen=new Set();
   shows.forEach(s=>{
     if(!s.songs)return;
-    s.songs.forEach(song=>{
+    s.songs.forEach(function(song){
       if(song.toLowerCase().includes(q)){
         const k=s.id+'|'+song;
         if(!seen.has(k)){seen.add(k);matches.push({id:s.id,date:s.date,venue:s.venue,city:s.city,song});}
       }
     });
   });
-  matches.sort((a,b)=>a.date.localeCompare(b.date));
-  const indexed=shows.filter(s=>s.songs).length;
-  cntEl.textContent=matches.length?`${matches.length} shows with "${q}"${indexed<shows.length?" · "+indexed.toLocaleString()+" of "+shows.length.toLocaleString()+" setlists loaded":""}`:`Search any song · ${indexed.toLocaleString()} of ${shows.length.toLocaleString()} setlists loaded${indexed<shows.length?" (loading more in background)":""}`;
-  resEl.innerHTML=matches.slice(0,150).map(m=>`
-    <div class="smatch" onclick="openSetlistAndPlay('${m.id}','${esc(m.song).replace(/'/g,"\\'")}')">
-      <div class="sm-date">${m.date}</div><div class="sm-venue">${esc(m.venue)}</div>
-      <div class="sm-ctx">${esc(m.city)} · <em>${esc(m.song)}</em></div>
-    </div>`).join('');
+  // Sort by song name first, then date
+  matches.sort(function(a,b){
+    const sc=a.song.toLowerCase().localeCompare(b.song.toLowerCase());
+    return sc!==0?sc:a.date.localeCompare(b.date);
+  });
+  cntEl.textContent=showSongIndexStats(matches.length,q);
+  resEl.innerHTML=matches.slice(0,200).map(renderSongRow).join('');
 }
 async function openSetlistAndPlay(id,song){
-  await openSetlist(id);
-  setTimeout(()=>{if(!curShow?.tracks)return;const i=findTrackIdx(curShow,song);if(i>=0)startPlayback(curShow,i);},800);
+  const show=shows.find(s=>s.id===id);
+  if(!show)return;
+
+  // Open the setlist panel
+  setlistOriginTab=document.querySelector('.tab.on')?.id?.replace('tab-btn-','')||'shows';
+  curShow=show;
+  document.getElementById('sp-date').textContent=show.date;
+  document.getElementById('sp-venue').textContent=show.venue;
+  document.getElementById('sp-city').textContent=show.city;
+  updateSpAttBtn();updateSpFavBtn();
+  const _hdr=document.querySelector('.hdr');
+  const _hdrH=_hdr?_hdr.offsetHeight:65;
+  const _mp=document.getElementById('miniPlayer');
+  const _mpH=(_mp&&_mp.offsetHeight>10)?_mp.offsetHeight:0;
+  const _sp=document.getElementById('setlistPanel');
+  var _tabs=document.querySelector('.tabs');
+  var _tabsH=_tabs?_tabs.offsetHeight:0;
+  _sp.style.top=(_hdrH+_tabsH)+'px';
+  _sp.style.height='calc(100vh - '+(_hdrH+_tabsH)+'px)';
+  _sp.classList.add('open');
+  var _listB=document.getElementById('list');if(_listB)_listB.style.visibility='hidden';
+  const doPlay=function(){
+    const i=findTrackIdx(show,song);
+    curTrackIdx=i>=0?i:0;
+    updateSpPlayer();
+    renderSetlistBody(show);
+    startPlayback(show,curTrackIdx);
+  };
+
+  if(show.tracks&&show.tracks.length){
+    // Already loaded - play immediately
+    doPlay();
+  } else {
+    // Show loading state
+    document.getElementById('sp-meta-txt').innerHTML='<span class="spinner"></span>Loading…';
+    if(!show.songs||!show.songs.length){
+      document.getElementById('sp-body').innerHTML='<div class="loading"><span class="spinner"></span>Fetching setlist…</div>';
+    } else {
+      renderSetlistBody(show);
+    }
+    // Load then play
+    await loadShowMeta(show,true);
+    if(show.tracks&&show.tracks.length){
+      doPlay();
+    }
+  }
+}
+
+function tryCast(){
+  if(!audio)return;
+  // Try AirPlay (iOS Safari / macOS)
+  if(typeof audio.webkitShowPlaybackTargetPicker==='function'){
+    audio.webkitShowPlaybackTargetPicker();
+    return;
+  }
+  // Try Remote Playback API (Chrome/Android - Chromecast)
+  if(audio.remote&&typeof audio.remote.prompt==='function'){
+    audio.remote.prompt().catch(function(){});
+    return;
+  }
+  setHdrSt('AirPlay/Cast not available in this browser','err');
+  setTimeout(function(){setHdrSt('','');},3000);
 }
 
 // ── TABS ──────────────────────────────────────────────────────────
 let prevTab='shows';
 let setlistOriginTab='shows';
 function switchTab(name){
+  // Close setlist panel if open
+  const _spc=document.getElementById('setlistPanel');
+  if(_spc&&_spc.classList.contains('open')){
+    _spc.classList.remove('open');_spc.style.top='';_spc.style.height='';
+    const _mpEl2=document.getElementById('miniPlayer');if(_mpEl2)_mpEl2.style.visibility='';
+    var _list=document.getElementById('list');if(_list)_list.style.visibility='';
+  }
   if(name==='jam')initJamTab();
+  if(name==='songs'){const q=document.getElementById('songQ');if(q&&q.value.length<2)renderFeaturedSongs();}
   if(name==='others')refreshAttendance(false);
   prevTab=document.querySelector('.tab.on')?.id?.replace('tab-btn-','')||'shows';
   ['shows','songs','others','jam'].forEach(t=>{
@@ -1784,6 +1993,11 @@ function switchTab(name){
 }
 
 loadData();
+// Set poster button visible once DOM is ready (element is below the script tag)
+document.addEventListener('DOMContentLoaded',function(){
+  const pb=document.getElementById('viewPosterBtn');
+  if(pb&&POSTER_URL)pb.style.display='block';
+});
 
 // ── FAVORITES ─────────────────────────────────────────────────────
 // allFavorites: [{user, showId, date, venue}] — loaded from sheet
@@ -2195,6 +2409,67 @@ async function prefetchRelistenAvailability(){
 }
 
 
+// ── ADMIN BROADCAST MESSAGE ────────────────────────────────────────
+// Ron updates the message by editing the sheet (Apps Script getMessage action).
+// Format returned: {id:'msg-001', text:'Hello Deadheads...'} or {id:'', text:''}
+// Client stores 'gd_msg_seen' = last seen id. Shows once per new id.
+async function checkAdminMsg(){
+  try{
+    const r=await fetch(SCRIPT_URL+'?action=getMessage',{signal:AbortSignal.timeout(6000)});
+    if(!r.ok){console.warn('getMessage HTTP error',r.status);return;}
+    const text=await r.text();
+    let d;
+    try{d=JSON.parse(text);}catch(e){console.warn('getMessage bad JSON',text.slice(0,100));return;}
+    if(!d.id||!d.text){console.log('getMessage: no active message',JSON.stringify(d));return;}
+    const seen=localStorage.getItem('gd_msg_seen')||'';
+    if(seen===d.id){console.log('getMessage: already seen',d.id);return;}
+    console.log('getMessage: showing message',d.id);
+    showMsg(d.id,d.text);
+  }catch(e){console.warn('checkAdminMsg error',e.message);}
+}
+function showMsg(id,text){
+  const overlay=document.getElementById('msgOverlay');
+  const el=document.getElementById('msgText');
+  if(!overlay||!el)return;
+  el.innerHTML=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  overlay._msgId=id;
+  overlay.style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function dismissMsg(){
+  const overlay=document.getElementById('msgOverlay');
+  if(!overlay)return;
+  if(overlay._msgId)try{localStorage.setItem('gd_msg_seen',overlay._msgId);}catch(e){}
+  overlay.style.display='none';
+  document.body.style.overflow='';
+}
+
+function showPoster(){
+  if(!POSTER_URL)return;
+  const el=document.getElementById('posterOverlay');
+  if(!el)return;
+  // Build fresh content each time — avoids iOS stale-element image loading issues
+  const wrap=el.querySelector('.poster-wrap');
+  if(wrap){
+    wrap.innerHTML='<div style="color:var(--muted);font-size:13px;text-align:center;padding:60px 20px">Loading poster…</div>';
+    const img=new Image();
+    img.style.cssText='max-width:100%;width:100%;height:auto;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.8);display:block';
+    img.onload=function(){wrap.innerHTML='';wrap.appendChild(img);};
+    img.onerror=function(){
+      wrap.innerHTML='<div style="color:var(--muted);font-size:13px;text-align:center;padding:60px 20px">Could not load poster.<br><br>Make sure <b style=\'color:var(--gold)\'>final_deadhead_poster_web.jpg</b><br>is in the GitHub repo.</div>';
+    };
+    img.src=POSTER_URL;
+  }
+  el.style.display='block';
+  el.scrollTop=0;
+  document.body.style.overflow='hidden';
+}
+function closePoster(){
+  const el=document.getElementById('posterOverlay');
+  if(el)el.style.display='none';
+  document.body.style.overflow='';
+}
+
 function showHelp(){
   const screen=document.getElementById('welcomeScreen');
   if(!screen)return;
@@ -2203,8 +2478,12 @@ function showHelp(){
     const anyLogo=document.querySelector('.hdr-logo')||document.querySelector('.login-logo');
     if(anyLogo&&anyLogo.src)wLogo.src=anyLogo.src;
   }
+  // Show poster button only if a poster URL is configured
+  const pb=document.getElementById('viewPosterBtn');
+  if(pb)pb.style.display=POSTER_URL?'block':'none';
   screen.style.display='block';
   document.body.style.overflow='hidden';
+  const mp=document.getElementById('miniPlayer');if(mp)mp.style.display='none';
   // Fetch visitor stats from Apps Script
   fetchVisitorStats();
 }
@@ -2232,9 +2511,27 @@ function closeHelp(){
   const screen=document.getElementById('welcomeScreen');
   if(screen)screen.style.display='none';
   document.body.style.overflow='';
+  const mp=document.getElementById('miniPlayer');if(mp)mp.style.display='';
   const firstVisit=!localStorage.getItem('gd_welcomed');
   localStorage.setItem('gd_welcomed','1');
-  // On first visit, show login after dismissing welcome
+  // First-time users: show poster (if configured) then proceed to login
+  if(firstVisit&&POSTER_URL&&!localStorage.getItem('gd_poster_seen')){
+    localStorage.setItem('gd_poster_seen','1');
+    showPoster();
+    // When they close the poster, show login
+    function onPosterClose(){
+      closePoster();
+      if(shows.length>0){renderLoginScreen();document.getElementById('loginScreen').style.display='flex';}
+    }
+    const overlay=document.getElementById('posterOverlay');
+    const xBtn=overlay.querySelector('button');
+    if(xBtn){
+      const orig=xBtn.onclick;
+      xBtn.onclick=function(){onPosterClose();xBtn.onclick=orig;};
+    }
+    return;
+  }
+  // On first visit (no poster), show login
   if(firstVisit&&shows.length>0){
     renderLoginScreen();
     document.getElementById('loginScreen').style.display='flex';
@@ -2392,6 +2689,7 @@ async function doMarkAttended(show,user,attended){
   if(!show||!user)return;
   show.attended[user]=attended;
   saveAttendedLocal(show.id,user,attended);
+  rebuildAttCache();
   renderList();updateAttCount();renderOthers();updateSpAttBtn();
   setHdrSt('Saving…','busy');
   try{
@@ -2525,16 +2823,35 @@ function restoreLastPosition(){
     if(Date.now()-saved.ts > 86400000){localStorage.removeItem('gd_restore');return;}
     const show=shows.find(s=>s.id===saved.showId);
     if(!show)return;
+    // If the show isn't visible (myOnly filter excludes it), temporarily show all
+    // so the user can see what's being restored
+    const showInFiltered=filtered.some(s=>s.id===show.id);
+    if(!showInFiltered&&myOnly){
+      myOnly=false;
+      const myBtn=document.getElementById('myBtn');
+      if(myBtn)myBtn.classList.remove('on');
+      applyFilters();
+    }
     // Load the show meta if needed, then pause at position
     curShow=show;curTrackIdx=saved.trackIdx||0;
+    const afterRestore=function(){
+      if(show.tracks&&show.tracks.length>saved.trackIdx){
+        pauseAtPosition(show,saved.trackIdx,saved.pos);
+        // Scroll the list to the restored show after a brief render delay
+        setTimeout(function(){
+          const idx=filtered.findIndex(s=>s.id===show.id);
+          if(idx<0)return;
+          const list=document.getElementById('list');
+          if(!list)return;
+          const rows=list.querySelectorAll('.row');
+          if(rows[idx])rows[idx].scrollIntoView({block:'center',behavior:'smooth'});
+        },200);
+      }
+    };
     if(!show.metaLoaded){
-      loadShowMeta(show,true).then(function(){
-        if(show.tracks&&show.tracks.length>saved.trackIdx){
-          pauseAtPosition(show,saved.trackIdx,saved.pos);
-        }
-      });
-    } else if(show.tracks&&show.tracks.length>saved.trackIdx){
-      pauseAtPosition(show,saved.trackIdx,saved.pos);
+      loadShowMeta(show,true).then(afterRestore);
+    } else {
+      afterRestore();
     }
   }catch(e){}
 }
@@ -2546,9 +2863,8 @@ function pauseAtPosition(show,trackIdx,pos){
   // Create audio element paused at position
   if(audio){audio.pause();audio=null;}
   audio=new Audio();
-  audio.preload='none';
+  audio.preload='metadata';
   audio.src=url;
-  audio.ontimeupdate=function(){savePos(show.id,audio.currentTime);updateProgress();};
   audio.onended=function(){
     if(!playIntent)return;
     const next=trackIdx+1;
@@ -2556,15 +2872,33 @@ function pauseAtPosition(show,trackIdx,pos){
     else{playing=false;playIntent=false;renderList();renderMiniPlayer();}
   };
   audio.onerror=function(){playing=false;playIntent=false;};
-  // Set position when metadata loads
-  audio.onloadedmetadata=function(){
-    if(pos&&pos>0)audio.currentTime=pos;
+  // Seek to saved position — use both onloadedmetadata and a one-shot ontimeupdate
+  // because on iOS, seeking in onloadedmetadata alone is unreliable
+  let _seeked=false;
+  function _doSeek(){
+    if(!pos||pos<=0||_seeked)return;
+    try{audio.currentTime=pos;_seeked=true;}catch(e){}
+  }
+  audio.onloadedmetadata=function(){_doSeek();};
+  audio.ontimeupdate=function(){
+    if(!_seeked)_doSeek();
+    savePos(show.id,audio.currentTime);updateProgress();
   };
   audio.load();
   playing=false;playIntent=false;
+  playingShow=show;playingTrackIdx=trackIdx;
   renderList();renderMiniPlayer();updateSpPlayer();
-  // Show a toast so user knows where they left off
-  setHdrSt('Paused at ✕ '+show.date,'ok');
+  // Set media session so lock screen/car shows song even when paused
+  if('mediaSession' in navigator&&track){
+    const sName=(show.songs&&show.songs[trackIdx])||track.name||'Track '+(trackIdx+1);
+    navigator.mediaSession.metadata=new MediaMetadata({
+      title:sName,artist:'Grateful Dead',
+      album:(show.venue||'')+(show.date?' · '+show.date:''),
+      artwork:[{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'180x180',type:'image/png'}]
+    });
+    navigator.mediaSession.playbackState='paused';
+  }
+  setHdrSt('⏸ Paused · '+show.date,'ok');
   setTimeout(function(){setHdrSt('','');},4000);
 }
 
@@ -2708,7 +3042,24 @@ function retryShowMeta(id){
 
 
   <!-- Welcome / Help Screen -->
-  <div id="welcomeScreen" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;overflow-y:auto">
+  <!-- ── POSTER OVERLAY ── -->
+  <div id="posterOverlay" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.95);overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <button onclick="closePoster()" style="position:fixed;top:14px;right:14px;z-index:601;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.7);border:2px solid rgba(200,168,75,.6);color:var(--gold);font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">×</button>
+    <div class="poster-wrap" style="display:flex;align-items:flex-start;justify-content:center;min-height:100%;padding:60px 12px 24px">
+      <div style="color:var(--muted);font-size:13px;text-align:center;padding:60px 20px">Loading poster…</div>
+    </div>
+  </div>
+
+  <!-- ── ADMIN MESSAGE OVERLAY ── -->
+  <div id="msgOverlay" style="display:none;position:fixed;inset:0;z-index:550;background:rgba(0,0,0,.85);align-items:center;justify-content:center;padding:20px;box-sizing:border-box">
+    <div style="background:#140c0c;border:1px solid rgba(200,168,75,.4);border-radius:18px;max-width:380px;width:100%;padding:28px 24px 22px;position:relative;box-shadow:0 16px 48px rgba(0,0,0,.9)">
+      <div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">Message from Ron</div>
+      <div id="msgText" style="font-size:15px;color:#d8d0c0;line-height:1.7;margin-bottom:20px"></div>
+      <button onclick="dismissMsg()" style="width:100%;background:linear-gradient(135deg,#c8a84b,#a87c28);border:none;border-radius:10px;padding:12px;color:#000;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer">Got it 👍</button>
+    </div>
+  </div>
+
+  <div id="welcomeScreen" style="display:none;position:fixed;z-index:300;inset:0;background:rgba(0,0,0,.92);z-index:500;overflow-y:auto">
     <div style="min-height:100%;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box">
       <div style="background:#140c0c;border:1px solid rgba(200,168,75,.25);border-radius:20px;max-width:440px;width:100%;padding:32px 28px 28px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.8)">
 
@@ -2716,66 +3067,58 @@ function retryShowMeta(id){
         <button onclick="closeHelp()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.06);border:none;color:var(--muted);font-size:18px;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1">×</button>
 
         <!-- Logo + Title -->
-        <div style="text-align:center;margin-bottom:24px">
+        <div style="text-align:center;margin-bottom:20px">
           <img id="welcomeLogo" style="width:88px;height:88px;border-radius:50%;border:2px solid rgba(200,168,75,.3);margin-bottom:14px;display:block;margin-left:auto;margin-right:auto">
-          <div style="font-family:var(--serif);font-size:28px;color:var(--gold);letter-spacing:.5px;line-height:1.2">Ron's Deadhead Listener</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.5px">1965 – 1995 · 2,386 Shows</div>
+          <div style="font-family:var(--serif);font-size:26px;color:var(--gold);letter-spacing:.5px;line-height:1.2">Ron's Deadhead Listener</div>
+          <div style="font-family:var(--serif);font-size:18px;color:rgba(200,168,75,.7);letter-spacing:.3px;margin-top:5px;line-height:1.3">Built for Deadheads by Ron</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.5px">1965 – 1995 · 2,386 Shows · Relisten</div>
         </div>
 
-        <!-- What it is -->
-        <div style="font-size:15px;color:#c8c0b0;line-height:1.8;margin-bottom:20px;text-align:center">
-          Browse and listen to every recorded Grateful Dead concert.<br>
-          Audio streams from archive.org via Relisten.
+        <!-- Install on phone — PROMINENT AT TOP -->
+        <div style="background:rgba(200,168,75,.1);border:2px solid rgba(200,168,75,.5);border-radius:12px;padding:18px 18px 16px;margin-bottom:16px;position:relative">
+          <div style="position:absolute;top:-11px;left:16px;background:var(--gold);color:#000;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:.5px">INSTALL THE APP</div>
+          <div style="font-size:13px;color:#c8c0b0;line-height:1.9;margin-top:4px">
+            Browse and play every Grateful Dead show right from your home screen — no App Store, no browser chrome, just music.<br><br>
+            <b style="color:var(--gold)">iPhone · Safari only:</b><br>
+            1&nbsp; Tap the <b style="color:#d8d0c0">Share ⎙</b> button at the bottom<br>
+            2&nbsp; Scroll down and tap <b style="color:#d8d0c0">Add to Home Screen</b><br>
+            3&nbsp; Tap <b style="color:#d8d0c0">Add</b> — done ✓<br><br>
+            <b style="color:var(--gold)">Android · Chrome:</b><br>
+            Tap <b style="color:#d8d0c0">⋮ Menu</b> → <b style="color:#d8d0c0">Add to Home screen</b>
+          </div>
         </div>
 
-        <!-- How to use -->
+        <!-- What's Here -->
         <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px 18px;margin-bottom:16px">
-          <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">The Four Tabs</div>
+          <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">What's Here</div>
           <div style="font-size:14px;color:#b8b0a0;line-height:2.1">
-            <b style="color:#d8d0c0">Shows</b> — all 2,386 concerts. Filter by year, search by venue, city or date. Tap any show for its setlist &amp; player<br>
-            <b style="color:#d8d0c0">Songs</b> — type any song name to find every show it was played. Tap a result to jump to that show<br>
-            <b style="color:#d8d0c0">Others</b> — all registered listeners with their show counts. Tap a name to browse their attended shows<br>
-            <b style="color:#d8d0c0">Jam</b> — discover shows: On This Day, Play a Show, and Best Versions
-          </div>
-        </div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px 18px;margin-bottom:16px">
-          <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">Reading the Show List</div>
-          <div style="font-size:14px;color:#b8b0a0;line-height:2.1">
-            <span style="color:rgba(82,183,136,.9)">&#9654;</span> <b style="color:#d8d0c0">Green arrow</b> — audio available on Relisten<br>
-            <span style="color:var(--gold);font-size:11px">SBD</span> <b style="color:#d8d0c0">Gold badge</b> — soundboard recording (best quality)<br>
-            <b style="color:#d8d0c0">Colored circles</b> — which listeners attended this show<br>
-            <b style="color:#d8d0c0">+ button</b> — mark as a show you attended<br>
-            <b style="color:#d8d0c0">My shows filter</b> — show only your attended shows
+            🎵 <b style="color:#d8d0c0">Shows</b> — all 2,386 concerts. Filter by year, search venue, city or date. Tap any show for its setlist &amp; player<br>
+            🔍 <b style="color:#d8d0c0">Songs</b> — type any song to find every show it was played. Tap a result to jump straight there<br>
+            💀 <b style="color:#d8d0c0">Deadheads</b> — other Deadheads show lists. Tap a name to browse their attended shows<br>
+            🎲 <b style="color:#d8d0c0">Jam</b> — discover shows: Favorites, On This Day, Play a Show, and Best Versions
           </div>
         </div>
 
-        <!-- Sign in -->
-        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px 18px;margin-bottom:16px">
-          <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">Signing In</div>
-          <div style="font-size:14px;color:#b8b0a0;line-height:2">
-            <b style="color:#d8d0c0">Tap your name</b> — enter PIN to log in and track your attended shows<br>
-            <b style="color:#d8d0c0">Explore the Archive</b> — listen to everything, no sign-in needed
-          </div>
-        </div>
-        <!-- Jam tab -->
+        <!-- The Jam Tab detail -->
         <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px 18px;margin-bottom:16px">
           <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">The Jam Tab</div>
           <div style="font-size:14px;color:#b8b0a0;line-height:2.1">
-            <b style="color:#d8d0c0">⭐ Favorites</b> — starred shows from all listeners. Your favorites pin to the top of your show list (max 5)<br>
-            <b style="color:#d8d0c0">📅 On This Day</b> — shows recorded on today’s date across all years, sorted by rating<br>
-            <b style="color:#d8d0c0">🎲 Play a Show</b> — roll the dice for a surprise — weighted toward top rated shows<br>
-            <b style="color:#d8d0c0">🏆 Best Versions</b> — type any song name to find its highest rated performances
+            ⭐ <b style="color:#d8d0c0">Favorites</b> — starred shows from all listeners. Your favorites pin to the top of your list (max 5)<br>
+            📅 <b style="color:#d8d0c0">On This Day</b> — shows from today's date across all years, sorted by rating<br>
+            🎲 <b style="color:#d8d0c0">Play a Show</b> — roll the dice for a surprise, weighted toward top rated shows<br>
+            🏆 <b style="color:#d8d0c0">Best Versions</b> — type any song name to find its highest rated performances
           </div>
         </div>
 
-        <!-- Install on phone -->
-        <div style="background:rgba(200,168,75,.1);border:2px solid rgba(200,168,75,.5);border-radius:12px;padding:18px 18px 16px;margin-bottom:24px;position:relative">
-          <div style="position:absolute;top:-11px;left:16px;background:var(--gold);color:#000;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:.5px">INSTALL THE APP</div>
-          <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;margin-top:4px">📱 Add to Your Home Screen</div>
-          <div style="font-size:14px;color:#b8b0a0;line-height:2.2">
-            Get the full experience — launches instantly like a real app, no browser needed.<br>
-            <b style="color:#d8d0c0">iPhone (Safari):</b> tap the <b style="color:var(--gold)">Share ↑</b> button &rarr; <b style="color:var(--gold)">Add to Home Screen</b><br>
-            <b style="color:#d8d0c0">Android (Chrome):</b> tap the <b style="color:var(--gold)">⋮ Menu</b> &rarr; <b style="color:var(--gold)">Add to Home screen</b>
+        <!-- Reading the show list -->
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px 18px;margin-bottom:16px">
+          <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">Reading the Show List</div>
+          <div style="font-size:14px;color:#b8b0a0;line-height:2.1">
+            <span style="color:rgba(82,183,136,.9)">▶</span> <b style="color:#d8d0c0">Green arrow</b> — audio available on Relisten<br>
+            <span style="color:var(--gold);font-size:11px">SBD</span> <b style="color:#d8d0c0">Gold badge</b> — soundboard recording (best quality)<br>
+            <b style="color:#d8d0c0">Colored circles</b> — which Deadheads attended this show<br>
+            <b style="color:#d8d0c0">+ button</b> — mark as a show you attended<br>
+            <b style="color:#d8d0c0">My shows filter</b> — see only your attended shows
           </div>
         </div>
 
@@ -2784,11 +3127,137 @@ function retryShowMeta(id){
           Loading stats…
         </div>
 
-        <!-- Contact -->
-        <div style="text-align:center;margin-bottom:14px">
-          <span id="contact-link" style="font-size:15px;color:var(--muted);cursor:pointer;text-decoration:underline" onclick="var p='ronsdeadheadlistener',d='gmail.com',at=String.fromCharCode(64);window.location='mailto:'+p+at+d">&#9993; <span id="contact-email">ronsdeadheadlistener&#64;gmail.com</span></span>
-          <div style="font-size:10px;color:rgba(255,255,255,.2);margin-top:4px;letter-spacing:.5px">questions · new users · feedback</div>
+        <!-- Get in Touch -->
+        <div style="text-align:center;margin-bottom:18px">
+          <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Get in Touch</div>
+          <span id="contact-link" style="font-size:15px;color:#c8c0b0;cursor:pointer" onclick="var p='ronsdeadheadlistener',d='gmail.com',at=String.fromCharCode(64);window.location='mailto:'+p+at+d">✉ <span id="contact-email" style="text-decoration:underline">ronsdeadheadlistener&#64;gmail.com</span></span>
+          <div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:5px">questions · new users · feedback</div>
         </div>
 
+        <!-- Share nudge -->
+        <div style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:20px;font-style:italic">
+          If you like it, share it with another Deadhead 💀
+        </div>
+
+        <!-- Poster button — only visible when POSTER_URL is set -->
+        <button id="viewPosterBtn" onclick="showPoster()" style="display:none;width:100%;background:transparent;border:1.5px solid rgba(200,168,75,.45);border-radius:12px;padding:13px;color:var(--gold);font-family:var(--mono);font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.5px;margin-bottom:10px">
+          📜 View the Poster
+        </button>
+
         <!-- CTA button -->
-        <button onclick="closeHelp()" style="width:100%;background:linear-gradient(135deg,#c8a84b,#a87c28);border:none;border-radius:12px;padding:15px;color:#000;font-family:var(--mono);font-si
+        <button onclick="closeHelp()" style="width:100%;background:linear-gradient(135deg,#c8a84b,#a87c28);border:none;border-radius:12px;padding:15px;color:#000;font-family:var(--mono);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px">
+          Let&#39;s Listen ▶</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- JAM TAB -->
+  <div id="tab-jam" style="display:none">
+
+    <!-- Favorites -->
+    <div class="jam-card">
+      <div class="jam-card-hdr">
+        <span class="jam-icon">&#11088;</span>
+        <div>
+          <div class="jam-title">Favorites</div>
+          <div class="jam-sub">Starred shows from all listeners</div>
+        </div>
+      </div>
+      <div id="jamFavList" class="jam-results">
+        <div class="jam-empty">Loading&hellip;</div>
+      </div>
+    </div>
+
+    <!-- On This Day -->
+    <div class="jam-card" id="jamToday">
+      <div class="jam-card-hdr">
+        <span class="jam-icon">&#128197;</span>
+        <div>
+          <div class="jam-title">On This Day</div>
+          <div class="jam-sub" id="jamTodayDate">Shows from today in Dead history</div>
+        </div>
+      </div>
+      <div id="jamTodayList" class="jam-results">
+        <div class="jam-loading"><span class="spinner"></span> Loading&hellip;</div>
+      </div>
+    </div>
+
+    <!-- Play a Show -->
+    <div class="jam-card">
+      <div class="jam-card-hdr">
+        <span class="jam-icon">&#127922;</span>
+        <div>
+          <div class="jam-title">Play a Show</div>
+          <div class="jam-sub">Surprise me with a great show</div>
+        </div>
+      </div>
+      <div id="jamRandom" class="jam-results"></div>
+      <button class="jam-btn" onclick="loadRandomShow()">Roll the Dice &#8635;</button>
+    </div>
+
+    <!-- Best Versions -->
+    <div class="jam-card">
+      <div class="jam-card-hdr">
+        <span class="jam-icon">&#127942;</span>
+        <div>
+          <div class="jam-title">Best Versions</div>
+          <div class="jam-sub">Top rated performances of any song</div>
+        </div>
+      </div>
+      <div style="padding:0 0 10px">
+        <input id="jamSongQ" type="text" placeholder="Type a song name&hellip;"
+          oninput="jamSongSearch()"
+          style="width:100%;box-sizing:border-box;background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none">
+      </div>
+      <div id="jamBestList" class="jam-results"></div>
+    </div>
+
+  </div>
+  <div class="mini-player" id="miniPlayer">
+    <div class="mp-idle">Tap a show to open its setlist ↑</div>
+  </div>
+  <div class="setlist-panel" id="setlistPanel">
+    <div class="sp-hdr">
+      <button class="sp-back" onclick="closeSetlist()">← Back</button>
+      <div class="sp-info">
+        <div class="sp-date" id="sp-date"></div>
+        <div class="sp-venue" id="sp-venue"></div>
+        <div class="sp-city" id="sp-city"></div>
+      </div>
+      <div class="sp-badges" id="sp-badges"></div>
+    </div>
+    <div class="sp-meta" id="sp-meta">
+      <div class="sp-meta-txt" id="sp-meta-txt"><span class="spinner"></span></div>
+      <button class="sp-arc" onclick="openArchive()">archive ↗</button>
+    </div>
+    <div class="sp-body" id="sp-body">
+      <div class="loading"><span class="spinner"></span>Fetching tracks…</div>
+    </div>
+    <div class="sp-player">
+      <div class="sp-now" id="sp-now" onclick="openSetlistForCurrent()" style="cursor:pointer">—</div>
+      <div class="sp-now-sub" id="sp-now-sub" onclick="openSetlistForCurrent()" style="cursor:pointer"></div>
+      <div class="prog-wrap">
+        <span class="ptime" id="sp-tc">0:00</span>
+        <div class="pbar" onclick="seekClick(event)">
+          <div class="pbar-inner"><div class="pbar-fill" id="sp-fill"></div></div>
+        </div>
+        <span class="ptime r" id="sp-td">--:--</span>
+      </div>
+      <div class="sp-ctrls">
+        <button class="cbtn att" id="sp-att" onclick="markAttended()">+ mine</button>
+        <button class="cbtn skip" onclick="skipTrack(-1)" title="Previous track">⏮</button>
+        <button class="cbtn main" id="sp-play" onclick="togglePlay()">▶</button>
+        <button class="cbtn skip" onclick="skipTrack(1)" title="Next track">⏭</button>
+        <button class="cbtn" onclick="tryCast()" title="Cast / AirPlay" style="border-radius:50%;width:44px;height:44px;padding:0;display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 16.1A5 5 0 0 1 5.9 20M2 12.05A9 9 0 0 1 9.95 20M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/>
+            <circle cx="2" cy="20" r="1" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="cbtn" id="sp-fav" onclick="toggleFavoriteFromPlayer()" title="Add to favorites" style="padding:0 14px;gap:6px;font-size:14px">+ fav</button>
+      </div>
+    </div>
+  </div>
+
+</div>i
