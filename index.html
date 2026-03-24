@@ -1872,7 +1872,7 @@ function renderSetlistBody(show){
   show.tracks.forEach(function(t,i){
     const dur=t.length?fmtT(parseFloat(t.length)):'';
     const hasTransition=t.name&&t.name.trim().endsWith('->');
-    const songName=t.name?t.name.replace(/\s*->$/,'').trim():'Track '+(i+1);
+    const songName=(show.songs&&show.songs[i])||(t.name&&t.name.replace(/\s*->$/,'').trim())||('Track '+(i+1));
     html+=
       '<div class="tl-row" id="track-'+i+'" onclick="playTrack('+i+')">'+
         '<span class="tl-num">'+(i+1)+'</span>'+
