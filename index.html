@@ -1496,7 +1496,6 @@ async function openSetlist(id){
   setlistOriginTab=document.querySelector('.tab.on')?.id?.replace('tab-btn-','')||'shows';
   if(!curShow||curShow.id!==show.id) curTrackIdx=-1; // no auto-highlight on open
   curShow=show;renderList();
-  addToHistory(show);
   document.getElementById('sp-date').textContent=show.date;
   document.getElementById('sp-venue').textContent=show.venue;
   document.getElementById('sp-city').textContent=show.city;
@@ -2375,6 +2374,9 @@ function startPlayback(show,idx){
     playing=true;
     _stopBufferTimer();
     _startAudioKeepAlive(); // keep iOS audio session alive in background
+    // Add/move show to Box of Tapes now that actual playback has started
+    const _trackTitle=(show.songs&&show.songs[idx])||(track&&(track.title||track.name))||null;
+    addToHistory(show,idx,_trackTitle);
     // Clear status and error banner on successful play
     _setMpStatus(null);
     const _err=document.getElementById('sp-audio-err');
@@ -3070,20 +3072,21 @@ async function toggleFavorite(id) {
 const HISTORY_KEY='gd_play_history';
 const HISTORY_MAX=20;
 
-function addToHistory(show){
+function addToHistory(show,trackIdx,trackTitle){
   if(!show||!show.id)return;
+  const fromPlayback=(trackIdx!=null);
   try{
     let hist=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');
-    // Preserve existing position data if present (moving to front on re-open)
     const existing=hist.find(h=>h.id===show.id)||{};
     hist=hist.filter(h=>h.id!==show.id);
     hist.unshift({
       id:show.id,date:show.date,venue:show.venue,city:show.city,ts:Date.now(),
-      // Carry forward any previously saved position fields
-      lastTrackIdx:existing.lastTrackIdx!=null?existing.lastTrackIdx:null,
-      lastTrackTitle:existing.lastTrackTitle||null,
-      lastPos:existing.lastPos||null,
-      lastPosTs:existing.lastPosTs||null
+      // On playback: reset to current track (position will update via saveHistoryPosition)
+      // On view-only: this path no longer runs (addToHistory only called from startPlayback)
+      lastTrackIdx:fromPlayback?trackIdx:(existing.lastTrackIdx!=null?existing.lastTrackIdx:null),
+      lastTrackTitle:fromPlayback?(trackTitle||null):(existing.lastTrackTitle||null),
+      lastPos:fromPlayback?0:(existing.lastPos||null),
+      lastPosTs:fromPlayback?null:(existing.lastPosTs||null)
     });
     if(hist.length>HISTORY_MAX)hist=hist.slice(0,HISTORY_MAX);
     localStorage.setItem(HISTORY_KEY,JSON.stringify(hist));
