@@ -732,8 +732,18 @@ function showStartupCrash(msg){
     }
   }catch(e){}
 }
-window.addEventListener('error',function(e){showStartupCrash((e&&e.message)||'Script error');});
-window.addEventListener('unhandledrejection',function(e){showStartupCrash((e&&e.reason&&e.reason.message)||String(e&&e.reason||'Promise error'));});
+window.addEventListener('error',function(e){
+  // Ignore resource-load noise and cross-origin "Script error." events. Those
+  // should not block a usable app.
+  if(e&&e.target&&e.target!==window)return;
+  if(!e||(!e.error&&(!e.message||e.message==='Script error.')))return;
+  showStartupCrash(e.message||'Startup error');
+});
+window.addEventListener('unhandledrejection',function(e){
+  const msg=(e&&e.reason&&e.reason.message)||String(e&&e.reason||'Promise error');
+  if(!msg||msg==='Script error.')return;
+  showStartupCrash(msg);
+});
 
 try{const p=localStorage.getItem('gd_pos');if(p)positions=JSON.parse(p);}catch(e){}
 // Update the Recently Played history entry for a show with its current playback position.
