@@ -578,7 +578,7 @@ body{display:flex;justify-content:center}
 // ── CONFIG ────────────────────────────────────────────────────────
 const SHEET_ID   = '1Hl1iSUkBQbfjbzXpEl5DrpRZQhu_xnOfqgvgmoTMURk';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDkkn9PBWvmBFsjRpoj0-zzM3euaLQt23B64iWn8XO13I4eqeEiCEuB8Zwj0ohObwpMQ/exec';
-const APP_BUILD = '1.5.5w-archive-source-dropdown';
+const APP_BUILD = '1.5.5w2-startup-cache-guard';
 // Poster filename — place final_deadhead_poster_web.jpg in the same folder as index.html
 // Leave empty string to disable the poster feature entirely
 const POSTER_FILE = 'final_deadhead_poster_web.jpg';
@@ -715,6 +715,25 @@ function _stopAudioKeepAlive(){
 }
 let pinTarget=null, pinBuffer='';
 let debugLines=[];
+function showStartupCrash(msg){
+  try{
+    const login=document.getElementById('loginScreen');
+    const usersEl=document.getElementById('loginUsers');
+    if(login)login.style.display='flex';
+    const pin=document.getElementById('pinScreen');if(pin)pin.style.display='none';
+    const nu=document.getElementById('newUserScreen');if(nu)nu.style.display='none';
+    if(usersEl){
+      usersEl.innerHTML='<div style="padding:16px;color:var(--muted);font-size:12px;line-height:1.8">'+
+        '<div style="color:var(--gold);font-size:13px;margin-bottom:8px">The app hit a startup error.</div>'+
+        '<button onclick="location.reload()" style="margin:10px 0;background:transparent;border:1px solid rgba(200,168,75,.5);border-radius:8px;padding:8px 24px;color:var(--gold);font-family:var(--mono);font-size:12px;cursor:pointer;display:block;width:100%">Reload</button>'+
+        '<button onclick="enterGuestMode()" style="margin:10px 0;background:rgba(200,168,75,.12);border:1px solid rgba(200,168,75,.45);border-radius:8px;padding:8px 24px;color:var(--gold);font-family:var(--mono);font-size:12px;cursor:pointer;display:block;width:100%">Continue as Guest</button>'+
+        '<div style="color:var(--red);font-size:10px;word-break:break-word;margin-top:10px">'+esc(msg||'Unknown startup error')+'</div>'+
+      '</div>';
+    }
+  }catch(e){}
+}
+window.addEventListener('error',function(e){showStartupCrash((e&&e.message)||'Script error');});
+window.addEventListener('unhandledrejection',function(e){showStartupCrash((e&&e.reason&&e.reason.message)||String(e&&e.reason||'Promise error'));});
 
 try{const p=localStorage.getItem('gd_pos');if(p)positions=JSON.parse(p);}catch(e){}
 // Update the Recently Played history entry for a show with its current playback position.
@@ -1603,14 +1622,6 @@ function onLoaded(list,opts){
       const savedIsPending=saved&&localStorage.getItem('gd_pending_user')===saved;
       if(saved&&userPins[saved]&&savedPin===userPins[saved]&&(users.includes(saved)||savedIsPending)){
         loginAs(saved,false);
-      } else if(!localStorage.getItem('gd_welcomed')){
-        document.getElementById('loginScreen').style.display='none';
-        // New users: show poster first (once only), then help screen
-        if(POSTER_URL&&!localStorage.getItem('gd_poster_seen')){
-          showPoster();
-        } else {
-          showHelp();
-        }
       }
       // else login screen stays visible
     }
