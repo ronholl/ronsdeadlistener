@@ -399,7 +399,7 @@ body{display:flex;justify-content:center}
     <div class="login-hero">
       <img src="deadhead_logo.jpg" class="login-logo" alt="Ron's Deadhead Listener" loading="eager" decoding="async"/>
       <div class="login-title">Ron's Deadhead Listener</div>
-      <div class="login-sub">1965 – 1995 · <span id="login-show-count">2,290</span> Shows</div>
+      <div class="login-sub">1965 – 1995 · <span id="login-show-count">2,290</span> Shows · <span style="opacity:.55">V1.5.5W</span></div>
     </div>
     
 
@@ -447,7 +447,7 @@ body{display:flex;justify-content:center}
 
     <div id="loginCloseBtn" onclick="cancelLogin()" style="display:none;position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10" title="Close">×</div>
     <div class="login-users" id="loginUsers">
-      <div id="loginLoadingMsg" style="padding:20px;text-align:center;color:var(--muted);font-size:12px"><span class="spinner"></span> Loading names…<br><br><span style="font-size:10px;opacity:.6">Connecting to Google Sheets</span></div>
+      <div id="loginLoadingMsg" style="padding:20px;text-align:center;color:var(--muted);font-size:12px"><span class="spinner"></span> Loading names…<br><br><span style="font-size:10px;opacity:.6">Connecting to Google Sheets · V1.5.5W</span></div>
     </div>
     <div class="login-spacer"></div>
   </div>
@@ -812,7 +812,7 @@ async function loadData(){
     }
   },12000);
   try{
-    await _fetchSheetFresh();
+    await _fetchSheetFresh({startup:true});
   }finally{
     if(!finished){
       finished=true;
@@ -829,8 +829,11 @@ function _readCache(){
     const parsed=JSON.parse(raw);
     if(parsed&&Array.isArray(parsed.shows)&&parsed.users&&parsed.users.length)
       return parsed; // new format
-    if(Array.isArray(parsed)&&parsed.length>5)
-      return {shows:parsed,users:null,pins:{}}; // old format — shows only
+    if(Array.isArray(parsed)&&parsed.length>5){
+      let userCache={};
+      try{userCache=JSON.parse(localStorage.getItem('gd_users_cache')||'{}')||{};}catch(e){}
+      return {schemaVersion:SHEET_CACHE_SCHEMA_VERSION,shows:parsed,users:userCache.users||[],pins:userCache.pins||{},userLimit:0};
+    }
   }catch(e){}
   return null;
 }
@@ -911,7 +914,6 @@ function _canRenderFromSheetCache(cached){
 function _canRenderStartupFromSheetCache(cached){
   try{
     if(!cached||!cached.shows||cached.shows.length<=5||!cached.users||!cached.users.length)return false;
-    if(cached.schemaVersion!==SHEET_CACHE_SCHEMA_VERSION)return false;
     return cached.shows.some(function(s){
       return s&&s.date&&s.venue&&(Array.isArray(s.attendedUsers)||(s.attended&&typeof s.attended==='object'));
     });
@@ -934,7 +936,7 @@ function restoreSavedUserShell(){
     document.getElementById('loginScreen').style.display='flex';
     const loginUsers=document.getElementById('loginUsers');
     if(loginUsers){
-      loginUsers.innerHTML='<div id="loginLoadingMsg" style="padding:20px;text-align:center;color:var(--muted);font-size:12px"><span class="spinner"></span> Loading names…<br><br><span style="font-size:10px;opacity:.6">Connecting to Google Sheets</span></div>';
+      loginUsers.innerHTML='<div id="loginLoadingMsg" style="padding:20px;text-align:center;color:var(--muted);font-size:12px"><span class="spinner"></span> Loading names…<br><br><span style="font-size:10px;opacity:.6">Connecting to Google Sheets · V1.5.5W</span></div>';
     }
     const loginClose=document.getElementById('loginCloseBtn');
     if(loginClose)loginClose.style.display='none';
@@ -965,6 +967,21 @@ async function _fetchSheetFresh(opts){
   if(r&&r.length>5){
     if(opts.background){_writeCacheSoon(r);return;}
     onLoaded(r,opts);_writeCacheSoon(r);return;
+  }
+  if(opts.startup){
+    const cached=_readCache();
+    if(_canRenderStartupFromSheetCache(cached)){
+      users=cached.users;
+      userPins=cached.pins||{};
+      userLimit=cached.userLimit||0;
+      onLoaded(_hydrateSheetCacheShows(cached.shows),{fromCache:true});
+      setTimeout(function(){setHdrSt('Using cached data — Google Sheets slow','warn');},1200);
+      setTimeout(function(){_fetchSheetFresh({refresh:true});},3000);
+      return;
+    }
+    debugLines.push('Startup: Google Sheets did not respond quickly');
+    showErr();
+    return;
   }
   // 2. Try CORS proxies in sequence
   for(const url of [
@@ -1834,7 +1851,7 @@ function switchUser(){
   // Tapping own name closes, tapping another name asks for PIN
   if(!users.length){
     const el=document.getElementById('loginUsers');
-    if(el)el.innerHTML='<div id="loginLoadingMsg" style="padding:20px;text-align:center;color:var(--muted);font-size:12px"><span class="spinner"></span> Loading names…<br><br><span style="font-size:10px;opacity:.6">Connecting to Google Sheets</span></div>';
+    if(el)el.innerHTML='<div id="loginLoadingMsg" style="padding:20px;text-align:center;color:var(--muted);font-size:12px"><span class="spinner"></span> Loading names…<br><br><span style="font-size:10px;opacity:.6">Connecting to Google Sheets · V1.5.5W</span></div>';
     document.getElementById('pinScreen').style.display='none';
     document.getElementById('newUserScreen').style.display='none';
     document.getElementById('loginScreen').style.display='flex';
