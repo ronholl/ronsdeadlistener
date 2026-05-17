@@ -903,7 +903,6 @@ function _canRenderFromSheetCache(cached){
     // those can make duplicate dates borrow the wrong same-date setlists.
     if(cached.schemaVersion!==SHEET_CACHE_SCHEMA_VERSION)return false;
     if(!cached.shows.some(function(s){return s&&s.date&&s.venue&&(Array.isArray(s.attendedUsers)||(s.attended&&typeof s.attended==='object'));}))return false;
-    if(localStorage.getItem('gd_prior_guest')==='1')return true;
     const saved=localStorage.getItem('gd_user');
     const savedPin=localStorage.getItem('gd_pin');
     const savedIsPending=saved&&localStorage.getItem('gd_pending_user')===saved;
@@ -1590,17 +1589,12 @@ function onLoaded(list,opts){
   // Build login screen with real user data
   // Only show login if not already logged in (user may have entered PIN during load)
   if(!curUser && !guestMode){
-    // Check if prior session was guest — if so, reopen directly as guest (no login screen)
+    // A prior guest session should not hijack startup. Show names once they
+    // are available; Guest remains an explicit button choice.
     const priorGuest=localStorage.getItem('gd_prior_guest');
     if(priorGuest==='1'){
-      // Silently re-enter guest mode without showing login screen
-      guestMode=true;
+      try{localStorage.removeItem('gd_prior_guest');}catch(e){}
       renderLoginScreen();
-      document.getElementById('loginScreen').style.display='none';
-      const hdr=document.getElementById('hdrUser');
-      if(hdr)hdr.innerHTML='<span style="font-size:10px;color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:2px 8px">Guest</span>';
-      const av=document.getElementById('hdrAvatar');
-      if(av){av.textContent='?';av.style.background='';av.style.color='';}
     } else {
       renderLoginScreen();
       // Check if already logged in via saved credentials
