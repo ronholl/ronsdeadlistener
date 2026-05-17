@@ -784,7 +784,7 @@ function userColor(name){const i=users.indexOf(name);return USER_COLORS[i>=0?i%U
 async function loadData(){
   debugLines=[];
   const cached=_readCache();
-  if(_canRenderFromSheetCache(cached)){
+  if(_canRenderFromSheetCache(cached)||_canRenderStartupFromSheetCache(cached)){
     users=cached.users;
     userPins=cached.pins||{};
     userLimit=cached.userLimit||0;
@@ -794,7 +794,31 @@ async function loadData(){
     });
     return;
   }
-  await _fetchSheetFresh();
+  let finished=false;
+  const startupTimer=setTimeout(function(){
+    if(finished)return;
+    const fallback=_readCache();
+    if(_canRenderStartupFromSheetCache(fallback)){
+      finished=true;
+      users=fallback.users;
+      userPins=fallback.pins||{};
+      userLimit=fallback.userLimit||0;
+      onLoaded(_hydrateSheetCacheShows(fallback.shows),{fromCache:true});
+      setTimeout(function(){setHdrSt('Using cached data — Google Sheets slow','warn');},1200);
+    }else{
+      finished=true;
+      debugLines.push('Startup timeout before sheet data loaded');
+      showErr();
+    }
+  },12000);
+  try{
+    await _fetchSheetFresh();
+  }finally{
+    if(!finished){
+      finished=true;
+      clearTimeout(startupTimer);
+    }
+  }
 }
 
 function _readCache(){
@@ -881,6 +905,16 @@ function _canRenderFromSheetCache(cached){
     const savedPin=localStorage.getItem('gd_pin');
     const savedIsPending=saved&&localStorage.getItem('gd_pending_user')===saved;
     return !!(saved&&cached.pins&&cached.pins[saved]&&savedPin===cached.pins[saved]&&(cached.users.includes(saved)||savedIsPending));
+  }catch(e){return false;}
+}
+
+function _canRenderStartupFromSheetCache(cached){
+  try{
+    if(!cached||!cached.shows||cached.shows.length<=5||!cached.users||!cached.users.length)return false;
+    if(cached.schemaVersion!==SHEET_CACHE_SCHEMA_VERSION)return false;
+    return cached.shows.some(function(s){
+      return s&&s.date&&s.venue&&(Array.isArray(s.attendedUsers)||(s.attended&&typeof s.attended==='object'));
+    });
   }catch(e){return false;}
 }
 
