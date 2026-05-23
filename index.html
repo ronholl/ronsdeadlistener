@@ -391,7 +391,7 @@ body{display:flex;justify-content:center}
   <link rel="apple-touch-icon" sizes="180x180" href="favicon_tight_180.png">
   <link rel="apple-touch-icon" sizes="152x152" href="favicon_tight_180.png">
   <link rel="apple-touch-icon" sizes="120x120" href="favicon_tight_180.png">
-  <link rel="manifest" href="manifest.json?v=1.7.0.E">
+  <link rel="manifest" href="manifest.json?v=1.6.1E">
 </head>
 <body>
 <div id="app">
@@ -518,7 +518,7 @@ body{display:flex;justify-content:center}
     <img src="deadhead_logo.jpg" class="hdr-logo" alt="logo" loading="eager" decoding="async"/>
     <div class="hdr-text">
       <div class="hdr-title">Ron's Deadhead Listener</div>
-      <div class="hdr-sub" style="color:rgba(200,168,75,.6)">1965 – 1995 · <span id="hdr-show-count">2,290</span> Shows · <span style="opacity:.45">V1.7.0.E</span></div>
+      <div class="hdr-sub" style="color:rgba(200,168,75,.6)">1965 – 1995 · <span id="hdr-show-count">2,290</span> Shows · <span style="opacity:.45">V1.6.1E</span></div>
       <div class="hdr-st" id="hdrSt"></div>
     </div>
     <div class="hdr-user" id="hdrUser" onclick="switchUser()">
@@ -548,12 +548,12 @@ body{display:flex;justify-content:center}
       <div class="stat"><span class="stat-n" id="s-yrs">—</span><span class="stat-l">Years</span></div>
     </div>
     <div class="filters">
-      <div style="position:relative;display:flex;align-items:center"><input class="srch" id="q" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="search" enterkeyhint="search" placeholder="Search venue, city, date, song..." oninput="applyFilters()" style="width:100%"/></div>
+      <div style="position:relative;display:flex;align-items:center"><input class="srch" id="q" type="text" autocomplete="off" placeholder="Search venue, city, date, song..." oninput="applyFilters()" style="width:100%;padding-right:32px"/><button onclick="document.getElementById('q').value='';applyFilters()" style="position:absolute;right:8px;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px;line-height:1">×</button></div>
       <div class="frow">
         <select class="fsel" id="yrSel" onchange="applyYearFilter()"><option value="">All years</option></select>
         <button class="ftog" id="myBtn" onclick="toggleMy()">My shows</button>
         <button class="ftog" id="theirBtn" style="display:none" onclick="toggleTheir()">— shows</button>
-        <button class="ftog" id="srtBtn" onclick="toggleSort()">Date ↑</button>
+        <button class="ftog" id="srtBtn" onclick="toggleSort()">Date ↓</button>
       </div>
     </div>
     <div class="cntbar" id="cntbar">Loading...</div>
@@ -562,7 +562,7 @@ body{display:flex;justify-content:center}
 
   <div id="tab-songs" style="display:none">
     <div class="song-view">
-      <div style="position:relative;display:flex;align-items:center"><input class="srch" id="songQ" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="search" enterkeyhint="search" placeholder="Search song name (e.g. Dark Star, Scarlet...)" oninput="songSearch()" style="width:100%"/></div>
+      <div style="position:relative;display:flex;align-items:center"><input class="srch" id="songQ" type="text" autocomplete="off" placeholder="Search song name (e.g. Dark Star, Scarlet...)" oninput="songSearch()" style="width:100%;padding-right:32px"/><button onclick="document.getElementById('songQ').value='';renderFeaturedSongs()" style="position:absolute;right:8px;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px;line-height:1">×</button></div>
       <div class="cntbar" id="songCnt" style="padding:4px 0;border:none">Type a song name to search</div>
     </div>
     <div class="song-results" id="songResults"></div>
@@ -580,7 +580,7 @@ body{display:flex;justify-content:center}
 // ── CONFIG ────────────────────────────────────────────────────────
 const SHEET_ID   = '1Hl1iSUkBQbfjbzXpEl5DrpRZQhu_xnOfqgvgmoTMURk';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDkkn9PBWvmBFsjRpoj0-zzM3euaLQt23B64iWn8XO13I4eqeEiCEuB8Zwj0ohObwpMQ/exec';
-const APP_BUILD = '1.7.0.E';
+const APP_BUILD = '1.6.1E';
 // Poster filename — place final_deadhead_poster_web.jpg in the same folder as index.html
 // Leave empty string to disable the poster feature entirely
 const POSTER_FILE = 'final_deadhead_poster_web.jpg';
@@ -646,7 +646,7 @@ let _signupUiState=null;
 let curShow=null, audio=null, playing=false, curTrackIdx=0;
 let archiveAutoRetryTimer=null, archiveAutoRetryShowId=null, archiveAutoRetryCount=0;
 let playingShow=null, playingTrackIdx=0; // what's actually playing audio
-let myOnly=false, sortDesc=false;
+let myOnly=false, sortDesc=true;
 let positions={}, songIndex={}, metaCache={};
 let preloadAudio=null; // preloaded next track for seamless playback
 let playIntent=false;
@@ -781,12 +781,6 @@ function refreshTrackDurationFromAudio(show,idx,aud){
 }
 function setHdrSt(msg,cls){const el=document.getElementById('hdrSt');el.textContent=msg;el.className='hdr-st '+(cls||'');if(cls==='ok')setTimeout(()=>{el.textContent='';el.className='hdr-st';},4000);}
 function userColor(name){const i=users.indexOf(name);return USER_COLORS[i>=0?i%USER_COLORS.length:0];}
-function blurActiveInput(){
-  const el=document.activeElement;
-  if(el&&/^(INPUT|TEXTAREA|SELECT)$/i.test(el.tagName)){
-    try{el.blur();}catch(e){}
-  }
-}
 
 // ── DATA LOADING ──────────────────────────────────────────────────
 async function loadData(){
@@ -1149,14 +1143,14 @@ function bestCachedSetlistForShow(cached, show){
     if(!cached || !show || !show.date) return [];
     if(show.archiveNoAudioHint) return [];
     let best = Array.isArray(cached[show.id]) ? cached[show.id] : [];
-    if(show.archiveIdHint) return sanitizeSongList(best);
-    if(sourceLocked(show)) return sanitizeSongList(best);
+    if(show.archiveIdHint) return best.slice();
+    if(isDuplicateDateShow(show) || sourceLocked(show)) return best.slice();
     Object.keys(cached).forEach(function(k){
       if(k.indexOf(show.date + '-') === 0 && Array.isArray(cached[k]) && cached[k].length > best.length){
         best = cached[k];
       }
     });
-    return sanitizeSongList(best);
+    return Array.isArray(best) ? best.slice() : [];
   }catch(e){
     return [];
   }
@@ -1205,7 +1199,7 @@ function indexShowSongs(show,songs){
 }
 
 function applyBestCachedSetlist(show, incomingSongs, cached){
-  const inc = sanitizeSongList(incomingSongs);
+  const inc = Array.isArray(incomingSongs) ? incomingSongs.slice() : [];
   const bestCached = bestCachedSetlistForShow(
     cached || JSON.parse(localStorage.getItem('gd_setlists')||'{}'),
     show
@@ -1217,64 +1211,6 @@ function applyBestCachedSetlist(show, incomingSongs, cached){
   show._visibleTrackMap = null;
   show._visibleTrackLabels = null;
   return best;
-}
-
-function sanitizeSongList(songs){
-  return (Array.isArray(songs)?songs:[]).map(function(s){
-    return cleanTrackLabel(String(s||''));
-  }).filter(function(s){
-    return s&&s.length>2&&!looksLikeTapeId(s)&&!looksLikeArchiveNote(s)&&!/^\d+$/.test(s);
-  });
-}
-
-let _setlistCacheMemo=null;
-let _setlistCacheByDateMemo=null;
-function cachedSongListValue(v){
-  return (Array.isArray(v)?v:[]).map(function(s){
-    return String(s||'').trim();
-  }).filter(function(s){
-    return s&&s.length>1&&!/^\d+$/.test(s);
-  });
-}
-function setlistCacheStore(){
-  if(_setlistCacheMemo)return _setlistCacheMemo;
-  try{_setlistCacheMemo=JSON.parse(localStorage.getItem('gd_setlists')||'{}')||{};}
-  catch(e){_setlistCacheMemo={};}
-  return _setlistCacheMemo;
-}
-function setlistCacheByDate(){
-  if(_setlistCacheByDateMemo)return _setlistCacheByDateMemo;
-  const cache=setlistCacheStore();
-  const byDate={};
-  Object.keys(cache||{}).forEach(function(k){
-    const m=String(k).match(/^(\d{4}-\d{2}-\d{2})-/);
-    if(!m)return;
-    const songs=cachedSongListValue(cache[k]);
-    if(!songs.length)return;
-    if(!byDate[m[1]]||songs.length>byDate[m[1]].length)byDate[m[1]]=songs;
-  });
-  _setlistCacheByDateMemo=byDate;
-  return byDate;
-}
-function ensureCachedSetlistForShow(show){
-  if(!show||show.archiveNoAudioHint||(show.songs&&show.songs.length))return;
-  const cache=setlistCacheStore();
-  let songs=[];
-  if(show.archiveIdHint){
-    songs=sanitizeSongList(cache[show.id]||[]);
-  }else if(sourceLocked(show)){
-    songs=cachedSongListValue(cache[show.id]||[]);
-  }else{
-    songs=cachedSongListValue(cache[show.id]||[]);
-    if(!songs.length)songs=(setlistCacheByDate()[show.date]||[]).slice();
-  }
-  if(!songs.length)return;
-  show.songs=songs.slice();
-  show.setlistCached=true;
-  show.cachePlayable=true;
-  show.setlistTrusted=!show.archiveIdHint||!!show.setlistTrusted;
-  show._displayNameMap=null;show._visibleTrackMap=null;show._visibleTrackLabels=null;
-  if(show.setlistTrusted)indexShowSongs(show,songs);
 }
 
 
@@ -1295,7 +1231,6 @@ function saveShowFlags(show){
       hasAudio:!!(show.metaLoaded&&!show.notAvail),
       notAvail:!!(show.notAvail&&!hasArchiveHint&&!show.archiveNoAudioHint),
       setlist:!!(show.songs&&show.songs.length),
-      setlistTrusted:!!show.setlistTrusted,
       archiveId:show.archiveId||'',
       archiveIdHintLoaded:show.archiveIdHintLoaded||''
     };
@@ -1331,7 +1266,6 @@ function markShowSetlistCached(show){
     const cur=flags[show.id]||{};
     const hasArchiveHint=plausibleArchiveId(show.archiveIdHint||show.archiveId||'');
     cur.setlist=!!(show.songs&&show.songs.length);
-    cur.setlistTrusted=!!show.setlistTrusted;
     if(typeof cur.hasAudio==='undefined') cur.hasAudio=!!(show.metaLoaded&&!show.notAvail);
     if(typeof cur.notAvail==='undefined') cur.notAvail=!!(show.notAvail&&!hasArchiveHint&&!show.archiveNoAudioHint);
     if(show.archiveId) cur.archiveId=show.archiveId;
@@ -1379,24 +1313,8 @@ function showLooksIndexed(show){
 function showLooksStartupReady(show){
   return !!(show && (
     showLooksIndexed(show) ||
-    showAssumedNoAudioNoSource(show) ||
     show._offlineFail
   ));
-}
-
-function showNeedsStartupWork(show){
-  if(!show)return false;
-  if(show._archiveHintChanged)return true;
-  if(show.archiveNoAudioHint)return !!(!show.metaLoaded || !show.archiveIdHintLoaded || show._archiveHintRefreshNeeded);
-  if(show.archiveIdHint){
-    if(show._archiveHintChanged || show._archiveHintRefreshNeeded)return true;
-    if(show._archiveTempFail && show._archiveDeferred)return false;
-    return !!(!showLooksIndexed(show) || show._archiveTempFail);
-  }
-  // Do not make the startup progress bar depend on crawling the whole catalog.
-  // Non-manual, non-Relisten shows can be assumed ready locally and resolved
-  // later only when visible/opened.
-  return false;
 }
 
 function showLooksUnavailable(show){
@@ -1413,22 +1331,18 @@ function showLooksUnavailable(show){
 function showAssumedNoAudioNoSource(show){
   if(!show)return false;
   if(show.archiveNoAudioHint)return false;
-  // Only a sheet-provided Archive ID should force Archive resolution during
-  // startup/background scan. A cached/backfilled archiveId by itself should
-  // not turn an otherwise unresolved show into scan work for every user.
-  if(plausibleArchiveId(show.archiveIdHint||''))return false;
+  if(plausibleArchiveId(show.archiveIdHint||show.archiveId||''))return false;
   if(show.relistenAvail)return false;
   return true;
 }
 
 function scanProgressStats(){
   const total=totalShows();
-  const pending=shows.filter(showNeedsStartupWork).length;
-  const resolved=Math.max(0,total-pending);
+  const resolved=shows.filter(showLooksStartupReady).length;
   const unavailable=shows.filter(showLooksUnavailable).length;
   const available=Math.max(0,total-unavailable);
   const pct=total?Math.round(resolved/total*100):0;
-  return {total:total,resolved:resolved,available:available,unavailable:unavailable,pct:pct,allDone:total>0&&pending===0,pending:pending};
+  return {total:total,resolved:resolved,available:available,unavailable:unavailable,pct:pct,allDone:total>0&&resolved>=total};
 }
 
 function scanProgressStatus(prefix){
@@ -1506,9 +1420,9 @@ function shouldShowStartupProgress(indexed,total){
 function invalidateShowForArchiveHint(show,hint){
   show.archiveIdHintLoaded='';
   show.metaLoaded=false;show.notAvail=false;show.allRestricted=false;
-  show.songs=null;show.setlistCached=false;show.cachePlayable=false;show.setlistTrusted=false;
+  show.songs=null;show.setlistCached=false;show.cachePlayable=false;
   show.tracks=null;show.totalDur=0;show.archiveId=null;show.recordings=null;
-  show._needsArchive=false;show._archiveTempFail=false;show._archiveDeferred=false;show._archiveBgTried=false;show._offlineFail=false;
+  show._needsArchive=false;show._archiveTempFail=false;show._archiveBgTried=false;show._offlineFail=false;
   show._displayNameMap=null;show._visibleTrackMap=null;show._visibleTrackLabels=null;show._tapeHeavyDisplay=false;
   show._archiveHintRefreshNeeded=true;
   removeShowFromSongIndex(show);
@@ -1522,50 +1436,33 @@ function applyArchiveHintInvalidation(show,flags,fp){
   const hint=show.archiveNoAudioHint?'NO_AUDIO':normalizeArchiveId(show.archiveIdHint||'');
   const fpHint=archiveHintFingerprint(show);
   if(!hint||!fpHint)return false;
+  const priorFp=fp?fp[show.id]||'':'';
+  if(priorFp!==fpHint){
+    invalidateShowForArchiveHint(show,hint);
+    if(!show.archiveNoAudioHint){
+      show.archiveIdHintLoaded=hint;
+      show._archiveHintRefreshNeeded=false;
+      saveShowFlags(show);
+    }
+    if(fp)fp[show.id]=fpHint;
+    return true;
+  }
   if(show.archiveNoAudioHint){
     if(show.metaLoaded&&show.notAvail&&show.archiveIdHintLoaded==='NO_AUDIO')return false;
     invalidateShowForArchiveHint(show,'NO_AUDIO');
-    if(fp)fp[show.id]=fpHint;
     return true;
   }
-
-  const loadedHint=normalizeArchiveId(show.archiveIdHintLoaded || (flags&&flags.archiveIdHintLoaded) || '');
-  const loadedArchive=normalizeArchiveId(show.archiveId || (flags&&flags.archiveId) || '');
-  const hasCachedSetlist=!!((show.songs&&show.songs.length)||(flags&&flags.setlist)||show.setlistCached||show.cachePlayable);
-  const hasCachedAudio=!!((show.tracks&&show.tracks.length)||(flags&&flags.hasAudio));
-
-  // First install after adding Archive IDs should not wipe useful caches just
-  // because older flags did not know which hint produced them. Treat an
-  // existing cached setlist/audio entry as current unless a different cached
-  // Archive ID is explicitly known.
-  if(!loadedHint&&!loadedArchive&&(hasCachedSetlist||hasCachedAudio)){
+  if(!show.archiveIdHintLoaded){
     show.archiveIdHintLoaded=hint;
     show._archiveHintRefreshNeeded=false;
     saveShowFlags(show);
-    if(fp)fp[show.id]=fpHint;
     return false;
   }
-
-  if((loadedHint&&loadedHint!==hint)||(loadedArchive&&loadedArchive!==hint)){
-    invalidateShowForArchiveHint(show,hint);
-    show._archiveHintChanged=true;
-    if(fp)fp[show.id]=fpHint;
-    return true;
-  }
-
-  if(!loadedHint&&!loadedArchive){
-    show.archiveIdHintLoaded=hint;
-    show._archiveHintRefreshNeeded=false;
-    saveShowFlags(show);
-    if(fp)fp[show.id]=fpHint;
-    return false;
-  }
-
-  if(fp)fp[show.id]=fpHint;
+  const loadedHint=show.archiveIdHintLoaded || (flags&&flags.archiveIdHintLoaded) || '';
+  const loadedArchive=show.archiveId || (flags&&flags.archiveId) || '';
   if(loadedHint===hint && !show.metaLoaded)return false;
-  if((loadedHint===hint||loadedArchive===hint) && show.metaLoaded && !show.notAvail)return false;
+  if(loadedHint===hint && loadedArchive===hint && show.metaLoaded && !show.notAvail)return false;
   invalidateShowForArchiveHint(show,hint);
-  show._archiveHintChanged=true;
   return true;
 }
 
@@ -1593,8 +1490,6 @@ function onLoaded(list,opts){
   shows=list;
   try{
     const cached=JSON.parse(localStorage.getItem('gd_setlists')||'{}');
-    _setlistCacheMemo=cached;
-    _setlistCacheByDateMemo=null;
     // One-time migration: wipe gd_meta_loaded if it was written by the buggy build
     // that cached temporary archive.org failures as permanent. Version stamp prevents
     // wiping on every launch.
@@ -1630,7 +1525,6 @@ function onLoaded(list,opts){
         }else if(showFlags[s.id].notAvail && !s.archiveIdHint && !s.archiveNoAudioHint){
           s.notAvail=true;
         }
-        if(showFlags[s.id].setlistTrusted) s.setlistTrusted=true;
         if(showFlags[s.id].setlist) s.cachePlayable=true;
         if(showFlags[s.id].archiveId) s.archiveId=showFlags[s.id].archiveId;
         if(showFlags[s.id].archiveIdHintLoaded) s.archiveIdHintLoaded=showFlags[s.id].archiveIdHintLoaded;
@@ -1638,27 +1532,20 @@ function onLoaded(list,opts){
       // Restore the best cached setlist for this date into the search index.
       // Some dates exist under multiple show IDs; prefer the longest cached setlist.
       const bestCachedSongs = bestCachedSetlistForShow(cached, s);
-      if(bestCachedSongs.length && !s.songs && !s.archiveNoAudioHint){
+      if(bestCachedSongs.length && !s.songs && !s.archiveNoAudioHint && !showAssumedNoAudioNoSource(s)){
         s.songs = bestCachedSongs;
         s.setlistCached = true;
-        // Older caches predate setlistTrusted. Normal Dead shows can trust the
-        // cached setlist; manual Archive-ID shows stay stricter because Archive
-        // descriptions often contain notes instead of songs.
-        s.setlistTrusted=!s.archiveIdHint||!!(showFlags[s.id]&&showFlags[s.id].setlistTrusted);
         s.cachePlayable = true;
         s._displayNameMap = null; s._visibleTrackMap = null; s._visibleTrackLabels = null;
-        if(s.setlistTrusted)markShowSetlistCached(s);
+        markShowSetlistCached(s);
         // Keep cached setlists searchable immediately on launch.
-        if(s.setlistTrusted){
-          bestCachedSongs.forEach(function(song){
-            const key=song.toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
-            if(!songIndex[key])songIndex[key]=[];
-            if(!songIndex[key].some(function(e){return e.id===s.id;}))
-              songIndex[key].push({id:s.id,date:s.date,venue:s.venue,city:s.city,song:song});
-          });
-        }
+        bestCachedSongs.forEach(function(song){
+          const key=song.toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
+          if(!songIndex[key])songIndex[key]=[];
+          if(!songIndex[key].some(function(e){return e.id===s.id;}))
+            songIndex[key].push({id:s.id,date:s.date,venue:s.venue,city:s.city,song:song});
+        });
       }
-      ensureCachedSetlistForShow(s);
       // Restore Relisten availability flags
       if(relistenCache[s.date]&&!s.archiveIdHint&&!s.archiveNoAudioHint){
         const rc=relistenCache[s.date];
@@ -1671,17 +1558,6 @@ function onLoaded(list,opts){
       }
       if((s.songs&&s.songs.length)||(showFlags[s.id]&&showFlags[s.id].setlist)) s.cachePlayable=true;
       applyArchiveHintInvalidation(s,showFlags[s.id],archiveHintFp);
-      if(showAssumedNoAudioNoSource(s)&&!showLooksIndexed(s)){
-        s._needsArchive=false;
-        s._archiveTempFail=false;
-        s._archiveBgTried=false;
-        s._backgroundNoArchiveAssumed=true;
-        s.metaLoaded=true;
-        s.notAvail=true;
-        s.tracks=[];
-        s.totalDur=0;
-        saveMetaLoaded(s);
-      }
     });
     writeArchiveHintFingerprints(archiveHintFp);
   }catch(e){}
@@ -1856,7 +1732,7 @@ function renderLoginScreen(){
 
   // Search box + list
   el.innerHTML='<div style="padding:0 0 8px">'
-    +'<input id="loginSearch" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="search" enterkeyhint="search" placeholder="Search Deadheads…" '
+    +'<input id="loginSearch" type="search" placeholder="Search Deadheads…" '
     +'oninput="document.getElementById(\'loginUserList\').innerHTML=buildLoginCards(this.value)" '
     +'style="width:100%;box-sizing:border-box;background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:9px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;margin-bottom:8px">'
     +'</div>'
@@ -2218,18 +2094,6 @@ function toggleMy(){
   applyFilters();updateAttCount();updateViewStats();
 }
 function toggleSort(){sortDesc=!sortDesc;document.getElementById('srtBtn').textContent='Date '+(sortDesc?'↓':'↑');applyFilters();}
-function showSheetRowIndex(show){
-  const m=String((show&&show.id)||'').match(/-(\d+)$/);
-  return m?Number(m[1])||0:0;
-}
-function sortShowsByDate(list){
-  return (list||[]).slice().sort(function(a,b){
-    const d=(b.date||'').localeCompare(a.date||'');
-    if(d!==0)return sortDesc?d:-d;
-    const r=showSheetRowIndex(a)-showSheetRowIndex(b);
-    return sortDesc?-r:r;
-  });
-}
 function applyYearFilter(){
   applyFilters();
   requestAnimationFrame(function(){
@@ -2250,15 +2114,15 @@ function currentFilteredShows(){
     if(myOnly&&viewUser!=='all'&&!s.attended[viewUser])return false;
     return true;
   });
-  return sortShowsByDate(list);
+  if(!sortDesc)list=[...list].reverse();
+  return list;
 }
 function applyFilters(){
   const list=currentFilteredShows();
   filtered=list;
-  const _st=scanProgressStats();
-  const _loaded=_st.resolved;
-  const _total=_st.total;
-  const _pct=_st.pct;
+  const _loaded=shows.filter(showLooksStartupReady).length;
+  const _total=shows.length;
+  const _pct=Math.round(_loaded/_total*100);
   updateScanDebugStats(_loaded,_total,_pct);
   const _prog=window._gdSheetRefreshPending
     ? ' <span class="bgscan-prog" style="color:var(--gold2);font-size:10px">· cached sheet data · refreshing Google Sheets…</span>'
@@ -2296,57 +2160,14 @@ function updateViewStats(){
 // ── LIST ──────────────────────────────────────────────────────────
 function rowSetlistSummary(show){
   if(!show)return '';
-  ensureCachedSetlistForShow(show);
-  const songs=sanitizeSongList(show.songs);
-  if(songs.length&&(!show.archiveIdHint||show.setlistTrusted))return songs.slice(0,5).join(' · ');
+  if(show.songs&&show.songs.length)return show.songs.slice(0,5).join(' · ');
   const tracks=(show.tracks||[]).map(function(t){
     return getUsableArchiveLabel(t)||cleanTrackLabel((t&&t.name)||'');
   }).filter(function(s){
-    return s&&s.length>1&&!/^Track \d+$/i.test(s)&&!looksLikeArchiveNote(s);
+    return s&&s.length>1&&!/^Track \d+$/i.test(s);
   });
   if(tracks.length)return tracks.slice(0,5).join(' · ');
   return '';
-}
-
-function showNeedsFreshSetlistOnOpen(show){
-  if(!show)return false;
-  const archiveHint=normalizeArchiveId(show.archiveIdHint||'');
-  if(!archiveHint)return false;
-  if(show._freshSetlistOpenLoaded===archiveHint)return false;
-  const cleanSongs=sanitizeSongList(show.songs);
-  const rawSongCount=(show.songs&&show.songs.length)||0;
-  const loadedHint=normalizeArchiveId(show.archiveIdHintLoaded||'');
-  const loadedArchive=normalizeArchiveId(show.archiveId||'');
-  if(loadedHint&&loadedHint!==archiveHint)return true;
-  if(loadedArchive&&loadedArchive!==archiveHint)return true;
-  return (
-    (!show.metaLoaded&&!(show.songs&&show.songs.length)) ||
-    (!(show.tracks&&show.tracks.length)&&!(show.songs&&show.songs.length)) ||
-    rawSongCount!==cleanSongs.length
-  );
-}
-
-async function freshenSetlistOnOpen(show){
-  const archiveHint=normalizeArchiveId(show&&show.archiveIdHint||'');
-  if(!archiveHint)return;
-  const cleanSongs=sanitizeSongList(show.songs);
-  if(cleanSongs.length!==((show.songs&&show.songs.length)||0)){
-    show.songs=cleanSongs.length?cleanSongs:null;
-    show.setlistCached=!!cleanSongs.length;
-    show.cachePlayable=!!cleanSongs.length;
-    show.setlistTrusted=false;
-    removeShowFromSongIndex(show);
-  }
-  show._freshSetlistOpenLoaded=archiveHint;
-  show._forceFreshOpenLoad=true;
-  show.metaLoaded=false;
-  show.notAvail=false;
-  show._archiveTempFail=false;
-  try{
-    await loadShowMeta(show,true);
-  }finally{
-    show._forceFreshOpenLoad=false;
-  }
 }
 
 function kickVisibleSetlistLoads(){
@@ -2395,17 +2216,11 @@ function renderList(){
       return shown.join('');
     })();
     let sub='';
-    ensureCachedSetlistForShow(s);
     const hasAudio=showLooksPlayable(s);
     const hasCachedSetlist=!!(s.songs&&s.songs.length);
-    if(hasCachedSetlist){
-      const dot='<span style="color:var(--green)">▶ </span>';
-      const prefix=s.relistenSbd?'<span style="color:var(--gold);font-size:9px">SBD </span>':'';
-      const songs=rowSetlistSummary(s);
-      if(songs)sub=`<div class="row-songs">${dot}${prefix}${esc(songs)}</div>`;
-    }else if(s.archiveNoAudioHint || showAssumedNoAudioNoSource(s) || (s.notAvail&&s.metaLoaded)){
+    if(s.archiveNoAudioHint || showAssumedNoAudioNoSource(s) || (s.notAvail&&s.metaLoaded&&!hasCachedSetlist)){
       sub='<div class="row-na">not on Relisten or archive.org</div>';
-    }else if(hasAudio){
+    }else if(hasAudio||hasCachedSetlist){
       const dot='<span style="color:var(--green)">▶ </span>';
       const prefix=s.relistenSbd?'<span style="color:var(--gold);font-size:9px">SBD </span>':'';
       const songs=rowSetlistSummary(s);
@@ -2482,7 +2297,6 @@ function toggleTheir(){
 
 // ── SETLIST PANEL ─────────────────────────────────────────────────
 async function openSetlist(id){
-  blurActiveInput();
   const show=shows.find(s=>s.id===id);if(!show)return;
   if(archiveAutoRetryShowId&&archiveAutoRetryShowId!==show.id)stopArchiveAutoRetry();
   // Remember which tab was active so Back returns there
@@ -2507,22 +2321,20 @@ async function openSetlist(id){
   var _list=document.getElementById('list');if(_list)_list.style.visibility='hidden';
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
   updateSpFavBtn();
-  const freshenOnOpen=showNeedsFreshSetlistOnOpen(show);
-  if(freshenOnOpen||!show.metaLoaded||!show.tracks||!show.tracks.length){
+  if(!show.metaLoaded||!show.tracks||!show.tracks.length){
     const _hint=normalizeArchiveId(show.archiveIdHint||'');
     document.getElementById('sp-meta-txt').innerHTML='<span class="sp-meta-line"><span class="spinner"></span>Loading tracks</span>'+sourcePickerHtml(show,sourceRecordsForShow(show),_hint||normalizeArchiveId(show.archiveId||''));
     // Show cached setlist immediately while audio loads
     if(show.songs&&show.songs.length){
       renderSetlistBody(show);
       document.getElementById('sp-meta-txt').innerHTML='<span class="sp-meta-line"><span class="spinner"></span>Loading tracks</span>'+sourcePickerHtml(show,sourceRecordsForShow(show),_hint||normalizeArchiveId(show.archiveId||''));
-      (freshenOnOpen?freshenSetlistOnOpen(show):loadShowMeta(show,true)).then(function(){if(curShow&&curShow.id===show.id)renderSetlistBody(show);});
+      loadShowMeta(show,true).then(function(){if(curShow&&curShow.id===show.id)renderSetlistBody(show);});
       return;
     }else{
       document.getElementById('sp-body').innerHTML='<div class="loading" id="sp-body-loading"><span class="spinner"></span><span id="sp-body-msg">Fetching setlist</span><span id="sp-body-dots"></span></div>';
     startLoadingDots('sp-body-msg','Fetching setlist');
     }
-    if(freshenOnOpen)await freshenSetlistOnOpen(show);
-    else await loadShowMeta(show,true);
+    await loadShowMeta(show,true);
     renderSetlistBody(show);
   }else{
     renderSetlistBody(show);
@@ -2574,7 +2386,6 @@ function noteBgItemProgress(show){
 }
 function bgArchiveRetryReady(s){
   if(s&&s._archivePartialScan)return !s._archiveBgLastTry || (Date.now()-s._archiveBgLastTry)>5000;
-  if(s&&s._archiveDeferred)return false;
   if(s&&s.archiveIdHint&&s._archiveTempFail)return !s._archiveBgLastTry || (Date.now()-s._archiveBgLastTry)>15000;
   return !s._archiveBgLastTry || (Date.now()-s._archiveBgLastTry)>90000;
 }
@@ -2587,7 +2398,6 @@ function visibleSetlistPriority(show){
   if(!show)return 0;
   const user=(viewUser&&viewUser!=='all')?viewUser:curUser;
   let score=0;
-  if(show._archiveHintChanged)score+=500;
   if(user&&show.attended&&show.attended[user])score+=100;
   if(filtered&&filtered.some(function(s){return s&&s.id===show.id;}))score+=50;
   if(show.archiveIdHint)score+=35;
@@ -2603,16 +2413,22 @@ function bgLoadBatch(){
   if(!shows||!shows.length)return;
   bgRunning=true;
   // Priority queues:
-  // Keep startup work targeted. Do not crawl the whole catalog in the
-  // foreground; casual users should get cached data immediately.
-  // 1) hardCandidates: new/changed manual Archive IDs only
+  // 1) hardCandidates: normal Relisten-first setlist indexing
   // 2) hintedCandidates: cheap NO_AUDIO finalization only
-  // 3) archiveCandidates: retry manual Archive IDs that already asked for archive
-  // 4) archiveIdBackfillCandidates: disabled during startup
+  // 3) archiveCandidates: required archive.org setlist/audio fallback
+  // 4) archiveIdBackfillCandidates: lower-priority durable Archive ID writes
   const hintedCandidates=shows.filter(function(s){
     return !isActiveLoadFresh(s.id) && s.archiveNoAudioHint && (!s.metaLoaded || !s.archiveIdHintLoaded || s._archiveHintRefreshNeeded);
   }).sort(newestShowFirst);
-  const archiveIdBackfillCandidates=[];
+  const archiveIdBackfillCandidates=shows.filter(function(s){
+    return !isActiveLoadFresh(s.id)
+      && !s.archiveIdHint
+      && !s.archiveNoAudioHint
+      && !showAssumedNoAudioNoSource(s)
+      && !sourceLocked(s)
+      && !s.notAvail
+      && !s._needsArchive;
+  }).sort(newestShowFirst);
   try{
     window._gdArchiveIdBackfillStats={
       at:Date.now(),
@@ -2639,7 +2455,7 @@ function bgLoadBatch(){
     }
   });
   const hardCandidates=shows.filter(function(s){
-    return !isActiveLoadFresh(s.id)&&showNeedsStartupWork(s)&&!s._needsArchive;
+    return !isActiveLoadFresh(s.id)&&!showLooksIndexed(s)&&!s._needsArchive;
   }).sort(setlistLoadPriority);
   const archiveCandidates=shows.filter(function(s){
     return !isActiveLoadFresh(s.id)&&!showLooksIndexed(s)&&s._needsArchive&&s.archiveIdHint&&(!s._archiveBgTried||s._archiveTempFail&&bgArchiveRetryReady(s));
@@ -2658,8 +2474,11 @@ function bgLoadBatch(){
   const indexedNow=shows.filter(showLooksIndexed).length;
   const indexedPctNow=shows.length?indexedNow/shows.length:0;
   const elapsed=Date.now()-APP_STARTED_AT;
-  const allowArchiveIdBackfill=false;
-  const allowDeepArchiveScan=archiveCandidates.length>0&&(indexedPctNow>=0.90 || elapsed>30000 || hardCandidates.length===0);
+  const allowArchiveIdBackfill=indexedPctNow>=0.90 || elapsed>20000;
+  const allowDeepArchiveScan=indexedPctNow>=0.90 || elapsed>30000 || hardCandidates.length===0;
+  archiveIdBackfillCandidates.slice(0,40).forEach(function(s){
+    if(s.archiveId)maybeQueueArchiveIdSave(s,'cached',true);
+  });
   try{
     window._gdArchiveIdBackfillStats.allowed=allowArchiveIdBackfill;
     window._gdArchiveIdBackfillStats.queuedAfter=_archiveIdSaveQueue.length;
@@ -2878,7 +2697,6 @@ function cacheArchiveSourceForShow(show,source){
       tracks:show.tracks.slice(0,120).map(function(t){return {name:t.name||'',title:t.title||'',mp3:t.mp3||'',length:t.length||'',size:t.size||''};}),
       setBreaks:(show.setBreaks||[]).slice(),
       songs:(show.songs||[]).slice(0,120),
-      setlistTrusted:!!show.setlistTrusted,
       totalDur:show.totalDur||0,
       rating:show.rating||0,
       reviews:show.numReviews||0,
@@ -2903,19 +2721,15 @@ function applyCachedArchiveSourceToShow(show,archiveId){
     show.numReviews=entry.reviews||0;
     show.isSoundboard=!!entry.sbd;
     show.recordings=mergeSourceRecords(show.recordings,[{id:id,rating:show.rating||0,reviews:show.numReviews||0,sbd:!!show.isSoundboard,restricted:false,cached:true}]);
-    const cachedSongs=sanitizeSongList(entry.songs);
-    if(cachedSongs.length){
-      show.songs=cachedSongs.slice();
+    if(entry.songs&&entry.songs.length){
+      show.songs=entry.songs.slice();
       show.setlistCached=true;
-      show.setlistTrusted=!!entry.setlistTrusted;
       show.cachePlayable=true;
       removeShowFromSongIndex(show);
-      if(show.setlistTrusted){
-        indexShowSongs(show,show.songs);
-        markShowSetlistCached(show);
-      }
+      indexShowSongs(show,show.songs);
+      markShowSetlistCached(show);
     }else if(show.archiveIdHint&&!(show.songs&&show.songs.length)){
-      show.songs=null;show.setlistCached=false;show.cachePlayable=false;show.setlistTrusted=false;
+      show.songs=null;show.setlistCached=false;show.cachePlayable=false;
     }
     show.metaLoaded=true;show.notAvail=false;show._needsArchive=false;show._archiveTempFail=false;show._archiveHintRefreshNeeded=false;
     show.archiveIdHintLoaded=id;
@@ -3217,20 +3031,9 @@ function looksLikeTapeId(s){
   );
 }
 
-function looksLikeArchiveNote(s){
-  const x=(s||'').trim();
-  if(!x)return true;
-  return (
-    /\b(this is|tagged version|shnid|shn id|seeded by|uploaded by|encoded by|transferred by|transferred and edited|tracked by|checksum|md5|ffp|sector boundary|seekable|non-seekable)\b/i.test(x) ||
-    /\b(source|transfer|lineage|notes?|thanks to|archive\.org|etree|bt\.etree|lossless legs|recorded|nakamichi|sony|tdk|maxell|dolby)\b\s*:?/i.test(x) ||
-    /\b(drums|bass|guitar|keyboards|vocals?|sax(?:ophone)?|percussion)\s*$/i.test(x)&&/:/.test(x) ||
-    /\b\d{4}-\d{2}-\d{2}\b/.test(x)
-  );
-}
-
 function getUsableArchiveLabel(t){
   const raw=cleanTrackLabel((((t&&t.title)||'') || ((t&&t.name)||'')).toString());
-  return raw && !looksLikeTapeId(raw) && !looksLikeArchiveNote(raw) ? raw : '';
+  return raw && !looksLikeTapeId(raw) ? raw : '';
 }
 
 function sourceTitleQuality(src){
@@ -3241,10 +3044,9 @@ function sourceTitleQuality(src){
     tracks.forEach(function(t){
       const raw=(((t&&t.title)||'')||((t&&t.name)||'')).toString();
       const clean=cleanTrackLabel(raw);
-      if(clean&&!looksLikeTapeId(clean)&&!looksLikeArchiveNote(clean))score+=2;
+      if(clean&&!looksLikeTapeId(clean))score+=2;
       if(raw&&clean&&raw!==clean)score-=0.35;
       if(/^track\s*\d+$/i.test(raw.trim()))score-=1;
-      if(looksLikeArchiveNote(clean))score-=2;
     });
     return score/tracks.length;
   }catch(e){
@@ -3259,7 +3061,7 @@ function sourceTrackCount(src){
     tracks.forEach(function(t){
       const raw=(((t&&t.title)||'')||((t&&t.name)||'')).toString();
       const clean=normalizeSongForMatch(cleanTrackLabel(raw)).replace(/\\+/g,'').replace(/\s*>\s*$/,'').trim();
-      if(clean&&!looksLikeArchiveNote(clean))seen.add(clean);
+      if(clean)seen.add(clean);
     });
     return seen.size||tracks.length;
   }catch(e){
@@ -3293,34 +3095,30 @@ function archiveMetaTitleQuality(meta){
   return sourceTitleQuality(archiveMetaAsSource(meta));
 }
 
-function archiveDescriptionSongsTrusted(show,songs,rawDesc,tracks){
-  songs=sanitizeSongList(songs);
-  if(!songs.length)return false;
-  const text=String(Array.isArray(rawDesc)?rawDesc.join(' '):(rawDesc||''));
-  const hasSetMarkers=/\b(set\s*(?:1|one|i|2|two|ii)?|setlist|encore)\b/i.test(text);
-  const labels=(tracks||[]).map(function(t){return normalizeSongForMatch(getUsableArchiveLabel(t));}).filter(Boolean);
-  if(labels.length){
-    let hits=0;
-    songs.forEach(function(song){
-      const key=normalizeSongForMatch(song);
-      if(key&&labels.some(function(label){return label===key||label.indexOf(key)>=0||key.indexOf(label)>=0;}))hits++;
-    });
-    if(hits>=Math.min(4,Math.ceil(Math.min(songs.length,labels.length)*0.45)))return true;
-  }
-  if(!hasSetMarkers)return false;
-  return songs.length>=5 && songs.filter(function(song){
-    const x=normalizeSongForMatch(song);
-    return x&&x!==normalizeSongForMatch(show.venue)&&x!==normalizeSongForMatch(show.city)&&!/^(grateful dead|jerry garcia|david grisman|jerry garcia band)$/.test(x);
-  }).length>=5;
-}
-
 function applyArchiveMetaToShow(show,meta,archiveId,rating){
   if(archiveId)show.archiveId=archiveId;
   if(rating)show.rating=rating||0;
   const rawDesc=(meta.metadata&&meta.metadata.description)||'';
   const archiveOverride=!!show.archiveIdHint;
-  const descSongs=parseSongs(Array.isArray(rawDesc)?rawDesc.join(' '):String(rawDesc));
+  const songs=parseSongs(Array.isArray(rawDesc)?rawDesc.join(' '):String(rawDesc));
   removeShowFromSongIndex(show);
+  if(songs.length){
+    const chosenSongs=archiveOverride?songs.slice():applyBestCachedSetlist(show,songs);
+    if(archiveOverride){
+      show.songs=chosenSongs.slice();
+      show._displayNameMap=null;show._visibleTrackMap=null;show._visibleTrackLabels=null;
+    }
+    indexShowSongs(show,chosenSongs);
+    try{
+      const c=JSON.parse(localStorage.getItem('gd_setlists')||'{}');
+      if(archiveOverride || !Array.isArray(c[show.id]) || chosenSongs.length > c[show.id].length) c[show.id]=chosenSongs;
+      localStorage.setItem('gd_setlists',JSON.stringify(c));
+    }catch(e){}
+    markShowSetlistCached(show);
+  }else if(archiveOverride&&!(show.songs&&show.songs.length)){
+    show.songs=null;show.setlistCached=false;show.cachePlayable=false;
+    clearCachedSetlistForShow(show);
+  }
   const byBase={};
   const titleByBase={};
   const fmtScore=function(n){return n.endsWith('.ogg')?5:n.includes('128')?4:n.endsWith('.mp3')&&!n.includes('64kb')?3:1;};
@@ -3346,35 +3144,28 @@ function applyArchiveMetaToShow(show,meta,archiveId,rating){
   show.tracks=stripLeadingNonSongTracks(show.tracks);
   show.totalDur=show.tracks.reduce(function(s,f){return s+parseDurationSeconds(f.length);},0);
   if(show.tracks.length>0) show.allRestricted=false;
-  const trackSongs=show.tracks.map(function(t){
-    return getUsableArchiveLabel(t);
-  }).filter(function(s){return s&&s.length>1;});
-  const descTrusted=archiveDescriptionSongsTrusted(show,descSongs,rawDesc,show.tracks);
-  const chosenSongs=archiveOverride
-    ? (trackSongs.length?trackSongs:(descTrusted?sanitizeSongList(descSongs):[]))
-    : applyBestCachedSetlist(show,descSongs);
-  if(chosenSongs.length){
-    show.songs=chosenSongs.slice();
-    show.setlistCached=true;
-    show.cachePlayable=true;
-    show.setlistTrusted=!!(descTrusted||trackSongs.length);
-    show._displayNameMap=null;show._visibleTrackMap=null;show._visibleTrackLabels=null;
-    if(show.setlistTrusted)indexShowSongs(show,chosenSongs);
-    try{
-      const c=JSON.parse(localStorage.getItem('gd_setlists')||'{}');
-      if(show.setlistTrusted && (archiveOverride || !Array.isArray(c[show.id]) || chosenSongs.length > c[show.id].length)) c[show.id]=chosenSongs;
-      localStorage.setItem('gd_setlists',JSON.stringify(c));
-    }catch(e){}
-    if(show.setlistTrusted)markShowSetlistCached(show);
-  }else if(archiveOverride){
-    show.songs=null;show.setlistCached=false;show.cachePlayable=false;show.setlistTrusted=false;
-    clearCachedSetlistForShow(show);
+  if(archiveOverride&&(!show.songs||!show.songs.length)&&show.tracks.length){
+    const trackSongs=show.tracks.map(function(t){
+      return getUsableArchiveLabel(t);
+    }).filter(function(s){return s&&s.length>1;});
+    if(trackSongs.length){
+      show.songs=trackSongs;
+      show.setlistCached=true;
+      show.cachePlayable=true;
+      show._displayNameMap=null;show._visibleTrackMap=null;show._visibleTrackLabels=null;
+      indexShowSongs(show,trackSongs);
+      try{
+        const c=JSON.parse(localStorage.getItem('gd_setlists')||'{}');
+        c[show.id]=trackSongs;
+        localStorage.setItem('gd_setlists',JSON.stringify(c));
+      }catch(e){}
+      markShowSetlistCached(show);
+    }
   }
   show._needsArchive=false;
   show._archiveTempFail=false;
   show._archivePartialScan=false;
   show._archiveMetaScanOffset=0;
-  show._archiveHintChanged=false;
   show.metaLoaded=true;show.notAvail=show.tracks.length===0;
   if(!show.notAvail) clearMetaLoaded(show);
   saveMetaLoaded(show);
@@ -3419,7 +3210,6 @@ function applyRelistenSourceToShow(show,src,archiveId){
     show.songs=songs.slice();
     show.setlistCached=true;
     show.cachePlayable=true;
-    show.setlistTrusted=true;
     show._displayNameMap=null;show._visibleTrackMap=null;show._visibleTrackLabels=null;
     indexShowSongs(show,songs);
     try{
@@ -3429,12 +3219,11 @@ function applyRelistenSourceToShow(show,src,archiveId){
     }catch(e){}
     markShowSetlistCached(show);
   }else if(show.archiveIdHint&&!(show.songs&&show.songs.length)){
-    show.songs=null;show.setlistCached=false;show.cachePlayable=false;show.setlistTrusted=false;
+    show.songs=null;show.setlistCached=false;show.cachePlayable=false;
     clearCachedSetlistForShow(show);
   }
   show._needsArchive=false;
   show._archiveTempFail=false;
-  show._archiveHintChanged=false;
   show.metaLoaded=true;show.notAvail=deduped.length===0;
   if(!show.notAvail) clearMetaLoaded(show);
   saveMetaLoaded(show);
@@ -3647,8 +3436,7 @@ async function loadShowMeta(show,priority,forceArchiveBg){
     show.metaLoaded=false;
     clearMetaLoaded(show);
   }
-  if(!show._forceFreshOpenLoad&&show.metaLoaded&&((show.tracks&&show.tracks.length)||show.notAvail||show.allRestricted))return;
-  if(priority||forceArchiveBg)show._archiveDeferred=false;
+  if(show.metaLoaded&&((show.tracks&&show.tracks.length)||show.notAvail||show.allRestricted))return;
   if(forceArchiveBg){show._archiveBgTried=true;show._archiveBgLastTry=Date.now();}
   if(isActiveLoadFresh(show.id)){
     if(priority){
@@ -3668,7 +3456,7 @@ async function loadShowMeta(show,priority,forceArchiveBg){
     const tOut=priority?14000:10000;
     if(archiveHint){
       if(!priority)show._archiveBgLastTry=Date.now();
-      if(!show._forceFreshOpenLoad&&applyCachedArchiveSourceToShow(show,archiveHint)){
+      if(applyCachedArchiveSourceToShow(show,archiveHint)){
         stopLoadingDots('sp-meta-txt');stopLoadingDots('sp-body-msg');
         if(priority){renderSetlistBody(show);renderList();}
         else renderList();
@@ -3691,7 +3479,6 @@ async function loadShowMeta(show,priority,forceArchiveBg){
         show.metaLoaded=false;
         show.notAvail=false;
         show._archiveTempFail=true;
-        show._archiveDeferred=!priority;
         show._needsArchive=true;
         stopLoadingDots('sp-meta-txt');stopLoadingDots('sp-body-msg');
         if(priority){renderSetlistBody(show);renderList();}
@@ -3702,7 +3489,6 @@ async function loadShowMeta(show,priority,forceArchiveBg){
       show.metaLoaded=false;
       show.notAvail=false;
       show._archiveTempFail=true;
-      show._archiveDeferred=!priority;
       show._needsArchive=true;
       stopLoadingDots('sp-meta-txt');stopLoadingDots('sp-body-msg');
       if(priority){renderSetlistBody(show);renderList();}
@@ -3770,7 +3556,6 @@ async function loadShowMeta(show,priority,forceArchiveBg){
       }
       if(!docs.length&&archiveTempFail){
         show._needsArchive=true;show._archiveTempFail=true;
-        show._archiveDeferred=!priority;
         show.metaLoaded=false;show.notAvail=false;
         if(priority)renderSetlistBody(show);
         return;
@@ -3810,7 +3595,6 @@ async function loadShowMeta(show,priority,forceArchiveBg){
         show._archivePartialScan=true;
         show._needsArchive=true;
         show._archiveTempFail=true;
-        show._archiveDeferred=!priority;
         show.metaLoaded=false;show.notAvail=false;
         return;
       }
@@ -3834,7 +3618,6 @@ async function loadShowMeta(show,priority,forceArchiveBg){
       if(best){show.archiveId=best.identifier;show.rating=best.avg_rating||0;}
       if(!meta&&metaTempFail){
         show._needsArchive=true;show._archiveTempFail=true;
-        show._archiveDeferred=!priority;
         show.metaLoaded=false;show.notAvail=false;
         if(priority)renderSetlistBody(show);
         return;
@@ -3853,11 +3636,9 @@ async function loadShowMeta(show,priority,forceArchiveBg){
       show.metaLoaded=false;show.notAvail=false;show._offlineFail=true;
     } else {
       show.metaLoaded=false;show.notAvail=false;show._archiveTempFail=true;
-      show._archiveDeferred=!priority;
     }
     if(priority)renderSetlistBody(show);
   }finally{
-    show._forceFreshOpenLoad=false;
     const _fn=activeLoads.get(show.id);
     activeLoads.delete(show.id);
     activeLoadStarted.delete(show.id);
@@ -3867,7 +3648,6 @@ async function loadShowMeta(show,priority,forceArchiveBg){
 
 
 function renderSetlistBody(show){
-  ensureCachedSetlistForShow(show);
   _setMpStatus(null);
   const _err=document.getElementById('sp-audio-err');
   if(_err){_err.style.display='none';_err.innerHTML='';}
@@ -3880,7 +3660,7 @@ function renderSetlistBody(show){
   }else if(show._archiveTempFail){
     mt.innerHTML='<span style="color:var(--gold)">Audio source timed out</span>'+archiveRetryControls(show)+sourcePickerHtml(show,sourceRecordsForShow(show),archiveHint||normalizeArchiveId(show.archiveId||''));
     if(archiveAutoRetryShowId===show.id&&!archiveAutoRetryTimer)scheduleArchiveAutoRetry(show.id);
-  }else if(show.notAvail&&!archiveHint&&!hasCachedSetlist){
+  }else if(show.notAvail&&!archiveHint){
     mt.innerHTML='<span style="color:var(--muted)">not on Relisten or archive.org</span>';
   }else if(show.allRestricted&&(!show.tracks||!show.tracks.length)){
     mt.innerHTML=show._relistenBlocked
@@ -3906,7 +3686,7 @@ function renderSetlistBody(show){
       '<button data-retry="'+show.id+'" onclick="retryShowMeta(this.dataset.retry)" style="background:transparent;border:1px solid rgba(200,168,75,.4);border-radius:8px;padding:8px 20px;color:var(--gold);font-family:var(--mono);font-size:12px;cursor:pointer">↺ Retry when connected</button></div>';
     return;
   }
-  if(show._archiveTempFail&&!hasCachedSetlist){
+  if(show._archiveTempFail&&!(archiveHint&&hasCachedSetlist)){
     body.innerHTML='<div class="sp-unavail">Audio did not load from Archive.org just now. This is usually temporary.<br><br>'+
       '<button data-retry="'+show.id+'" onclick="retryShowMeta(this.dataset.retry)" style="background:transparent;border:1px solid rgba(200,168,75,.4);border-radius:8px;padding:8px 20px;color:var(--gold);font-family:var(--mono);font-size:12px;cursor:pointer">Retry loading audio</button> '+
       '<button data-auto-retry="'+show.id+'" onclick="toggleArchiveAutoRetry(this.dataset.autoRetry)" style="background:transparent;border:1px solid rgba(200,168,75,.4);border-radius:8px;padding:8px 20px;color:var(--gold);font-family:var(--mono);font-size:12px;cursor:pointer">'+(archiveAutoRetryShowId===show.id?'Stop auto retry':'Auto retry')+'</button>'+
@@ -3928,19 +3708,14 @@ function renderSetlistBody(show){
       body.innerHTML='<div class="sp-unavail">not on Relisten or archive.org</div>';
       return;
     }
-    if(hasCachedSetlist&&(!archiveHint||show.setlistTrusted)){
-      const songRows=sanitizeSongList(show.songs).map(function(s,i){
+    if(archiveHint&&hasCachedSetlist){
+      const songRows=show.songs.map(function(s,i){
         return '<div class="tl-row" style="opacity:.82;cursor:default">'+
           '<span class="tl-num">'+(i+1)+'</span>'+
           '<span class="tl-title">'+esc(s)+'</span>'+
           '</div>';
       }).join('');
       body.innerHTML='<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:8px 12px 4px">Setlist</div>'+songRows;
-      return;
-    }
-    if(archiveHint&&hasCachedSetlist&&!show.setlistTrusted){
-      body.innerHTML='<div class="loading" id="sp-body-loading"><span class="spinner"></span><span id="sp-body-msg">Loading tracks</span><span id="sp-body-dots"></span></div>';
-      startLoadingDots('sp-body-msg','Loading tracks');
       return;
     }
     // Auto-retry once silently before showing the no-audio message.
@@ -4015,7 +3790,6 @@ function fmtSize(b){const mb=b/1048576;return(mb>100?Math.round(mb):mb.toFixed(1
 
 // ── PLAYBACK ─────────────────────────────────────────────────────
 function playTrack(idx){
-  blurActiveInput();
   if(!curShow?.tracks)return;
   touchFavoritePlayback(curShow);
   const map = buildVisibleTrackIndexMap(curShow);
@@ -4025,7 +3799,6 @@ function playTrack(idx){
   startPlayback(curShow,target);
 }
 function quickPlay(id){
-  blurActiveInput();
   const show=shows.find(s=>s.id===id);if(!show||show.notAvail)return;
   touchFavoritePlayback(show);
   if(curShow?.id===id&&audio){
@@ -4109,9 +3882,8 @@ function _onBufferTimeout(){
     _setMpStatus('<span style="color:var(--gold)">⏱ Slow load — retrying…</span>');
     const s=_bufferShow||playingShow; const i=_bufferShow?_bufferIdx:playingTrackIdx;
     if(s&&s.tracks){
-      const resumeAt=currentPlaybackResumePosition(s,i);
       if(audio){audio.onerror=null;audio.oncanplay=null;audio.onwaiting=null;audio.onstalled=null;audio.pause();audio=null;}
-      startPlayback(s,i,resumeAt);
+      startPlayback(s,i);
       return;
     }
   }
@@ -4135,25 +3907,12 @@ function retryPlayback(){
     return;
   }
   _stopBufferTimer();
-  const resumeAt=currentPlaybackResumePosition(s,i);
+  const resumeAt=(audio&&isFinite(audio.currentTime))?audio.currentTime:0;
   if(audio){audio.onerror=null;audio.oncanplay=null;audio.pause();audio=null;}
   playing=false; playIntent=false;
   const errEl=document.getElementById('sp-audio-err');
   if(errEl){errEl.style.display='none';errEl.innerHTML='';}
   startPlayback(s,i,resumeAt);
-}
-
-function currentPlaybackResumePosition(show,idx){
-  let pos=(audio&&isFinite(audio.currentTime))?audio.currentTime:0;
-  const saved=Number(positions&&show&&positions[show.id])||0;
-  if(playingShow&&show&&playingShow.id===show.id&&playingTrackIdx===idx&&saved>pos)pos=saved;
-  try{
-    const restore=JSON.parse(localStorage.getItem('gd_restore')||'{}');
-    if(restore&&show&&restore.showId===show.id&&restore.trackIdx===idx&&Number(restore.pos)>pos){
-      pos=Number(restore.pos)||pos;
-    }
-  }catch(e){}
-  return Math.max(0,pos||0);
 }
 function cancelPlayback(){
   _stopBufferTimer();
@@ -4167,7 +3926,6 @@ function cancelPlayback(){
 }
 
 function startPlayback(show,idx,resumeAt){
-  blurActiveInput();
   // Use preloaded audio if available for this exact track (seamless transition)
   // Relisten tracks have direct mp3 URL; archive tracks need base URL + filename
   const track=show.tracks[idx];
@@ -4192,8 +3950,8 @@ function startPlayback(show,idx,resumeAt){
   if(!newAudio){newAudio=new Audio();newAudio.preload='auto';}
   audio=newAudio;
   const saved=positions[show.id];
+  if(saved&&idx===0&&!newAudio._preloaded)audio.currentTime=saved;
   const resumePos=(resumeAt&&resumeAt>2)?resumeAt:0;
-  if(!resumePos&&saved&&idx===0&&!newAudio._preloaded)audio.currentTime=saved;
   let resumeSeeked=false;
   function seekAfterRetry(){
     if(!resumePos||resumeSeeked||!audio)return;
@@ -4352,7 +4110,6 @@ function resumeAudio(){
   }
 }
 function togglePlay(){
-  blurActiveInput();
   if(!audio&&curShow){
     const ti=curTrackIdx>=0?curTrackIdx:firstPlayableRawIdx(curShow);
     startPlayback(curShow,ti);
@@ -4519,36 +4276,14 @@ function openArchive(){
 // ── SONGS ─────────────────────────────────────────────────────────
 function parseSongs(text){
   const plain=text.replace(/<[^>]+>/g,' ').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&nbsp;/g,' ');
-  return[...new Set(plain.split(/[,\n\r]+|->|\|/).map(function(s){
-    return s.trim()
-      .replace(/^\d{1,2}\s*[-.)]\s*/,'')
-      .replace(/\s*\[\d{1,2}:\d{2}(?:[.:]\d{1,2})?\]\s*$/,'')
-      .replace(/\s+\d{1,2}:\d{2}(?::\d{2})?\s*$/,'')
-      .trim();
-  }).filter(s=>{
+  return[...new Set(plain.split(/[,\n\r]+|->|\|/).map(s=>s.trim()).filter(s=>{
     if(!s||s.length<3||s.length>70)return false;
-    if(/\b(sbd|aud|flac|wav|dat|pcm|transfer|recorded|source|taped|master|disc|track|tracks|http|www\.|dolby|nakamichi|sony|tdk|maxell)\b/i.test(s))return false;
-    if(looksLikeArchiveNote(s))return false;
+    if(/\b(sbd|aud|flac|wav|dat|pcm|transfer|recorded|source|taped|master|disc|track|http|www\.)\b/i.test(s))return false;
     if(/\d{4}-\d{2}-\d{2}/.test(s))return false;
-    if(/:\s*(drums|bass|guitar|keyboards|vocals?|sax(?:ophone)?|percussion)$/i.test(s))return false;
     if(/^(set\s*\d*|e:|encore|\d+\.|notes?:?)$/i.test(s.trim()))return false;
     return true;
   }).map(s=>s.replace(/^(set\s*\d+:?|e:|encore:)\s*/i,'').replace(/\*/g,'').trim()).filter(s=>s.length>2&&!/^\d+$/.test(s)))].slice(0,35);
 }
-
-function cacheSetlistDebug(){
-  try{
-    const cache=setlistCacheStore();
-    const byDate=setlistCacheByDate();
-    return {
-      cacheKeys:Object.keys(cache||{}).length,
-      cacheDates:Object.keys(byDate||{}).length,
-      showsWithSongs:shows.filter(function(s){return !!(s.songs&&s.songs.length);}).length,
-      visibleWithSongs:(filtered||[]).filter(function(s){ensureCachedSetlistForShow(s);return !!(s.songs&&s.songs.length);}).length
-    };
-  }catch(e){return {error:String(e&&e.message||e)};}
-}
-window.gdCacheSetlistDebug=cacheSetlistDebug;
 let songTimer=null;
 function songSearch(){clearTimeout(songTimer);songTimer=setTimeout(doSongSearch,220);}
 
@@ -4623,7 +4358,6 @@ function doSongSearch(refreshOnly){
   resEl.innerHTML=matches.slice(0,200).map(renderSongRow).join('');
 }
 async function openSetlistAndPlay(id,song){
-  blurActiveInput();
   const show=shows.find(s=>s.id===id);
   if(!show)return;
   touchFavoritePlayback(show);
@@ -4813,7 +4547,6 @@ function _tryAirPlay(){
 let prevTab='shows';
 let setlistOriginTab='shows';
 function switchTab(name){
-  blurActiveInput();
   // Close setlist panel if open
   const _spc=document.getElementById('setlistPanel');
   if(_spc&&_spc.classList.contains('open')){
@@ -6679,7 +6412,7 @@ function retryShowMeta(id){
   const show=shows.find(s=>s.id===id);
   if(!show)return;
   const selected=normalizeArchiveId(show.archiveId||show.archiveIdHint||'');
-  show.metaLoaded=false;show.notAvail=false;show._offlineFail=false;show._archiveTempFail=false;show._archiveDeferred=false;show.tracks=null;show._autoRetried=false;show._displayNameMap=null;show._visibleTrackMap=null;show._visibleTrackLabels=null;show._tapeHeavyDisplay=false;
+  show.metaLoaded=false;show.notAvail=false;show._offlineFail=false;show._archiveTempFail=false;show.tracks=null;show._autoRetried=false;show._displayNameMap=null;show._visibleTrackMap=null;show._visibleTrackLabels=null;show._tapeHeavyDisplay=false;
   document.getElementById('sp-body').innerHTML='<div class="loading"><span class="spinner"></span>Retrying…</div>';
   document.getElementById('sp-meta-txt').innerHTML='<span class="sp-meta-line"><span class="spinner"></span>Retrying tracks</span>'+sourcePickerHtml(show,sourceRecordsForShow(show),selected);
   return loadShowMeta(show,true).then(function(){
@@ -6964,7 +6697,7 @@ function stopArchiveAutoRetry(){
         </div>
       </div>
       <div style="padding:0 0 10px">
-        <input id="jamSongQ" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="search" enterkeyhint="search" placeholder="Type a song name&hellip;"
+        <input id="jamSongQ" type="text" placeholder="Type a song name&hellip;"
           oninput="jamSongSearch()"
           style="width:100%;box-sizing:border-box;background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none">
       </div>
