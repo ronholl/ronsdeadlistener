@@ -398,6 +398,7 @@ body{display:flex;justify-content:center}
 </style>
   <link rel="icon" href="favicon_tight.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon_tight_32.png">
+  <link rel="preload" as="image" href="favicon_tight_180.png" fetchpriority="high">
   <link rel="apple-touch-icon" sizes="180x180" href="favicon_tight_180.png">
   <link rel="apple-touch-icon" sizes="152x152" href="favicon_tight_180.png">
   <link rel="apple-touch-icon" sizes="120x120" href="favicon_tight_180.png">
@@ -409,7 +410,7 @@ body{display:flex;justify-content:center}
   <!-- ── LOGIN SCREEN ── -->
   <div id="loginScreen">
     <div class="login-hero">
-      <img src="deadhead_logo.jpg" class="login-logo" alt="Ron's Deadhead Listener" loading="lazy" decoding="async"/>
+      <img src="favicon_tight_180.png" class="login-logo" alt="Ron's Deadhead Listener" loading="eager" decoding="sync" fetchpriority="high"/>
       <div class="login-title">Ron's Deadhead Listener</div>
       <div class="login-sub">1965 – 1995 · <span id="login-show-count">2,290</span> Shows</div>
     </div>
@@ -525,7 +526,7 @@ body{display:flex;justify-content:center}
 
   <!-- ── MAIN APP ── -->
   <div class="hdr">
-    <img src="deadhead_logo.jpg" class="hdr-logo" alt="logo" loading="lazy" decoding="async"/>
+    <img src="favicon_tight_180.png" class="hdr-logo" alt="logo" loading="eager" decoding="sync" fetchpriority="high"/>
     <div class="hdr-text">
       <div class="hdr-title">Ron's Deadhead Listener</div>
       <div class="hdr-sub" style="color:rgba(200,168,75,.6)">1965 – 1995 · <span id="hdr-show-count">2,290</span> Shows · <span style="opacity:.45">V1.7.23</span></div>
