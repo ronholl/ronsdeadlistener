@@ -401,7 +401,7 @@ body{display:flex;justify-content:center}
   <link rel="apple-touch-icon" sizes="180x180" href="favicon_tight_180.png">
   <link rel="apple-touch-icon" sizes="152x152" href="favicon_tight_180.png">
   <link rel="apple-touch-icon" sizes="120x120" href="favicon_tight_180.png">
-  <link rel="manifest" href="manifest.json?v=1.7.22">
+  <link rel="manifest" href="manifest.json?v=1.7.23">
 </head>
 <body>
 <div id="app">
@@ -528,7 +528,7 @@ body{display:flex;justify-content:center}
     <img src="deadhead_logo.jpg" class="hdr-logo" alt="logo" loading="lazy" decoding="async"/>
     <div class="hdr-text">
       <div class="hdr-title">Ron's Deadhead Listener</div>
-      <div class="hdr-sub" style="color:rgba(200,168,75,.6)">1965 – 1995 · <span id="hdr-show-count">2,290</span> Shows · <span style="opacity:.45">V1.7.22</span></div>
+      <div class="hdr-sub" style="color:rgba(200,168,75,.6)">1965 – 1995 · <span id="hdr-show-count">2,290</span> Shows · <span style="opacity:.45">V1.7.23</span></div>
       <div class="hdr-st" id="hdrSt"></div>
     </div>
     <div class="hdr-user" id="hdrUser" onclick="switchUser()">
@@ -590,7 +590,7 @@ body{display:flex;justify-content:center}
 // ── CONFIG ────────────────────────────────────────────────────────
 const SHEET_ID   = '1Hl1iSUkBQbfjbzXpEl5DrpRZQhu_xnOfqgvgmoTMURk';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDkkn9PBWvmBFsjRpoj0-zzM3euaLQt23B64iWn8XO13I4eqeEiCEuB8Zwj0ohObwpMQ/exec';
-const APP_BUILD = '1.7.22';
+const APP_BUILD = '1.7.23';
 // Poster filename — place final_deadhead_poster_web.jpg in the same folder as index.html
 // Leave empty string to disable the poster feature entirely
 const POSTER_FILE = 'final_deadhead_poster_web.jpg';
@@ -828,11 +828,21 @@ async function loadData(){
     userLimit=cached.userLimit||0;
     requestAnimationFrame(function(){
       onLoaded(_hydrateSheetCacheShows(cached.shows),{fromCache:true});
-      setTimeout(function(){_fetchSheetFresh({refresh:true});},250);
+      scheduleSheetRefreshAfterStartup();
     });
     return;
   }
   await _fetchSheetFresh();
+}
+
+function scheduleSheetRefreshAfterStartup(){
+  const run=function(){setTimeout(function(){_fetchSheetFresh({refresh:true});},8000);};
+  try{
+    if(document.readyState==='complete')run();
+    else window.addEventListener('load',run,{once:true});
+  }catch(e){
+    setTimeout(function(){_fetchSheetFresh({refresh:true});},10000);
+  }
 }
 
 function _readCache(){
@@ -5013,7 +5023,7 @@ document.addEventListener('DOMContentLoaded',function(){
       f.href='https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap';
       document.head.appendChild(f);
     }catch(e){}
-  },1500);
+  },10000);
 });
 
 // ── BACKGROUND AUDIO RECOVERY ──────────────────────────────────────────
