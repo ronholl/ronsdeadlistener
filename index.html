@@ -269,7 +269,8 @@ body{display:flex;justify-content:center}
 .cbtn.main:active{background:var(--gold2);transform:scale(.95)}
 .cbtn.skip{border-radius:50%;width:64px;height:64px;font-size:24px;padding:0;flex-shrink:0;background:rgba(200,168,75,.34);border:2px solid rgba(200,168,75,.9);color:var(--gold);font-family:var(--mono);font-weight:700}
 .cbtn.skip:active{background:var(--gold);border-color:var(--gold);color:#000;transform:scale(.95)}
-#sp-status [onclick*="retryPlayback"],#mp-status-row [onclick*="retryPlayback"]{display:inline-flex;align-items:center;justify-content:center;min-width:64px;min-height:44px;padding:0 14px;margin:4px 4px 0 8px;border:1px solid rgba(200,168,75,.45);border-radius:12px;background:rgba(200,168,75,.08);color:var(--gold)!important;text-decoration:none!important;font-size:13px;font-weight:600}
+#sp-status [onclick*="retryPlayback"],#mp-status-row [onclick*="retryPlayback"]{display:inline-flex;align-items:center;justify-content:center;min-width:94px;min-height:48px;padding:0 18px;margin:6px 6px 0 0;border:1.5px solid rgba(200,168,75,.65);border-radius:14px;background:rgba(200,168,75,.14);color:var(--gold)!important;text-decoration:none!important;font-size:14px;font-weight:700}
+#sp-status [onclick*="cancelPlayback"],#mp-status-row [onclick*="cancelPlayback"]{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;margin:6px 0 0 4px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.04);color:var(--muted)!important;text-decoration:none!important;font-size:13px}
 #sp-fav{border-radius:12px;width:48px;min-width:48px;height:40px;font-size:12px;padding:0 4px;flex-shrink:0;border:1px solid rgba(200,168,75,.35);color:rgba(200,168,75,.7);gap:2px}
 #sp-fav.fav-active{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,.15)}
 #sp-fav.fav-fresh{border-color:var(--green);color:var(--green);background:rgba(82,183,136,.14)}
@@ -420,7 +421,7 @@ body{display:flex;justify-content:center}
     <div class="login-hero">
       <img src="favicon_tight_180.png" class="login-logo" alt="Ron's Deadhead Listener" loading="eager" decoding="sync" fetchpriority="high"/>
       <div class="login-title">Ron's Deadhead Listener</div>
-      <div class="login-sub">1965 – 1995 · <span id="login-show-count">—</span> Shows · <span id="login-version">V2.0.2</span></div>
+      <div class="login-sub">1965 – 1995 · <span id="login-show-count">—</span> Shows · <span id="login-version">V2.1.9</span></div>
     </div>
     
 
@@ -537,7 +538,7 @@ body{display:flex;justify-content:center}
     <img src="favicon_tight_180.png" class="hdr-logo" alt="logo" loading="eager" decoding="sync" fetchpriority="high"/>
     <div class="hdr-text">
       <div class="hdr-title">Ron's Deadhead Listener</div>
-          <div class="hdr-sub" style="color:rgba(200,168,75,.6)"><span id="hdr-year-range">1965 – 1995</span> · <span id="hdr-show-count">—</span> Shows · <span id="hdr-version" style="opacity:.45">V2.0.2</span></div>
+          <div class="hdr-sub" style="color:rgba(200,168,75,.6)"><span id="hdr-year-range">1965 – 1995</span> · <span id="hdr-show-count">—</span> Shows · <span id="hdr-version" style="opacity:.45">V2.1.9</span></div>
       <div class="hdr-st" id="hdrSt"></div>
     </div>
     <div class="hdr-user" id="hdrUser" onclick="switchUser()">
@@ -571,7 +572,7 @@ body{display:flex;justify-content:center}
       <div class="stat"><span class="stat-n" id="s-yrs">—</span><span class="stat-l">Years</span></div>
     </div>
     <div class="filters">
-      <div style="position:relative;display:flex;align-items:center"><input class="srch manual-clear" id="q" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="search" enterkeyhint="search" placeholder="Search venue, city, date, song..." oninput="applyFilters()" style="width:100%"/><button class="search-clear" id="qClear" type="button" aria-label="Clear search" onclick="clearShowSearch()">×</button></div>
+      <div style="position:relative;display:flex;align-items:center"><input class="srch manual-clear" id="q" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="search" enterkeyhint="search" placeholder="Search venue, city, date, song..." oninput="scheduleShowSearch()" style="width:100%"/><button class="search-clear" id="qClear" type="button" aria-label="Clear search" onclick="clearShowSearch()">×</button></div>
       <div class="frow">
         <select class="fsel" id="yrSel" onchange="applyYearFilter()"><option value="">All years</option></select>
         <button class="ftog" id="myBtn" onclick="toggleMy()">My shows</button>
@@ -617,7 +618,7 @@ body{display:flex;justify-content:center}
 // ── CONFIG ────────────────────────────────────────────────────────
 const SHEET_ID   = '1Hl1iSUkBQbfjbzXpEl5DrpRZQhu_xnOfqgvgmoTMURk';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDkkn9PBWvmBFsjRpoj0-zzM3euaLQt23B64iWn8XO13I4eqeEiCEuB8Zwj0ohObwpMQ/exec';
-const APP_BUILD = '2.0.2';
+const APP_BUILD = '2.1.9';
 // Poster filename — place final_deadhead_poster_web.jpg in the same folder as index.html
 // Leave empty string to disable the poster feature entirely
 const POSTER_FILE = 'final_deadhead_poster_web.jpg';
@@ -1425,6 +1426,26 @@ function rebuildAttCache(){
   saveUserCountCache();
 }
 function attCount(u){return attCache[u]||0;}
+function lastKnownAttCount(mode,user){
+  mode=mode||activeMode||DEFAULT_MODE;
+  if(!user)return 0;
+  const counts=userCountCache&&userCountCache.modes&&userCountCache.modes[mode.key];
+  return Number(counts&&counts[user])||0;
+}
+function displayAttCountFor(mode,user){
+  mode=mode||activeMode||DEFAULT_MODE;
+  if(!user||user==='all')return 0;
+  const current=attCount(user);
+  if(current>0)return current;
+  const last=lastKnownAttCount(mode,user);
+  if(!last)return current;
+  const state=attendanceLoadState[mode.key];
+  const lastSync=window._gdLastSheetSync;
+  const syncStarted=lastSync&&lastSync.mode===mode.key&&lastSync.status==='started';
+  const cacheHasUser=attendedCacheHasUser(mode,user);
+  if(state==='pending'||state==='error'||syncStarted||!cacheHasUser)return last;
+  return current;
+}
 function attendedCacheHasUser(mode,user){
   if(!user)return false;
   const cache=readAttendedModeCache(mode||activeMode||DEFAULT_MODE);
@@ -1454,7 +1475,7 @@ function rebuildUserTotalCounts(){
   userCountCache.totals=totals;
 }
 function displayUserModeCount(u){
-  return attCount(u);
+  return displayAttCountFor(activeMode,u);
 }
 function displayUserTotalCount(u){
   return (userCountCache&&userCountCache.totals&&userCountCache.totals[u])||attCount(u)||0;
@@ -1568,8 +1589,14 @@ let _legacySetlistCacheList=null,_legacyArchiveSourceCacheList=null;
 let _visibleSetlistHydrateRunning=false,_visibleSetlistHydrateLastAt=0;
 let preloadAudio=null; // preloaded next track for seamless playback
 let playIntent=false;
+let _interruptionResumeWanted=false;
+let _interruptionResumeTimer=0;
+let _lastResumeBlockMsg='';
+let _nativeNowPlayingLastAt=0;
 let _bufferTimer=null; // tracks elapsed seconds while buffering/stalled
-let _autoRetried=false;  // true if we've already auto-retried once this track
+let _autoRetryTrackKey='',_autoRetryCount=0;
+let _bufferLastPos=0,_bufferLastProgressAt=0;
+let _preloadTimer=0;
 // When connection comes back, nudge the user to retry if audio stalled offline
 window.addEventListener('online',function(){
   // If login screen is showing an error, auto-retry sheet load
@@ -1607,6 +1634,9 @@ window.addEventListener('offline',function(){
 });
 let _bufferSecs=0;     // elapsed seconds shown in loading indicator
 let _bufferShow=null,_bufferIdx=0; // show/idx being buffered (for retry)
+function nativeAudioBridgeActive(){
+  return !!(window._nativeBridgeInstalled&&window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.nativeAudioPlay);
+}
 
 // ── iOS BACKGROUND AUDIO KEEPALIVE ──────────────────────────────────────
 // iOS suspends the audio hardware when a PWA backgrounds, even if audio is
@@ -1637,6 +1667,9 @@ let pinTarget=null, pinBuffer='';
 let debugLines=[];
 
 try{const p=localStorage.getItem('gd_pos');if(p)positions=JSON.parse(p);}catch(e){}
+const PLAYBACK_POS_WRITE_MS=5000;
+const PLAYBACK_HISTORY_WRITE_MS=15000;
+let _lastPlaybackPosWriteAt=0,_lastPlaybackHistoryWriteAt=0,_pendingPlaybackPosTimer=0,_pendingPlaybackPos=null;
 // Update the Recently Played history entry for a show with its current playback position.
 // Defined here (near savePos) so it's available from both savePos and pauseAudio.
 function saveHistoryPosition(show, trackIdx, pos){
@@ -1670,24 +1703,48 @@ function saveHistoryPosition(show, trackIdx, pos){
     }
   }catch(e){}
 }
-function savePos(id,t){
-  positions[id]=Math.floor(t);
+function writePlaybackPositionNow(id,t,opts){
+  opts=opts||{};
   try{
+    if(_pendingPlaybackPosTimer){clearTimeout(_pendingPlaybackPosTimer);_pendingPlaybackPosTimer=0;}
+    _pendingPlaybackPos=null;
+    const pos=Math.floor(t||0);
     if(!setLocalStorageJsonSafe('gd_pos',positions)){
       const slim={};
-      if(playingShow)slim[playingShow.id]=Math.floor(t);
+      if(playingShow)slim[playingShow.id]=pos;
       setLocalStorageJsonSafe('gd_pos',slim,{dropOnFailure:true});
       positions=slim;
     }
-    // Always save playingShow/playingTrackIdx, not curShow/curTrackIdx
-    // curShow is whatever is open in the setlist panel — could be a different show
     if(playingShow&&audio){
-      setLocalStorageJsonSafe('gd_restore',{showId:showStorageId(playingShow),mode:showModeLabel(playingShow),trackIdx:playingTrackIdx,pos:Math.floor(t),ts:Date.now()});
-      // Keep the Recently Played entry in sync (throttled — history write is cheap but runs often)
-      saveHistoryPosition(playingShow, playingTrackIdx, t);
-      window._gdSavePosLast={id:id,showId:showStorageId(playingShow),mode:showModeLabel(playingShow),trackIdx:playingTrackIdx,pos:Math.floor(t),at:Date.now()};
+      setLocalStorageJsonSafe('gd_restore',{showId:showStorageId(playingShow),mode:showModeLabel(playingShow),trackIdx:playingTrackIdx,pos:pos,ts:Date.now()});
+      const now=Date.now();
+      if(opts.forceHistory||now-_lastPlaybackHistoryWriteAt>=PLAYBACK_HISTORY_WRITE_MS){
+        _lastPlaybackHistoryWriteAt=now;
+        saveHistoryPosition(playingShow, playingTrackIdx, pos);
+      }
+      _lastPlaybackPosWriteAt=now;
+      window._gdSavePosLast={id:id,showId:showStorageId(playingShow),mode:showModeLabel(playingShow),trackIdx:playingTrackIdx,pos:pos,at:now,throttled:!opts.force};
     }
   }catch(e){window._gdSavePosLast={id:id,error:String(e&&e.message||e),at:Date.now()};}
+}
+function schedulePlaybackPositionWrite(id,t,delay){
+  _pendingPlaybackPos={id:id,t:t};
+  if(_pendingPlaybackPosTimer)return;
+  _pendingPlaybackPosTimer=setTimeout(function(){
+    const p=_pendingPlaybackPos;
+    if(p)writePlaybackPositionNow(p.id,p.t);
+  },Math.max(250,delay||PLAYBACK_POS_WRITE_MS));
+}
+function flushPlaybackPosition(){
+  if(!_pendingPlaybackPos)return;
+  writePlaybackPositionNow(_pendingPlaybackPos.id,_pendingPlaybackPos.t,{force:true,forceHistory:true});
+}
+function savePos(id,t){
+  positions[id]=Math.floor(t);
+  const now=Date.now();
+  const due=now-_lastPlaybackPosWriteAt>=PLAYBACK_POS_WRITE_MS;
+  if(due)writePlaybackPositionNow(id,t);
+  else schedulePlaybackPositionWrite(id,t,PLAYBACK_POS_WRITE_MS-(now-_lastPlaybackPosWriteAt));
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function parseDurationSeconds(v){
@@ -2361,13 +2418,39 @@ function sameShowIdentity(a,b){
     String(a.venue||'').trim().toLowerCase()===String(b.venue||'').trim().toLowerCase() &&
     String(a.city||'').trim().toLowerCase()===String(b.city||'').trim().toLowerCase();
 }
+function showIdentityKeys(show){
+  const keys=[];
+  if(!show)return keys;
+  function add(k){if(k&&keys.indexOf(k)<0)keys.push(k);}
+  add('id:'+String(show.id||''));
+  add('raw:'+showStorageId(show));
+  add('dvc:'+favoriteDateKey(show.date)+'|'+String(show.venue||'').trim().toLowerCase()+'|'+String(show.city||'').trim().toLowerCase());
+  return keys;
+}
+function buildShowIdentityLookup(list){
+  const map={};
+  (list||[]).forEach(function(show){
+    showIdentityKeys(show).forEach(function(k){
+      if(k&&!map[k])map[k]=show;
+    });
+  });
+  return map;
+}
+function findShowByIdentityFast(map,probe){
+  const keys=showIdentityKeys(probe);
+  for(let i=0;i<keys.length;i++){
+    if(map[keys[i]])return map[keys[i]];
+  }
+  return null;
+}
 
 function applySheetUserOverlay(sheetList,mode){
   mode=mode||activeMode||DEFAULT_MODE;
   let changed=0;
   if(!Array.isArray(sheetList)||!sheetList.length)return changed;
+  const sheetLookup=buildShowIdentityLookup(sheetList);
   shows.forEach(function(show){
-    const fresh=sheetList.find(function(s){return sameShowIdentity(show,s);});
+    const fresh=findShowByIdentityFast(sheetLookup,show);
     if(!fresh||!fresh.attended)return;
     const sheetUsers=[...new Set(users.concat(Object.keys(fresh.attended||{})).filter(Boolean))];
     sheetUsers.forEach(function(u){
@@ -2478,7 +2561,7 @@ async function runBackgroundSheetSync(opts){
     setHdrSt(opts.manual?'✓ Synced':'','ok');
     window._gdLastSheetSync={mode:mode.key,manual:!!opts.manual,status:'ok',shows:list.length,hasOverlay:sheetListHasUserOverlay(list),user:curUser||viewUser||'',runtimeCount:runtimeAttendedCount(curUser||viewUser),cacheKeyCount:countAttendedCacheEntries(readAttendedModeCache(mode),curUser||viewUser),at:Date.now()};
     setAttendanceLoadState(mode,'ready');
-    if(activeMode&&activeMode.key===mode.key){updateAttCount();updateViewStats();}
+    if(activeMode&&activeMode.key===mode.key){rebuildAttCache();updateAttCount();updateViewStats();}
     return true;
   }catch(e){
     users=prior.users;userPins=prior.pins;userLimit=prior.limit;
@@ -4788,7 +4871,14 @@ function clearSearchInput(inputId,buttonId,afterClear,opts){
   else try{q.blur();}catch(e){}
 }
 function clearShowSearch(){
+  clearTimeout(showSearchTimer);
   clearSearchInput('q','qClear',applyFilters);
+}
+let showSearchTimer=null;
+function scheduleShowSearch(){
+  updateShowSearchClear();
+  clearTimeout(showSearchTimer);
+  showSearchTimer=setTimeout(applyFilters,120);
 }
 function setlistHydrationStats(mode,listOverride){
   mode=mode||activeMode||DEFAULT_MODE;
@@ -4890,18 +4980,18 @@ function applyFilters(){
 }
 function updateAttCount(){
   const u=(viewUser&&viewUser!=='all')?viewUser:curUser;
-  document.getElementById('s-att').textContent=u?(isAttendanceCountPending(activeMode,u)?'—':attCount(u).toLocaleString()):'—';
+  document.getElementById('s-att').textContent=u?(isAttendanceCountPending(activeMode,u)?'—':displayAttCountFor(activeMode,u).toLocaleString()):'—';
 }
 function updateViewStats(){
   const el=document.getElementById('ucnt');
   if(viewUser==='all'){el.innerHTML='';return;}
   const pending=isAttendanceCountPending(activeMode,viewUser);
-  const cnt=attCount(viewUser);
+  const cnt=displayAttCountFor(activeMode,viewUser);
   el.innerHTML=pending?'<b>—</b> shows':'<b>'+cnt+'</b> shows';
   const myBtn=document.getElementById('myBtn');
   if(myBtn){
     // Hide My Shows only if the LOGGED-IN user has 0 shows
-    const myCnt=curUser?attCount(curUser):0;
+    const myCnt=curUser?displayAttCountFor(activeMode,curUser):0;
     const myPending=curUser&&isAttendanceCountPending(activeMode,curUser);
     if(myCnt===0&&curUser&&!myPending){
       myBtn.style.display='none';
@@ -6542,6 +6632,21 @@ function sourceTrackTitle(show,i){
   return (show&&show.songs&&show.songs[i])||('Track '+(i+1));
 }
 
+function isPlaceholderTrackTitle(title){
+  const s=String(title||'').trim();
+  return !s || /^loading(?:[.\u2026\s]*)?$/i.test(s) || /^(?:track\s*0?|undefined|null|-)$/i.test(s);
+}
+
+function playbackTrackTitle(show,i){
+  const t=show&&show.tracks&&show.tracks[i];
+  let title=sourceTrackTitle(show,i);
+  if(isPlaceholderTrackTitle(title)&&show&&show.songs&&show.songs[i])title=show.songs[i];
+  if(isPlaceholderTrackTitle(title)&&t&&t.title)title=t.title;
+  if(isPlaceholderTrackTitle(title)&&t&&t.name)title=cleanName(t.name);
+  if(isPlaceholderTrackTitle(title))title='Track '+((i||0)+1);
+  return title;
+}
+
 function buildVisibleTrackIndexMap(show){
   if(!show || !show.tracks) return [];
   if(show._visibleTrackMap) return show._visibleTrackMap;
@@ -7086,18 +7191,32 @@ function quickPlay(id){
 
 // ── BUFFER / STALL TRACKING ──────────────────────────────────────
 function _startBufferTimer(show,idx){
+  if(nativeAudioBridgeActive())return;
   _stopBufferTimer();
   _bufferSecs=0; _bufferShow=show; _bufferIdx=idx;
+  _bufferLastPos=(audio&&isFinite(audio.currentTime))?audio.currentTime:0;
+  _bufferLastProgressAt=Date.now();
   _bufferTimer=setInterval(function(){
+    if(nativeAudioBridgeActive()){_stopBufferTimer();_setMpStatus(null);return;}
+    const pos=(audio&&isFinite(audio.currentTime))?audio.currentTime:0;
+    if(pos>_bufferLastPos+.25){
+      _bufferLastPos=pos;
+      _bufferLastProgressAt=Date.now();
+      _stopBufferTimer();
+      _setMpStatus(null);
+      return;
+    }
     _bufferSecs++;
     _updateBufferUI();
-    if(_bufferSecs>=30) _onBufferTimeout();
+    if(_bufferSecs>=15) _onBufferTimeout();
   },1000);
   _updateBufferUI();
 }
 function _stopBufferTimer(){
   if(_bufferTimer){clearInterval(_bufferTimer);_bufferTimer=null;}
   _bufferSecs=0;
+  _bufferLastPos=0;
+  _bufferLastProgressAt=0;
 }
 function _setMpStatus(msg){
   // Update status in setlist panel player (always visible when panel open)
@@ -7121,11 +7240,117 @@ function _setMpStatus(msg){
     if(mpEl)mpEl.remove();
   }
 }
+function _setMediaPlaybackState(state){
+  if('mediaSession' in navigator){
+    try{navigator.mediaSession.playbackState=state;}catch(e){}
+  }
+}
+function _postNativeNowPlaying(isPlaying,force){
+  try{
+    const h=window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.nowPlayingUpdate;
+    if(!h)return;
+    const now=Date.now();
+    if(!force&&now-_nativeNowPlayingLastAt<5000)return;
+    _nativeNowPlayingLastAt=now;
+    const show=playingShow||curShow;
+    const idx=playingShow?playingTrackIdx:curTrackIdx;
+    const title=(show&&show.tracks&&show.tracks[idx])?playbackTrackTitle(show,idx):"Ron's Deadhead Listener";
+    h.postMessage({
+      title:title,
+      artist:show?showModeLabel(show):'Deadhead Listener',
+      album:show?((show.venue||'')+(show.date?' · '+show.date:'')):'',
+      duration:(audio&&isFinite(audio.duration))?audio.duration:0,
+      elapsed:(audio&&isFinite(audio.currentTime))?audio.currentTime:0,
+      isPlaying:!!isPlaying
+    });
+  }catch(e){}
+}
+function _showTapPlayToResume(reason){
+  _lastResumeBlockMsg=reason||'resume-blocked';
+  playing=false;
+  playIntent=true;
+  _interruptionResumeWanted=true;
+  _setMediaPlaybackState('paused');
+  _postNativeNowPlaying(false,true);
+  updateSpPlayer();renderMiniPlayer();renderList();
+  _setMpStatus('Playback was interrupted. <span onclick="resumeAudio()" style="cursor:pointer;text-decoration:underline;color:var(--gold);margin-left:6px">Tap play to resume</span>.');
+  const errEl=document.getElementById('sp-audio-err');
+  if(errEl){
+    errEl.style.display='block';
+    errEl.innerHTML='Playback was interrupted. iOS may require a tap before audio can resume. <span onclick="resumeAudio()" style="cursor:pointer;text-decoration:underline;color:var(--gold)">Tap play to resume</span>.';
+  }
+}
+function _rememberPlaybackIntent(reason){
+  if(!audio||audio.ended)return;
+  if(!(playIntent||playing||!audio.paused))return;
+  playIntent=true;
+  _interruptionResumeWanted=true;
+  try{
+    if(playingShow&&audio&&isFinite(audio.currentTime)){
+      saveHistoryPosition(playingShow, playingTrackIdx, audio.currentTime||0);
+      setLocalStorageJsonSafe('gd_restore',{
+        showId:showStorageId(playingShow),
+        mode:showModeLabel(playingShow),
+        trackIdx:playingTrackIdx,
+        pos:Math.floor(audio.currentTime||0),
+        ts:Date.now(),
+        interrupted:true,
+        reason:reason||''
+      });
+    }
+  }catch(e){}
+}
+function _safeResumeAfterInterruption(reason,delay){
+  if(!audio||audio.ended)return;
+  if(!(playIntent||_interruptionResumeWanted))return;
+  if(!audio.paused){_interruptionResumeWanted=false;return;}
+  if(_interruptionResumeTimer)clearTimeout(_interruptionResumeTimer);
+  _interruptionResumeTimer=setTimeout(function(){
+    _interruptionResumeTimer=0;
+    if(!audio||audio.ended||!audio.paused)return;
+    if(!(playIntent||_interruptionResumeWanted))return;
+    resumeAudio({fromInterruption:true,reason:reason||'lifecycle'});
+  },delay==null?300:delay);
+}
+function _attachAudioRecoveryHandlers(a,show,idx){
+  if(!a||a._gdRecoveryHandlersAttached)return;
+  a._gdRecoveryHandlersAttached=true;
+  a.addEventListener('pause',function(){
+    if(a!==audio)return;
+    _setMediaPlaybackState('paused');
+    _postNativeNowPlaying(false,true);
+    if(playIntent&&!a.ended){
+      playing=false;
+      _rememberPlaybackIntent('audio-pause');
+      updateSpPlayer();renderMiniPlayer();renderList();
+    }
+  });
+  a.addEventListener('playing',function(){
+    if(a!==audio)return;
+    playing=true;
+    _interruptionResumeWanted=false;
+    _lastResumeBlockMsg='';
+    _setMediaPlaybackState('playing');
+    _postNativeNowPlaying(true,true);
+    _setMpStatus(null);
+    const errEl=document.getElementById('sp-audio-err');
+    if(errEl&&/Tap play to resume/i.test(errEl.innerHTML)){errEl.style.display='none';errEl.innerHTML='';}
+    updateSpPlayer();renderMiniPlayer();renderList();
+  });
+  a.addEventListener('canplay',function(){if(a===audio&&playIntent&&a.paused)_safeResumeAfterInterruption('canplay',50);});
+  a.addEventListener('waiting',function(){if(a===audio&&playIntent)_rememberPlaybackIntent('waiting');});
+  a.addEventListener('stalled',function(){if(a===audio&&playIntent)_rememberPlaybackIntent('stalled');});
+  a.addEventListener('suspend',function(){if(a===audio&&playIntent)_rememberPlaybackIntent('suspend');});
+  a.addEventListener('abort',function(){if(a===audio&&playIntent&&!a.ended)_rememberPlaybackIntent('abort');});
+  a.addEventListener('error',function(){if(a===audio&&playIntent)_rememberPlaybackIntent('error');});
+  a.addEventListener('ended',function(){if(a===audio){_interruptionResumeWanted=false;_setMediaPlaybackState('none');}});
+}
 function _updateBufferUI(){
+  if(nativeAudioBridgeActive()){_stopBufferTimer();_setMpStatus(null);return;}
   if(_bufferSecs>0){
     _setMpStatus('<span style="color:var(--gold)">⏳ Buffering… '+_bufferSecs+'s</span>'
-      +' <span onclick="retryPlayback()" style="cursor:pointer;color:var(--gold);margin-left:10px;text-decoration:underline">↺ retry</span>'
-      +' <span onclick="cancelPlayback()" style="cursor:pointer;color:var(--muted);margin-left:8px;text-decoration:underline">cancel</span>');
+      +'<br><span onclick="retryPlayback()">↺ Retry</span>'
+      +' <span onclick="cancelPlayback()">Cancel</span>');
   } else {
     _setMpStatus(null);
   }
@@ -7135,28 +7360,35 @@ function _updateBufferUI(){
 }
 function _onBufferTimeout(){
   _stopBufferTimer();
-  playing=false; playIntent=false;
+  if(nativeAudioBridgeActive()){_setMpStatus(null);return;}
+  const s=_bufferShow||playingShow;
+  const i=_bufferShow?_bufferIdx:playingTrackIdx;
+  const retryKey=s?(s.id+'|'+i):'';
   if(!navigator.onLine){
-    _setMpStatus('📶 No internet connection — reconnect and tap <b>↺ retry</b> to resume.');
+    playing=false; playIntent=false;
+    _setMpStatus('📶 No internet connection.<br><span onclick="retryPlayback()">↺ Retry</span>');
     updateSpPlayer();
     return;
   }
-  // Auto-retry once silently on timeout — handles brief archive.org hiccups
-  if(!_autoRetried){
-    _autoRetried=true;
-    _setMpStatus('<span style="color:var(--gold)">⏱ Slow load — retrying…</span>');
-    const s=_bufferShow||playingShow; const i=_bufferShow?_bufferIdx:playingTrackIdx;
-    if(s&&s.tracks){
-      const resumeAt=currentPlaybackResumePosition(s,i);
-      if(audio){audio.onerror=null;audio.oncanplay=null;audio.onwaiting=null;audio.onstalled=null;audio.pause();audio=null;}
-      startPlayback(s,i,resumeAt);
-      return;
-    }
+  if(retryKey&&retryKey!==_autoRetryTrackKey){
+    _autoRetryTrackKey=retryKey;
+    _autoRetryCount=0;
   }
+  // Auto-retry a couple times per track — enough to ride out archive/network hiccups
+  // without looping forever on a bad connection.
+  if(s&&s.tracks&&_autoRetryCount<2){
+    _autoRetryCount++;
+    _setMpStatus('<span style="color:var(--gold)">⏱ Slow stream — retrying '+_autoRetryCount+'/2…</span>');
+    const resumeAt=currentPlaybackResumePosition(s,i);
+    if(audio){playIntent=false;_interruptionResumeWanted=false;audio.onerror=null;audio.oncanplay=null;audio.onwaiting=null;audio.onstalled=null;audio.pause();audio=null;}
+    startPlayback(s,i,resumeAt);
+    return;
+  }
+  playing=false; playIntent=false;
   // Second timeout — show error with manual retry option
-  _setMpStatus('⏱ Still loading after 60s — archive.org may be slow.'
-    +' <span onclick="retryPlayback()" style="cursor:pointer;text-decoration:underline;color:var(--gold);margin-left:6px">↺ retry</span>'
-    +' <span onclick="cancelPlayback()" style="cursor:pointer;text-decoration:underline;color:var(--muted);margin-left:6px">cancel</span>');
+  _setMpStatus('⏱ Still buffering — archive.org or the connection may be slow.'
+    +'<br><span onclick="retryPlayback()">↺ Retry</span>'
+    +' <span onclick="cancelPlayback()">Cancel</span>');
   const ms=document.querySelector('.mp-song');
   if(ms)ms.innerHTML='<span style="color:var(--gold)">⏱ Still loading…</span>';
   updateSpPlayer();
@@ -7174,8 +7406,10 @@ function retryPlayback(){
   }
   _stopBufferTimer();
   const resumeAt=currentPlaybackResumePosition(s,i);
+  _autoRetryTrackKey=s.id+'|'+i;
+  _autoRetryCount=0;
+  playing=false; playIntent=false; _interruptionResumeWanted=false;
   if(audio){audio.onerror=null;audio.oncanplay=null;audio.pause();audio=null;}
-  playing=false; playIntent=false;
   const errEl=document.getElementById('sp-audio-err');
   if(errEl){errEl.style.display='none';errEl.innerHTML='';}
   startPlayback(s,i,resumeAt);
@@ -7195,8 +7429,9 @@ function currentPlaybackResumePosition(show,idx){
 }
 function cancelPlayback(){
   _stopBufferTimer();
+  playing=false; playIntent=false; _interruptionResumeWanted=false;
   if(audio){audio.onerror=null;audio.oncanplay=null;audio.src='';audio.pause();audio=null;}
-  playing=false; playIntent=false;
+  _setMediaPlaybackState('none');
   const sub=document.getElementById('sp-now-sub');
   if(sub)sub.textContent='';
   const ms=document.querySelector('.mp-song');
@@ -7221,15 +7456,21 @@ function startPlayback(show,idx,resumeAt){
   }
   // Stop current audio and any buffering timer
   _stopBufferTimer();
-  _autoRetried=false;
+  const trackRetryKey=show.id+'|'+idx;
+  if(trackRetryKey!==_autoRetryTrackKey){
+    _autoRetryTrackKey=trackRetryKey;
+    _autoRetryCount=0;
+  }
+  if(_preloadTimer){clearTimeout(_preloadTimer);_preloadTimer=0;}
+  playing=false;playIntent=false;_interruptionResumeWanted=false;
   if(audio){audio.onended=null;audio.ontimeupdate=null;audio.onerror=null;audio.oncanplay=null;audio.onwaiting=null;audio.onstalled=null;audio.pause();audio=null;}
-  playing=false;playIntent=false;
   if(!show.tracks||!show.tracks[idx])return;
   curShow=show;curTrackIdx=idx;
   playingShow=show;playingTrackIdx=idx;
   // Use preloaded or create new
   if(!newAudio){newAudio=new Audio();newAudio.preload='auto';}
   audio=newAudio;
+  _attachAudioRecoveryHandlers(audio,show,idx);
   const saved=positions[show.id];
   const resumePos=(resumeAt&&resumeAt>2)?resumeAt:0;
   if(!resumePos&&saved&&idx===0&&!newAudio._preloaded)audio.currentTime=saved;
@@ -7250,6 +7491,7 @@ function startPlayback(show,idx,resumeAt){
     if('mediaSession' in navigator&&navigator.mediaSession.setPositionState&&audio.duration&&!isNaN(audio.duration)){
       try{navigator.mediaSession.setPositionState({duration:audio.duration,playbackRate:1,position:audio.currentTime});}catch(e){}
     }
+    _postNativeNowPlaying(playing,false);
   };
   audio.onended=function(){
     if(!playIntent)return;
@@ -7287,13 +7529,15 @@ function startPlayback(show,idx,resumeAt){
   playIntent=true;
   if(!newAudio._preloaded)audio.src=url;
   _startBufferTimer(show,idx); // start timer only after src is set and play initiated
-  addToHistory(show,idx,sourceTrackTitle(show,idx));
+  addToHistory(show,idx,playbackTrackTitle(show,idx));
   audio.play().then(function(){
     playing=true;
+    _interruptionResumeWanted=false;
+    _lastResumeBlockMsg='';
     _stopBufferTimer();
     _startAudioKeepAlive(); // keep iOS audio session alive in background
     // Refresh Box of Tapes now that actual playback has started
-    const _trackTitle=sourceTrackTitle(show,idx);
+    const _trackTitle=playbackTrackTitle(show,idx);
     addToHistory(show,idx,_trackTitle);
     touchFavoritePlayback(show);
     // Clear status and error banner on successful play
@@ -7308,18 +7552,19 @@ function startPlayback(show,idx,resumeAt){
     renderSetlistBody(show);
     // If a Cast session is active, hand this track off to the Cast device
     if(castActive && castSession){ _castLoadCurrent(); }
-    // Preload next track silently
-    preloadNextTrack(show,idx+1);
+    // Preload next track silently after the current stream proves stable.
+    scheduleNextTrackPreload(show,idx);
     if('mediaSession' in navigator){
-      const _s=sourceTrackTitle(show,idx);
+      const _s=playbackTrackTitle(show,idx);
       navigator.mediaSession.metadata=new MediaMetadata({
         title:_s,artist:showModeLabel(show),
         album:(show.venue||'')+(show.date?' · '+show.date:''),
         artwork:[{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'512x512',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'180x180',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_32.png',sizes:'32x32',type:'image/png'}]
       });
-      navigator.mediaSession.playbackState='playing';
+      _setMediaPlaybackState('playing');
+      _postNativeNowPlaying(true,true);
       navigator.mediaSession.setActionHandler('play',function(){resumeAudio();});
-      navigator.mediaSession.setActionHandler('pause',function(){if(audio){audio.pause();playing=false;playIntent=false;navigator.mediaSession.playbackState='paused';renderMiniPlayer();updateSpPlayer();}});
+      navigator.mediaSession.setActionHandler('pause',function(){pauseAudio();});
       navigator.mediaSession.setActionHandler('nexttrack',function(){const _s=playingShow;const _i=playingTrackIdx;if(_s&&_i+1<(_s.tracks||[]).length)startPlayback(_s,_i+1);});
       navigator.mediaSession.setActionHandler('previoustrack',function(){const _s=playingShow;const _i=playingTrackIdx;if(audio&&audio.currentTime>3){audio.currentTime=0;}else if(_s&&_i>0){startPlayback(_s,_i-1);}});
       try{navigator.mediaSession.setActionHandler('seekbackward',function(d){if(audio)audio.currentTime=Math.max(0,audio.currentTime-(d.seekOffset||10));});navigator.mediaSession.setActionHandler('seekforward',function(d){if(audio)audio.currentTime=Math.min(audio.duration||0,audio.currentTime+(d.seekOffset||10));});}catch(e){}
@@ -7328,11 +7573,14 @@ function startPlayback(show,idx,resumeAt){
     }
   }).catch(function(e){
     if(e.name==='AbortError')return; // normal: src changed before play() resolved
-    playing=false;playIntent=false;
+    playing=false;
     // NotAllowedError = autoplay blocked (should not happen after unlock, but handle gracefully)
-    const msg=e.name==='NotAllowedError'
-      ? '⚠ Browser blocked autoplay — tap ▶ to start.'
-      : '⚠ Could not start playback';
+    if(e.name==='NotAllowedError'){
+      _showTapPlayToResume('start-not-allowed');
+      return;
+    }
+    playIntent=false;
+    const msg='⚠ Could not start playback';
     const ms=document.querySelector('.mp-song');
     if(ms)ms.innerHTML='<span style="color:var(--red,#c0392b)">'+msg+'</span>';
     updateSpPlayer();
@@ -7354,37 +7602,63 @@ function preloadNextTrack(show,nextIdx){
   // Don't call play() - just let browser buffer it
 }
 
+function scheduleNextTrackPreload(show,idx){
+  if(_preloadTimer){clearTimeout(_preloadTimer);_preloadTimer=0;}
+  _preloadTimer=setTimeout(function(){
+    _preloadTimer=0;
+    if(!audio||!playing||!playingShow||playingShow.id!==show.id||playingTrackIdx!==idx)return;
+    if(_bufferTimer||audio.error||audio.paused||audio.ended)return;
+    const pos=(isFinite(audio.currentTime)?audio.currentTime:0);
+    // Give weak connections a few seconds to settle before opening the next stream.
+    if(pos<4){
+      scheduleNextTrackPreload(show,idx);
+      return;
+    }
+    preloadNextTrack(show,idx+1);
+  },5000);
+}
+
 function pauseAudio(){
   if(!audio)return;
-  playIntent=false;audio.pause();playing=false;
+  playIntent=false;_interruptionResumeWanted=false;audio.pause();playing=false;
   // Save restore state on pause so restart picks up paused position
   if(playingShow&&audio){
-    try{
-    setLocalStorageJsonSafe('gd_restore',{
-        showId:showStorageId(playingShow),
-        mode:showModeLabel(playingShow),
-        trackIdx:playingTrackIdx,
-        pos:Math.floor(audio.currentTime||0),
-        ts:Date.now()
-      });
-    }catch(e){}
-    // Also update the Recently Played history entry
-    saveHistoryPosition(playingShow, playingTrackIdx, audio.currentTime||0);
+    // Pause is an intentional boundary; persist the exact spot immediately.
+    writePlaybackPositionNow(playingShow.id,audio.currentTime||0,{force:true,forceHistory:true});
   }
-  if('mediaSession' in navigator)navigator.mediaSession.playbackState='paused';
+  _setMediaPlaybackState('paused');
+  _postNativeNowPlaying(false,true);
   updateSpPlayer();renderMiniPlayer();renderList();
 }
-function resumeAudio(){
+function resumeAudio(opts){
   if(!audio)return;
+  opts=opts||{};
   playIntent=true;
   function doPlay(){
     audio.play().then(function(){
       playing=true;
-      if('mediaSession' in navigator)navigator.mediaSession.playbackState='playing';
-      if(playingShow) addToHistory(playingShow,playingTrackIdx,sourceTrackTitle(playingShow,playingTrackIdx));
+      _interruptionResumeWanted=false;
+      _lastResumeBlockMsg='';
+      _setMediaPlaybackState('playing');
+      _postNativeNowPlaying(true,true);
+      if(playingShow) addToHistory(playingShow,playingTrackIdx,playbackTrackTitle(playingShow,playingTrackIdx));
       touchFavoritePlayback(playingShow);
+      _setMpStatus(null);
+      const errEl=document.getElementById('sp-audio-err');
+      if(errEl&&/Tap play to resume/i.test(errEl.innerHTML)){errEl.style.display='none';errEl.innerHTML='';}
       updateSpPlayer();renderMiniPlayer();renderList();
-    }).catch(function(e){if(e.name!=='AbortError'){playing=false;playIntent=false;updateSpPlayer();}});
+    }).catch(function(e){
+      if(e.name==='AbortError')return;
+      playing=false;
+      if(e.name==='NotAllowedError'||opts.fromInterruption||_interruptionResumeWanted){
+        _showTapPlayToResume(e.name||opts.reason||'resume-blocked');
+      }else{
+        playIntent=false;
+        _setMediaPlaybackState('paused');
+        _postNativeNowPlaying(false,true);
+        updateSpPlayer();renderMiniPlayer();renderList();
+      }
+    });
   }
   if(_iosAC&&(_iosAC.state==='suspended'||_iosAC.state==='interrupted')){
     _iosAC.resume().then(doPlay).catch(doPlay);
@@ -7447,10 +7721,7 @@ function updateSpPlayer(){
   const ps=playingShow||curShow;
   const pi=playingShow?playingTrackIdx:curTrackIdx;
   if(now&&ps&&ps.tracks&&ps.tracks[pi]){
-    const t=ps.tracks[pi];
-    const vp = visiblePosForRaw(ps, pi);
-    const songName=(vp>=0)?visibleTrackLabel(ps,vp):displayTrackName(ps,t,pi);
-    now.textContent=songName||(t.mp3?t.name:cleanName(t.name));
+    now.textContent=playbackTrackTitle(ps,pi);
     if(sub)sub.textContent=(playing?'▶ ':audio?'⏸ ':'')+ps.date+' · '+ps.venue;
   } else if(now){
     now.textContent='';
@@ -7473,26 +7744,26 @@ function updateSpPlayer(){
 
 function renderMiniPlayer(){
   const el=document.getElementById('miniPlayer');
-  if(!curShow){
+  const miniShow=(playingShow&&audio)?playingShow:curShow;
+  const miniIdx=(miniShow===playingShow&&audio)?playingTrackIdx:curTrackIdx;
+  if(!miniShow){
     el.classList.add('idle');
     el.innerHTML='<div class="mp-idle">Tap a show to open its setlist ↑</div>';
     return;
   }
   el.classList.remove('idle');
   if(!audio){
-    el.innerHTML='<div class="mp-row"><div class="mp-info"><div class="mp-song">⏳ Loading '+esc(curShow.date)+'…</div><div class="mp-show">'+esc(curShow.venue)+'</div></div></div>';
+    const loadingName=(miniShow.tracks&&miniShow.tracks[miniIdx])?playbackTrackTitle(miniShow,miniIdx):'Loading '+miniShow.date;
+    el.innerHTML='<div class="mp-row"><div class="mp-info"><div class="mp-song">'+esc(loadingName)+'</div><div class="mp-show">'+esc(miniShow.venue)+'</div></div></div>';
     return;
   }
   const pct=audio&&audio.duration?(audio.currentTime/audio.duration*100):0;
-  // Use song name if available, fall back to cleaned filename
-  const _vp=visiblePosForRaw(curShow, curTrackIdx);
-  const songName=(curShow.tracks&&curShow.tracks[curTrackIdx])?((_vp>=0)?visibleTrackLabel(curShow,_vp):displayTrackName(curShow,curShow.tracks[curTrackIdx],curTrackIdx)):null;
-  const name=songName||(curShow.tracks&&curShow.tracks[curTrackIdx]?cleanName(curShow.tracks[curTrackIdx].name):'Loading…');
+  const name=(miniShow.tracks&&miniShow.tracks[miniIdx])?playbackTrackTitle(miniShow,miniIdx):'Track '+((miniIdx||0)+1);
   el.innerHTML=`
     <div class="mp-row">
       <div class="mp-info" onclick="openSetlistForCurrent()">
         <div class="mp-song">${esc(name)}</div>
-        <div class="mp-show">${esc(curShow.date)} · ${esc(curShow.venue)}</div>
+        <div class="mp-show">${esc(miniShow.date)} · ${esc(miniShow.venue)}</div>
       </div>
       <div class="mp-ctrls">
         <button class="mp-btn" onclick="event.stopPropagation();skipTrack(-1)" title="Previous">⏮</button>
@@ -7812,7 +8083,7 @@ function _castLoadCurrent(){
 
   const mediaInfo = new chrome.cast.media.MediaInfo(url, 'audio/mpeg');
   mediaInfo.metadata = new chrome.cast.media.MusicTrackMediaMetadata();
-  mediaInfo.metadata.title   = track.title || ('Track ' + (playingTrackIdx + 1));
+  mediaInfo.metadata.title   = playbackTrackTitle(playingShow,playingTrackIdx);
   mediaInfo.metadata.artist  = showModeLabel(playingShow);
   mediaInfo.metadata.albumName = playingShow.date + ' · ' + playingShow.venue;
 
@@ -7822,6 +8093,7 @@ function _castLoadCurrent(){
 
   castSession.loadMedia(req).then(function(){
     // Pause local audio — Cast device is now playing
+    playIntent=false;_interruptionResumeWanted=false;
     if(audio){ audio.pause(); }
   }).catch(function(e){
     setHdrSt('Cast error: ' + e,'err');
@@ -7934,19 +8206,19 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 
 // ── BACKGROUND AUDIO RECOVERY ──────────────────────────────────────────
-// When returning to foreground, call resumeAudio() — it handles unlock,
-// zombie detection, and element rebuild all in one place.
+// Remember user intent before iOS/Capacitor lifecycle interruptions, then try
+// one safe resume when the page/app becomes active again.
 document.addEventListener('visibilitychange',function(){
-  if(document.visibilityState==='visible'){
-    if(playIntent&&audio){
-      setTimeout(function(){
-        if(playIntent&&audio&&audio.paused&&!audio.ended){
-          resumeAudio();
-        }
-      },200);
-    }
+  if(document.visibilityState==='hidden'){
+    _rememberPlaybackIntent('visibility-hidden');
+  }else if(document.visibilityState==='visible'){
+    _safeResumeAfterInterruption('visibility-visible',250);
   }
 });
+window.addEventListener('pagehide',function(){_rememberPlaybackIntent('pagehide');});
+window.addEventListener('pageshow',function(){_safeResumeAfterInterruption('pageshow',350);});
+window.addEventListener('blur',function(){_rememberPlaybackIntent('blur');});
+window.addEventListener('focus',function(){_safeResumeAfterInterruption('focus',250);});
 
 // ── FAVORITES ─────────────────────────────────────────────────────
 // allFavorites: [{user, showId, date, venue, addedAt, lastPlayedAt}] — loaded from sheet
@@ -8321,7 +8593,7 @@ function seedHistoryFromPlayingShow(){
       city:playingShow.city,
       ts:Date.now(),
       lastTrackIdx:playingTrackIdx,
-      lastTrackTitle:sourceTrackTitle(playingShow,playingTrackIdx)||null,
+      lastTrackTitle:playbackTrackTitle(playingShow,playingTrackIdx)||null,
       lastPos:(audio&&isFinite(audio.currentTime))?Math.floor(audio.currentTime||0):0,
       lastPosTs:Date.now()
     }];
@@ -8531,6 +8803,7 @@ async function openRecentShow(id,shouldPlay,modeLabel){
       startPlayback(show,rawIdx);
     } else {
       if(playingShow&&playingShow.id!==show.id&&audio){
+        playIntent=false;_interruptionResumeWanted=false;
         try{audio.pause();}catch(e){}
         audio=null;playing=false;playIntent=false;playingShow=null;playingTrackIdx=0;
       }
@@ -9074,6 +9347,9 @@ function loadRandomShow(){
 
 // ── BEST VERSIONS ─────────────────────────────────────────────────
 let jamSongTimer = null;
+let jamRatingRefreshRunning = false;
+let jamRatingRefreshQuery = '';
+let jamSetlistSearchRunning = false;
 function updateJamSongSearchClear(){
   updateSearchClear('jamSongQ','jamSongQClear');
 }
@@ -9090,24 +9366,89 @@ function jamSongSearch(){
   jamSongTimer = setTimeout(doJamSongSearch, 250);
 }
 
+function normalizedSongSearchText(v){
+  return String(v||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+}
+function jamSongMatchScore(song,query){
+  const s=normalizedSongSearchText(song);
+  const q=normalizedSongSearchText(query);
+  if(!s||!q)return 0;
+  if(s===q)return 3;
+  if(s.indexOf(q)===0)return 2;
+  return s.indexOf(q)>=0?1:0;
+}
+function jamShowBestRating(show){
+  if(!show)return 0;
+  let rating=Number(show.relistenRating||show.rating||0)||0;
+  (show.recordings||[]).forEach(function(r){
+    const rr=Number(r&&r.rating)||0;
+    if(rr>rating)rating=rr;
+  });
+  sourceRecordsForShow(show).forEach(function(r){
+    const rr=Number(r&&r.rating)||0;
+    if(rr>rating)rating=rr;
+  });
+  return rating;
+}
+
+function applyRelistenRatingCacheToShows(){
+  if(!isDefaultMode(activeMode))return 0;
+  let applied=0;
+  try{
+    const cache=JSON.parse(localStorage.getItem(currentModeScopedKey('gd_relisten_avail'))||'{}');
+    (shows||[]).forEach(function(s){
+      if(!s||s.archiveIdHint||s.archiveNoAudioHint)return;
+      const rc=cache[s.date];
+      if(!rc)return;
+      const hadRating=!!Number(s.relistenRating||s.rating||0);
+      s.relistenAvail=rc.avail;
+      s.relistenSources=rc.sources||0;
+      s.relistenSbd=rc.sbd||false;
+      s.relistenRating=rc.rating||0;
+      s.relistenDur=rc.dur||0;
+      if(rc.rating&&!hadRating)applied++;
+      if(s.relistenAvail&&!s.metaLoaded)s.notAvail=false;
+    });
+  }catch(e){}
+  return applied;
+}
+
 function doJamSongSearch(){
   const q = (document.getElementById('jamSongQ')||{}).value||'';
   const el = document.getElementById('jamBestList');
   if(!el)return;
 
-  const query = q.trim().toLowerCase();
+  const query = normalizedSongSearchText(q);
   if(query.length < 2){
     el.innerHTML='<div class="jam-empty">Type at least 2 characters</div>';
     return;
   }
+  if(!readModeSetlistDataset(activeMode)){
+    el.innerHTML='<div class="jam-empty">Loading local song index...</div>';
+    if(!jamSetlistSearchRunning){
+      jamSetlistSearchRunning=true;
+      loadModeSetlistDataset(activeMode).then(function(){
+        hydrateShowsFromSetlistDataset(activeMode,shows,{skipSheetCache:true});
+      }).catch(function(){}).then(function(){
+        jamSetlistSearchRunning=false;
+        doJamSongSearch();
+      });
+    }
+    return;
+  }
+  if(readModeSetlistDataset(activeMode)){
+    hydrateShowsFromSetlistDataset(activeMode,shows,{skipSheetCache:true});
+  }
 
   // Search songIndex for matching songs
-  const matchedShows = new Map(); // showId -> {show, songName}
+  const matchedShows = new Map(); // showId -> {song, score}
   Object.keys(songIndex).forEach(function(key){
     if(key.includes(query)){
       songIndex[key].forEach(function(entry){
-        if(!matchedShows.has(entry.id)){
-          matchedShows.set(entry.id, entry.song);
+        const score=jamSongMatchScore(entry.song,query);
+        const prev=matchedShows.get(entry.id);
+        if(!prev||score>prev.score){
+          matchedShows.set(entry.id, {song:entry.song, score:score});
         }
       });
     }
@@ -9118,8 +9459,8 @@ function doJamSongSearch(){
     shows.forEach(function(s){
       if(!s.songs)return;
       s.songs.forEach(function(song){
-        if(song.toLowerCase().includes(query)&&!matchedShows.has(s.id)){
-          matchedShows.set(s.id, song);
+        if(normalizedSongSearchText(song).includes(query)&&!matchedShows.has(s.id)){
+          matchedShows.set(s.id, {song:song, score:jamSongMatchScore(song,query)});
         }
       });
     });
@@ -9132,17 +9473,17 @@ function doJamSongSearch(){
 
   // Get the show objects and sort by rating
   const results = [];
-  matchedShows.forEach(function(songName, showId){
+  matchedShows.forEach(function(match, showId){
     const s = shows.find(function(x){return x.id===showId;});
     if(s){
-      results.push({show:s, song:songName});
+      const rating=jamShowBestRating(s);
+      results.push({show:s, song:match.song, matchScore:match.score||0, rating:rating});
     }
   });
 
   results.sort(function(a,b){
-    const ra = a.show.relistenRating||a.show.rating||0;
-    const rb = b.show.relistenRating||b.show.rating||0;
-    if(rb!==ra)return rb-ra;
+    if(b.matchScore!==a.matchScore)return b.matchScore-a.matchScore;
+    if(b.rating!==a.rating)return b.rating-a.rating;
     return a.show.date.localeCompare(b.show.date);
   });
 
@@ -9152,19 +9493,39 @@ function doJamSongSearch(){
   }
 
   const total = results.length;
-  const rated = results.filter(function(r){return !!(r.show.relistenRating||r.show.rating);}).length;
-  const label = rated
-    ? total+' performance'+(total===1?'':'s')+' found, rated shows first'
-    : total+' performance'+(total===1?'':'s')+' found';
+  const rated = results.filter(function(r){return !!r.rating;}).length;
+  if(!rated){
+    if(applyRelistenRatingCacheToShows()){
+      doJamSongSearch();
+      return;
+    }
+    if(isDefaultMode(activeMode)&&!jamRatingRefreshRunning&&jamRatingRefreshQuery!==query){
+      jamRatingRefreshRunning=true;
+      jamRatingRefreshQuery=query;
+      el.innerHTML='<div class="jam-empty">Loading show ratings...</div>';
+      try{localStorage.removeItem(currentModeScopedKey('gd_relisten_avail_ts'));}catch(e){}
+      prefetchRelistenAvailability().then(function(){
+        applyRelistenRatingCacheToShows();
+      }).catch(function(){}).then(function(){
+        jamRatingRefreshRunning=false;
+        doJamSongSearch();
+      });
+      return;
+    }
+    el.innerHTML='<div class="jam-empty">No rated versions found yet for "'+esc(q.trim())+'". Use the Songs tab for chronological results.</div>';
+    return;
+  }
+  const display = results.filter(function(r){return r.rating>0;}).slice(0,50);
+  const label = 'Top rated versions · '+rated+' rated of '+total+' performance'+(total===1?'':'s');
   el.innerHTML = '<div style="font-size:11px;color:var(--muted);margin-bottom:8px">'+label+'</div>'+
-    results.map(function(r){
+    display.map(function(r){
       return jamShowCard(r.show, false, r.song);
     }).join('');
 }
 
 // ── SHARED SHOW CARD ──────────────────────────────────────────────
 function jamShowCard(s, showPlay, songName){
-  const rating = s.relistenRating||s.rating||0;
+  const rating = jamShowBestRating(s);
   const stars = rating ? '\u2605 '+rating.toFixed(1) : '';
   const sbd = s.relistenSbd ? '<span class="jam-show-sbd">SBD</span>' : '';
   const hasAudio = showLooksPlayable(s);
@@ -9419,7 +9780,7 @@ async function switchRecording(showId,newId){
   const prevId=normalizeArchiveId(show.archiveId||show.archiveIdHint||'');
   if(prevId)show.recordings=mergeSourceRecords(show.recordings,[{id:prevId,rating:show.rating||0,reviews:show.numReviews||0,sbd:!!show.isSoundboard,restricted:false,manual:true,sheetDefault:prevId===normalizeArchiveId(show.archiveIdHint||'')}]);
   if(newId)show.recordings=mergeSourceRecords(show.recordings,[{id:newId,restricted:false,manual:true}]);
-  if(audio){audio.pause();audio=null;playing=false;renderMiniPlayer();}
+  if(audio){playIntent=false;_interruptionResumeWanted=false;audio.pause();audio=null;playing=false;renderMiniPlayer();}
   if(preloadAudio){preloadAudio.src='';preloadAudio=null;}
   show.archiveId=newId;show.tracks=null;show.totalDur=0;show._displayNameMap=null;show._visibleTrackMap=null;show._visibleTrackLabels=null;show._tapeHeavyDisplay=false;
   const rec=(show.recordings||[]).find(function(r){return r.id===newId;});
@@ -9451,7 +9812,7 @@ async function switchRecording(showId,newId){
             const trackSongs=dd.map(function(t){return t.name.replace(/\s*->$/,'').trim();}).filter(function(s){return s.length>1;});
             applyBestCachedSetlist(show,trackSongs);
             if(curShow&&curShow.id===show.id&&playing&&'mediaSession' in navigator){
-              var _ms=sourceTrackTitle(show,curTrackIdx);
+              var _ms=playbackTrackTitle(show,curTrackIdx);
               navigator.mediaSession.metadata=new MediaMetadata({title:_ms,artist:showModeLabel(show),album:(show.venue||'')+(show.date?' · '+show.date:''),artwork:[{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'512x512',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'180x180',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_32.png',sizes:'32x32',type:'image/png'}]});
             }
             renderSetlistBody(show);return;
@@ -9768,10 +10129,11 @@ function pauseAtPosition(show,trackIdx,pos){
   if(!track)return;
   const url=track.mp3||('https://archive.org/download/'+show.archiveId+'/'+track.name);
   // Create audio element paused at position
-  if(audio){audio.pause();audio=null;}
+  if(audio){playIntent=false;_interruptionResumeWanted=false;audio.pause();audio=null;}
   audio=new Audio();
   audio.preload='metadata';
   audio.src=url;
+  _attachAudioRecoveryHandlers(audio,show,trackIdx);
   audio.onended=function(){
     if(!playIntent)return;
     const next=trackIdx+1;
@@ -9797,16 +10159,17 @@ function pauseAtPosition(show,trackIdx,pos){
   renderList();renderMiniPlayer();updateSpPlayer();
   // Set media session so lock screen/Watch/car shows song and controls work when paused
   if('mediaSession' in navigator&&track){
-    const sName=sourceTrackTitle(show,trackIdx);
+    const sName=playbackTrackTitle(show,trackIdx);
     navigator.mediaSession.metadata=new MediaMetadata({
       title:sName,artist:showModeLabel(show),
       album:(show.venue||'')+(show.date?' · '+show.date:''),
       artwork:[{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'512x512',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'180x180',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_32.png',sizes:'32x32',type:'image/png'}]
     });
-    navigator.mediaSession.playbackState='paused';
+    _setMediaPlaybackState('paused');
+    _postNativeNowPlaying(false,true);
     // Register handlers so lock screen/Watch play button works
     navigator.mediaSession.setActionHandler('play',function(){resumeAudio();});
-    navigator.mediaSession.setActionHandler('pause',function(){if(audio){audio.pause();playing=false;playIntent=false;navigator.mediaSession.playbackState='paused';renderMiniPlayer();updateSpPlayer();}});
+    navigator.mediaSession.setActionHandler('pause',function(){pauseAudio();});
     navigator.mediaSession.setActionHandler('nexttrack',function(){const _s=playingShow;const _i=playingTrackIdx;if(_s&&_i+1<(_s.tracks||[]).length)startPlayback(_s,_i+1);});
     navigator.mediaSession.setActionHandler('previoustrack',function(){const _s=playingShow;const _i=playingTrackIdx;if(audio&&audio.currentTime>3){audio.currentTime=0;}else if(_s&&_i>0){startPlayback(_s,_i-1);}});
     try{navigator.mediaSession.setActionHandler('seekbackward',function(d){if(audio)audio.currentTime=Math.max(0,audio.currentTime-(d.seekOffset||10));});navigator.mediaSession.setActionHandler('seekforward',function(d){if(audio)audio.currentTime=Math.min(audio.duration||0,audio.currentTime+(d.seekOffset||10));});}catch(e){}
@@ -9913,13 +10276,14 @@ async function refreshAttendance(force){
       }else if(cell.f){d=cell.f;}else if(cell.v!=null){d=String(cell.v).trim();}
       return displayDate(d);
     }
+    const showLookup=buildShowIdentityLookup(shows);
     function showForSheetRow(row,ri){
       const cells=(row&&row.c)||[];
       const d=gvizDate(cells[0]);
       const venue=cells[1]&&cells[1].v!=null?String(cells[1].v).trim():'';
       const city=cells[2]&&cells[2].v!=null?String(cells[2].v).trim():'';
       const probe={date:d,venue:venue,city:city,id:'',modeKey:(activeMode&&activeMode.key)||DEFAULT_MODE.key};
-      return shows.find(function(s){return sameShowIdentity(s,probe);})||shows[ri]||null;
+      return findShowByIdentityFast(showLookup,probe)||shows[ri]||null;
     }
     // Match attendance by show identity; mode catalogs can collapse duplicate sheet rows.
     let changed = 0;
@@ -10179,7 +10543,7 @@ function stopArchiveAutoRetry(){
             🎵 <b style="color:#d8d0c0">Shows</b> — all <span id="help-show-count2">—</span> Dead, Jerry, Phil and Bob concerts available in the archive. Filter by year, search venue, city or date. Tap any show for its setlist &amp; player<br>
             🔍 <b style="color:#d8d0c0">Songs</b> — type any song to find every show it was played. Tap a result to jump straight there<br>
             💀 <b style="color:#d8d0c0">Deadheads</b> — other Deadheads show lists. Tap a name to browse their attended shows<br>
-            🎲 <b style="color:#d8d0c0">Jam</b> — discover shows: Favorites, On This Day, Play a Show, and Best Versions
+            🎲 <b style="color:#d8d0c0">Jam</b> — discover shows: Favorites, On This Day, and Play a Show
           </div>
         </div>
 
@@ -10189,8 +10553,7 @@ function stopArchiveAutoRetry(){
           <div style="font-size:14px;color:#b8b0a0;line-height:2.1">
             ⭐ <b style="color:#d8d0c0">Favorites</b> — starred shows from all listeners. Your favorites pin to the top of your list (max 5)<br>
             📅 <b style="color:#d8d0c0">On This Day</b> — shows from today's date across all years, sorted by rating<br>
-            🎲 <b style="color:#d8d0c0">Play a Show</b> — roll the dice for a surprise, weighted toward top rated shows<br>
-            🏆 <b style="color:#d8d0c0">Best Versions</b> — type any song name to find its highest rated performances
+            🎲 <b style="color:#d8d0c0">Play a Show</b> — roll the dice for a surprise, weighted toward top rated shows
           </div>
         </div>
 
@@ -10321,26 +10684,6 @@ function stopArchiveAutoRetry(){
       </div>
     </div>
 
-    <!-- Best Versions -->
-    <div class="jam-card">
-      <div class="jam-card-hdr">
-        <span class="jam-icon">&#127942;</span>
-        <div>
-          <div class="jam-title">Best Versions</div>
-          <div class="jam-sub">Top rated performances of any song</div>
-        </div>
-      </div>
-      <div style="padding:0 0 10px">
-        <div style="position:relative;display:flex;align-items:center">
-        <input id="jamSongQ" class="manual-clear" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="search" enterkeyhint="search" placeholder="Type a song name&hellip;"
-          oninput="jamSongSearch()"
-          style="width:100%;box-sizing:border-box;background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:11px 38px 11px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none">
-        <button class="search-clear" id="jamSongQClear" type="button" aria-label="Clear Jam song search" onclick="clearJamSongSearch()">×</button>
-        </div>
-      </div>
-      <div id="jamBestList" class="jam-results"></div>
-    </div>
-
   </div>
   <div class="mini-player" id="miniPlayer">
     <div class="mp-idle">Tap a show to open its setlist ↑</div>
@@ -10427,7 +10770,8 @@ document.addEventListener('resume', function() {
   if (typeof playIntent !== 'undefined' && playIntent &&
       typeof audio !== 'undefined' && audio && audio.paused) {
     setTimeout(function() {
-      if (typeof resumeAudio === 'function') resumeAudio();
+      if (typeof _safeResumeAfterInterruption === 'function') _safeResumeAfterInterruption('capacitor-resume', 0);
+      else if (typeof resumeAudio === 'function') resumeAudio();
     }, 300); // small delay lets AVAudioSession fully reactivate
   }
 }, false);
