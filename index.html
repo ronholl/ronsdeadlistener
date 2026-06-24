@@ -425,7 +425,7 @@ body{display:flex;justify-content:center}
     <div class="login-hero">
       <img src="favicon_tight_180.png" class="login-logo" alt="Ron's Deadhead Listener" loading="eager" decoding="sync" fetchpriority="high"/>
       <div class="login-title">Ron's Deadhead Listener</div>
-      <div class="login-sub">1965 – 1995 · <span id="login-show-count">—</span> Shows · <span id="login-version">V2.1.12</span></div>
+      <div class="login-sub">1965 – 1995 · <span id="login-show-count">—</span> Shows · <span id="login-version">V2.1.13</span></div>
     </div>
     
 
@@ -542,7 +542,7 @@ body{display:flex;justify-content:center}
     <img src="favicon_tight_180.png" class="hdr-logo" alt="logo" loading="eager" decoding="sync" fetchpriority="high"/>
     <div class="hdr-text">
       <div class="hdr-title">Ron's Deadhead Listener</div>
-          <div class="hdr-sub" style="color:rgba(200,168,75,.6)"><span id="hdr-year-range">1965 – 1995</span> · <span id="hdr-show-count">—</span> Shows · <span id="hdr-version" style="opacity:.45">V2.1.12</span></div>
+          <div class="hdr-sub" style="color:rgba(200,168,75,.6)"><span id="hdr-year-range">1965 – 1995</span> · <span id="hdr-show-count">—</span> Shows · <span id="hdr-version" style="opacity:.45">V2.1.13</span></div>
       <div class="hdr-st" id="hdrSt"></div>
     </div>
     <div class="hdr-user" id="hdrUser" onclick="switchUser()">
@@ -622,7 +622,7 @@ body{display:flex;justify-content:center}
 // ── CONFIG ────────────────────────────────────────────────────────
 const SHEET_ID   = '1Hl1iSUkBQbfjbzXpEl5DrpRZQhu_xnOfqgvgmoTMURk';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDkkn9PBWvmBFsjRpoj0-zzM3euaLQt23B64iWn8XO13I4eqeEiCEuB8Zwj0ohObwpMQ/exec';
-const APP_BUILD = '2.1.12';
+const APP_BUILD = '2.1.13';
 // Poster filename — place final_deadhead_poster_web.jpg in the same folder as index.html
 // Leave empty string to disable the poster feature entirely
 const POSTER_FILE = 'final_deadhead_poster_web.jpg';
@@ -5675,7 +5675,7 @@ function clearMetaLoaded(show){
   saveShowFlags(show);
 }
 
-const ARCHIVE_SOURCE_CACHE_KEY='gd_archive_source_cache_v1';
+const ARCHIVE_SOURCE_CACHE_KEY='gd_archive_source_cache_v2';
 function sourceCacheLimitFor(modeOrShow){
   const mode=(modeOrShow&&modeOrShow.id)?modeForShow(modeOrShow):(modeOrShow||activeMode||DEFAULT_MODE);
   return isDefaultMode(mode)?90:0;
@@ -5706,6 +5706,70 @@ function writeArchiveSourceCache(cache,modeOrShow){
       localStorage.setItem(key,JSON.stringify(c));
     }catch(e2){}
   }
+}
+function archiveFileBaseName(name){
+  return String(name||'').replace(/\.(mp3|ogg|flac|shn|wav|m4a)$/i,'');
+}
+function archiveTitleUsable(title){
+  const clean=cleanTrackLabel(String(title||''));
+  return !!(clean&&clean.length>1&&!/^Track \d+$/i.test(clean)&&!looksLikeTapeId(clean)&&!looksLikeArchiveNote(clean));
+}
+function archiveTitleRank(f){
+  if(!f||!archiveTitleUsable(f.title))return 0;
+  if(f.source==='original'||!f.original)return 4;
+  if(/\.(flac|shn|wav)$/i.test(f.name||''))return 3;
+  if(f.track)return 2;
+  return 1;
+}
+function archiveTrackTitleForFile(f,fileByName,titleByBase){
+  const original=(f&&f.original&&fileByName)?fileByName[f.original]:null;
+  const candidates=[
+    original&&original.title,
+    titleByBase&&titleByBase[archiveFileBaseName(f&&f.original||'')],
+    titleByBase&&titleByBase[archiveFileBaseName(f&&f.name||'')],
+    f&&f.title
+  ];
+  for(let i=0;i<candidates.length;i++){
+    if(archiveTitleUsable(candidates[i]))return String(candidates[i]||'').trim();
+  }
+  return '';
+}
+function archivePlayableTracksFromMeta(meta){
+  const files=(meta&&meta.files)||[];
+  const fileByName={};
+  const titleByBase={};
+  const rankByBase={};
+  files.forEach(function(f){
+    if(f&&f.name)fileByName[f.name]=f;
+  });
+  files.forEach(function(f){
+    if(!f||!f.name||!f.title)return;
+    const base=archiveFileBaseName(f.name);
+    const rank=archiveTitleRank(f);
+    if(base&&rank&&rank>(rankByBase[base]||0)){
+      rankByBase[base]=rank;
+      titleByBase[base]=String(f.title||'').trim();
+    }
+  });
+  const byBase={};
+  const fmtScore=function(n){return n.endsWith('.ogg')?5:n.includes('128')?4:n.endsWith('.mp3')&&!n.includes('64kb')?3:1;};
+  files.filter(function(f){return f.name&&(f.name.endsWith('.mp3')||f.name.endsWith('.ogg'))&&!f.name.includes('_sample');}).forEach(function(f){
+    const base=archiveFileBaseName(f.name);
+    const title=archiveTrackTitleForFile(f,fileByName,titleByBase);
+    const track=Object.assign({},f);
+    if(title)track.title=title;
+    if(!byBase[base]){
+      byBase[base]=track;
+    }else if(fmtScore(track.name)>fmtScore(byBase[base].name)){
+      if(!track.title&&byBase[base].title)track.title=byBase[base].title;
+      byBase[base]=track;
+    }else if(track.title&&!byBase[base].title){
+      byBase[base].title=track.title;
+    }
+  });
+  const tracks=Object.values(byBase).filter(function(f){return !f.name.includes('64kb');});
+  const sorted=(tracks.length?tracks:Object.values(byBase)).sort(function(a,b){return a.name.localeCompare(b.name);});
+  return stripLeadingNonSongTracks(sorted);
 }
 function readArchiveSourceEntryForShow(show,archiveId){
   if(sourceCacheLimitFor(show)<=0){
@@ -6425,29 +6489,7 @@ function applyArchiveMetaToShow(show,meta,archiveId,rating){
   const archiveOverride=!!show.archiveIdHint;
   const descSongs=parseSongs(Array.isArray(rawDesc)?rawDesc.join(' '):String(rawDesc));
   removeShowFromSongIndex(show);
-  const byBase={};
-  const titleByBase={};
-  const fmtScore=function(n){return n.endsWith('.ogg')?5:n.includes('128')?4:n.endsWith('.mp3')&&!n.includes('64kb')?3:1;};
-  (meta.files||[]).forEach(function(f){
-    if(!f.name||!f.title)return;
-    const base=f.name.replace(/\.(mp3|ogg|flac|shn|wav)$/i,'');
-    if(base&&!titleByBase[base])titleByBase[base]=f.title;
-  });
-  (meta.files||[]).filter(function(f){return f.name&&(f.name.endsWith('.mp3')||f.name.endsWith('.ogg'))&&!f.name.includes('_sample');}).forEach(function(f){
-    const base=f.name.replace(/\.(mp3|ogg)$/,'');
-    if(!f.title&&titleByBase[base])f.title=titleByBase[base];
-    if(!byBase[base]){
-      byBase[base]=f;
-    }else if(fmtScore(f.name)>fmtScore(byBase[base].name)){
-      if(!f.title&&byBase[base].title)f.title=byBase[base].title;
-      byBase[base]=f;
-    }else if(f.title&&!byBase[base].title){
-      byBase[base].title=f.title;
-    }
-  });
-  const allT=Object.values(byBase).filter(function(f){return !f.name.includes('64kb');}).sort(function(a,b){return a.name.localeCompare(b.name);});
-  show.tracks=allT.length?allT:Object.values(byBase).sort(function(a,b){return a.name.localeCompare(b.name);});
-  show.tracks=stripLeadingNonSongTracks(show.tracks);
+  show.tracks=archivePlayableTracksFromMeta(meta);
   show.totalDur=show.tracks.reduce(function(s,f){return s+parseDurationSeconds(f.length);},0);
   if(show.tracks.length>0) show.allRestricted=false;
   const trackSongs=show.tracks.map(function(t){
@@ -9855,6 +9897,7 @@ async function switchRecording(showId,newId,opts){
   show.numReviews=rec?rec.reviews:0;
   document.getElementById('sp-meta-txt').innerHTML='<span class="sp-meta-line"><span class="spinner"></span>Loading tracks</span>'+sourcePickerHtml(show,sourceRecordsForShow(show),newId);
   document.getElementById('sp-body').innerHTML='<div class="loading"><span class="spinner"></span>Fetching tracks…</div>';
+  let relistenFallbackTracks=null;
   try{
     // Try Relisten first (has song names + direct URLs)
     if(rec&&rec.relistenId){
@@ -9873,15 +9916,19 @@ async function switchRecording(showId,newId,opts){
           });
           if(tracks.length){
             const dd=dedupeSourceTracks(tracks);
-            show.tracks=dd;
-            show.totalDur=dd.reduce(function(s,t){return s+parseDurationSeconds(t.length);},0);
             const trackSongs=dd.map(function(t){return t.name.replace(/\s*->$/,'').trim();}).filter(function(s){return s.length>1;});
-            applyBestCachedSetlist(show,trackSongs);
-            if(curShow&&curShow.id===show.id&&playing&&'mediaSession' in navigator){
-              var _ms=playbackTrackTitle(show,curTrackIdx);
-              navigator.mediaSession.metadata=new MediaMetadata({title:_ms,artist:showModeLabel(show),album:(show.venue||'')+(show.date?' · '+show.date:''),artwork:[{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'512x512',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'180x180',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_32.png',sizes:'32x32',type:'image/png'}]});
+            const usableTitleCount=trackSongs.filter(function(s){return !/^Track \d+$/i.test(s)&&archiveTitleUsable(s);}).length;
+            if(usableTitleCount>=Math.min(3,Math.ceil(dd.length*0.4))){
+              show.tracks=dd;
+              show.totalDur=dd.reduce(function(s,t){return s+parseDurationSeconds(t.length);},0);
+              applyBestCachedSetlist(show,trackSongs);
+              if(curShow&&curShow.id===show.id&&playing&&'mediaSession' in navigator){
+                var _ms=playbackTrackTitle(show,curTrackIdx);
+                navigator.mediaSession.metadata=new MediaMetadata({title:_ms,artist:showModeLabel(show),album:(show.venue||'')+(show.date?' · '+show.date:''),artwork:[{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'512x512',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_180.png',sizes:'180x180',type:'image/png'},{src:'https://www.ronsdeadlistener.com/favicon_tight_32.png',sizes:'32x32',type:'image/png'}]});
+              }
+              finishSwitchRecording(show,opts);return;
             }
-            finishSwitchRecording(show,opts);return;
+            relistenFallbackTracks=dd;
           }
         }
       }
@@ -9893,24 +9940,18 @@ async function switchRecording(showId,newId,opts){
       if(!r.ok)throw new Error('HTTP '+r.status);
       meta=await r.json();metaCache[newId]=meta;
     }
-    const byBase={};
-    const fmtScore=function(n){return n.endsWith('.ogg')?5:n.endsWith('.mp3')&&!n.includes('64kb')?3:1;};
-    (meta.files||[]).filter(function(f){return f.name&&(f.name.endsWith('.mp3')||f.name.endsWith('.ogg'))&&!f.name.includes('_sample');}).forEach(function(f){
-      const base=f.name.replace(/\.(mp3|ogg)$/,'');
-      if(!byBase[base]){
-        byBase[base]=f;
-      }else if(fmtScore(f.name)>fmtScore(byBase[base].name)){
-        if(!f.title&&byBase[base].title)f.title=byBase[base].title;
-        byBase[base]=f;
-      }else if(f.title&&!byBase[base].title){
-        byBase[base].title=f.title;
-      }
-    });
-    show.tracks=Object.values(byBase).filter(function(f){return !f.name.includes('64kb');}).sort(function(a,b){return a.name.localeCompare(b.name);});
-    if(!show.tracks.length)show.tracks=Object.values(byBase).sort(function(a,b){return a.name.localeCompare(b.name);});
+    show.tracks=archivePlayableTracksFromMeta(meta);
     show.totalDur=show.tracks.reduce(function(s,f){return s+parseDurationSeconds(f.length);},0);
+    applyBestCachedSetlist(show,deriveSetlistFromTracks(show.tracks));
+    cacheArchiveSourceForShow(show,'archive.org');
     finishSwitchRecording(show,opts);
   }catch(e){
+    if(relistenFallbackTracks&&relistenFallbackTracks.length){
+      show.tracks=relistenFallbackTracks;
+      show.totalDur=show.tracks.reduce(function(s,t){return s+parseDurationSeconds(t.length);},0);
+      finishSwitchRecording(show,opts);
+      return;
+    }
     document.getElementById('sp-body').innerHTML='<div class="sp-unavail">Could not load recording: '+e.message+'</div>';
   }
 }
