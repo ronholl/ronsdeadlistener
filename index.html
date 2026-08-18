@@ -11129,14 +11129,15 @@ function refreshInstallButton(){
   if(!btn)return;
   const mobile=installDevice().mobile;
   const installed=isHomeScreenApp();
-  btn.style.display=mobile?'flex':'none';
-  btn.textContent=installed?'SHARE':'INSTALL';
-  btn.title=installed?'Share Ron\'s Deadhead Listener':'Add this app to your Home Screen';
+  const shareMode=installed||!mobile;
+  btn.style.display='flex';
+  btn.textContent=shareMode?'SHARE':'INSTALL';
+  btn.title=shareMode?'Share Ron\'s Deadhead Listener':'Add this app to your Home Screen';
   btn.setAttribute('aria-label',btn.title);
 }
 
 function handleInstallShare(){
-  if(isHomeScreenApp())openShareHelp();
+  if(isHomeScreenApp()||!installDevice().mobile)openShareHelp();
   else openInstallHelp();
 }
 
