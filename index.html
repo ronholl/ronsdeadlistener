@@ -239,10 +239,10 @@ body{display:flex;justify-content:center}
 .source-row select{flex:1;min-width:0;margin-top:0!important}
 .alt-source-btn{min-width:108px;min-height:44px;border-radius:10px;border:1.5px solid rgba(200,168,75,.58);background:rgba(200,168,75,.12);color:var(--gold);font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0}
 .alt-source-btn:active{background:var(--gold);color:#000;transform:scale(.98)}
-.sp-actions{display:flex;flex-direction:column;align-items:stretch;gap:6px;flex-shrink:0;min-width:72px}
+.sp-actions{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:4px;flex-shrink:0;min-width:96px}
 .sp-arc{font-size:10px;color:var(--gold);background:transparent;border:1px solid rgba(200,168,75,.3);border-radius:6px;padding:3px 8px;cursor:pointer;font-family:var(--mono);flex-shrink:0;text-align:center}
 .sp-arc:active{background:rgba(200,168,75,.1)}
-.sp-wake{font-size:10px;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:6px;padding:3px 8px;cursor:pointer;font-family:var(--mono);flex-shrink:0;text-align:center}
+.sp-wake{min-width:96px;min-height:58px;font-size:11px;font-weight:800;letter-spacing:.35px;color:var(--text);background:rgba(82,183,136,.07);border:1.5px solid rgba(82,183,136,.38);border-radius:10px;padding:8px 8px;cursor:pointer;font-family:var(--mono);flex-shrink:0;text-align:center;white-space:nowrap}
 .sp-wake.on{color:var(--green);border-color:rgba(82,183,136,.6);background:rgba(82,183,136,.12)}
 .sp-wake.pending{color:var(--gold);border-color:rgba(200,168,75,.45);background:rgba(200,168,75,.08)}
 .sp-wake.unsupported{opacity:.55}
@@ -486,7 +486,7 @@ body{display:flex;justify-content:center}
     <div class="login-hero">
       <img src="favicon_tight_180.png" class="login-logo" alt="Ron's Deadhead Listener" loading="eager" decoding="sync" fetchpriority="high"/>
       <div class="login-title">Ron's Deadhead Listener</div>
-      <div class="login-sub">1965 – 1995 · <span id="login-show-count">—</span> Shows · <span id="login-version">V2.1.25</span></div>
+      <div class="login-sub">1965 – 1995 · <span id="login-show-count">—</span> Shows · <span id="login-version">V2.1.29</span></div>
     </div>
     
 
@@ -603,7 +603,7 @@ body{display:flex;justify-content:center}
     <img src="favicon_tight_180.png" class="hdr-logo" alt="logo" loading="eager" decoding="sync" fetchpriority="high"/>
     <div class="hdr-text">
       <div class="hdr-title">Ron's Deadhead Listener</div>
-          <div class="hdr-sub" style="color:rgba(200,168,75,.6)"><span id="hdr-year-range">1965 – 1995</span> · <span id="hdr-show-count">—</span> Shows · <span id="hdr-version" style="opacity:.45">V2.1.25</span></div>
+          <div class="hdr-sub" style="color:rgba(200,168,75,.6)"><span id="hdr-year-range">1965 – 1995</span> · <span id="hdr-show-count">—</span> Shows · <span id="hdr-version" style="opacity:.45">V2.1.29</span></div>
       <div class="hdr-st" id="hdrSt"></div>
     </div>
     <div class="hdr-user" id="hdrUser" onclick="switchUser()">
@@ -684,7 +684,7 @@ body{display:flex;justify-content:center}
 // ── CONFIG ────────────────────────────────────────────────────────
 const SHEET_ID   = '1Hl1iSUkBQbfjbzXpEl5DrpRZQhu_xnOfqgvgmoTMURk';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDkkn9PBWvmBFsjRpoj0-zzM3euaLQt23B64iWn8XO13I4eqeEiCEuB8Zwj0ohObwpMQ/exec';
-const APP_BUILD = '2.1.25';
+const APP_BUILD = '2.1.29';
 // Poster filename — place final_deadhead_poster_web.jpg in the same folder as index.html
 // Leave empty string to disable the poster feature entirely
 const POSTER_FILE = 'final_deadhead_poster_web.jpg';
@@ -7538,7 +7538,7 @@ function updateScreenWakeLockUI(){
   btn.classList.toggle('pending',screenWakeLockPending);
   btn.classList.toggle('unsupported',!supported);
   btn.setAttribute('aria-pressed',screenWakeLockWanted?'true':'false');
-  btn.textContent=screenWakeLockPending?'...':'awake';
+  btn.textContent=screenWakeLockPending?'AWAKE…':(active?'✓ AWAKE ON':'AWAKE OFF');
   btn.title=!supported
     ? 'Keep awake is not supported here'
     : (active?'Screen will stay awake while the app is visible':'Keep screen awake while this app stays open');
@@ -9172,8 +9172,32 @@ async function resumeRecentShow(id){
 
 async function openRecentShow(id,shouldPlay,modeLabel){
   const entry=recentEntryForShow(id,modeLabel);
-  const show=resolveRecentShow(entry||id,modeLabel);
-  if(!show)return;
+  const targetMode=modeForLabel(modeLabel||(entry&&entry.mode)||activeMode.label);
+
+  // Preserve the tap while a cross-mode catalog loads. This gives mobile
+  // browsers the best chance of allowing the requested playback afterward.
+  if(shouldPlay){
+    (function(){
+      const _u=new Audio();
+      _u.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+      _u.play().catch(function(){});
+    })();
+  }
+
+  // Box of Tapes contains shows from every mode. Resolve only after its mode
+  // is active; otherwise a valid entry can look like a dead button.
+  if(!sameModeLabel(targetMode.label,activeMode.label)||loadedCatalogModeKey!==targetMode.key){
+    await changeMode(targetMode.key);
+    if(!activeMode||activeMode.key!==targetMode.key||loadedCatalogModeKey!==targetMode.key){
+      setHdrSt('Could not open '+targetMode.label+' tape','err');
+      return;
+    }
+  }
+  const show=resolveRecentShow(entry||id,targetMode.label);
+  if(!show){
+    setHdrSt('Tape not found in '+targetMode.label,'err');
+    return;
+  }
   await prepareShowSetlistFromDataset(show);
 
   // Pull saved position from history
@@ -9192,13 +9216,6 @@ async function openRecentShow(id,shouldPlay,modeLabel){
   positionSetlistPanel(_sp,setlistPanelTop());
   _sp.classList.add('open');
   const _list=document.getElementById('list');if(_list)_list.style.visibility='hidden';
-
-  // Unlock audio context inside the user gesture before any async work
-  (function(){
-    const _u=new Audio();
-    _u.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-    _u.play().catch(function(){});
-  })();
 
   const openAtSavedTrack=function(){
     const rawIdx=Math.min(savedTrackIdx,(show.tracks||[]).length-1);
@@ -9390,14 +9407,26 @@ async function addFavoriteRecordFromJam(showId,modeLabel){
 
 async function openFavoriteRecord(showId,modeLabel){
   const m=modeForLabel(modeLabel);
-  const fav=activeFavorites(allFavorites).find(function(x){return x.showId===showId&&sameModeLabel(favoriteModeLabel(x),modeLabel);});
-  const activeList=sameModeLabel(m.label,activeMode.label)?shows:[];
-  const show=(fav&&findFavoriteMatchInList(activeList,fav))||
-    findShowInModeCache(m,showId,fav)||
-    (!fav&&activeList.find(function(s){return s.id===showId||showStorageId(s)===showId;}));
+  const fav=activeFavorites(allFavorites).find(function(x){
+    return (x.showId===showId||rawShowId(x.showId)===rawShowId(showId))&&sameModeLabel(favoriteModeLabel(x),modeLabel);
+  });
+  // Favorites and Box of Tapes span every mode. Activate the favorite's own
+  // catalog first so opening and playback resolve against the same show list.
+  if(!sameModeLabel(m.label,activeMode.label)||loadedCatalogModeKey!==m.key){
+    await changeMode(m.key);
+    if(!activeMode||activeMode.key!==m.key||loadedCatalogModeKey!==m.key){
+      setHdrSt('Could not open '+m.label+' show','err');
+      return;
+    }
+  }
+  const show=(fav&&findFavoriteMatchInList(shows,fav))||
+    shows.find(function(s){return s.id===showId||showStorageId(s)===showId||rawShowId(s.id)===rawShowId(showId);})||
+    findShowInModeCache(m,showId,fav);
   if(show){
     await prepareShowSetlistFromDataset(show);
-    openSetlistShow(show);
+    await openSetlistShow(show);
+  }else{
+    setHdrSt('Favorite show not found in '+m.label,'err');
   }
 }
 
@@ -10897,10 +10926,10 @@ function sourcePickerHtml(show,recs,selected){
       const label=sourceOptionLabel(r,selected);
       return '<option value='+JSON.stringify(id)+(id===selected?' selected':'')+'>'+esc(label)+'</option>';
     }).join('');
-    return '<br><div class="source-row"><select data-sid="'+show.id+'" onchange="switchRecording(this.dataset.sid,this.value)" style="background:var(--surf);color:var(--text);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:10px;padding:3px 6px;width:100%">'+opts+'</select>'+altBtn+sourceBtn+'</div>';
+    return '<div class="source-row"><select data-sid="'+show.id+'" onchange="switchRecording(this.dataset.sid,this.value)" style="background:var(--surf);color:var(--text);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:10px;padding:3px 6px;width:100%">'+opts+'</select>'+altBtn+sourceBtn+'</div>';
   }
   if(!selected)return '';
-  return '<br><div style="background:var(--surf);color:var(--muted);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:10px;padding:4px 6px;margin-top:4px;width:100%;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+
+  return '<div style="background:var(--surf);color:var(--muted);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:10px;padding:4px 6px;margin-top:4px;width:100%;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+
     esc(selected)+sourceBtn+
     '</div>';
 }
@@ -11233,7 +11262,7 @@ function stopArchiveAutoRetry(){
       <div class="sp-meta-txt" id="sp-meta-txt"><span class="spinner"></span></div>
       <div class="sp-actions">
         <button class="sp-arc" onclick="openArchive()">archive ↗</button>
-        <button class="sp-wake" id="sp-wake" onclick="toggleScreenWakeLock()" title="Keep screen awake while this app stays open">awake</button>
+        <button class="sp-wake" id="sp-wake" onclick="toggleScreenWakeLock()" title="Keep screen awake while this app stays open">AWAKE OFF</button>
       </div>
     </div>
     <div id="sp-audio-err" style="display:none;padding:10px 16px;background:rgba(180,140,40,.1);border-bottom:1px solid rgba(180,140,40,.25);font-size:12px;color:var(--text);font-family:var(--mono);line-height:1.6"></div>
